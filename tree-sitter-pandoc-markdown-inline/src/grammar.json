@@ -37,6 +37,18 @@
         },
         {
           "type": "SYMBOL",
+          "name": "citation_group"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "cross_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "citation"
+        },
+        {
+          "type": "SYMBOL",
           "name": "attribute_list"
         },
         {
@@ -180,6 +192,18 @@
         },
         {
           "type": "SYMBOL",
+          "name": "citation_group"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "cross_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "citation"
+        },
+        {
+          "type": "SYMBOL",
           "name": "attribute_list"
         },
         {
@@ -214,6 +238,18 @@
         {
           "type": "SYMBOL",
           "name": "html_inline"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "citation_group"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "cross_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "citation"
         },
         {
           "type": "SYMBOL",
@@ -288,6 +324,27 @@
       "content": {
         "type": "PATTERN",
         "value": "<\\/?[A-Za-z][^>\\r\\n]*>"
+      }
+    },
+    "citation_group": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\[[^\\]\\r\\n]*@[A-Za-z0-9_.:+-][^\\]\\r\\n]*\\]"
+      }
+    },
+    "cross_reference": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "@[A-Za-z0-9_.+-]+:[A-Za-z0-9_.:+-]*[A-Za-z0-9_+-]"
+      }
+    },
+    "citation": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]"
       }
     },
     "attribute_list": {
@@ -534,7 +591,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`<>\\[\\]{}]+"
+              "value": "[^\\n\\r*_`<>\\[\\]{}@]+"
             },
             {
               "type": "PATTERN",

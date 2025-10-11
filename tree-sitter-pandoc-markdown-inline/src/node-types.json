@@ -32,7 +32,19 @@
           "named": true
         },
         {
+          "type": "citation",
+          "named": true
+        },
+        {
+          "type": "citation_group",
+          "named": true
+        },
+        {
           "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "cross_reference",
           "named": true
         },
         {
@@ -111,7 +123,19 @@
           "named": true
         },
         {
+          "type": "citation",
+          "named": true
+        },
+        {
+          "type": "citation_group",
+          "named": true
+        },
+        {
           "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "cross_reference",
           "named": true
         },
         {
@@ -248,7 +272,19 @@
           "named": true
         },
         {
+          "type": "citation",
+          "named": true
+        },
+        {
+          "type": "citation_group",
+          "named": true
+        },
+        {
           "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "cross_reference",
           "named": true
         },
         {
@@ -332,7 +368,19 @@
     "named": true
   },
   {
+    "type": "citation",
+    "named": true
+  },
+  {
+    "type": "citation_group",
+    "named": true
+  },
+  {
     "type": "code_span_content",
+    "named": true
+  },
+  {
+    "type": "cross_reference",
     "named": true
   },
   {

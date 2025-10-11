@@ -336,3 +336,21 @@ Paragraph text inside
       (inline
         (text)))
     (fenced_div_delimiter)))
+
+================================================================================
+Paragraph with citations
+================================================================================
+See @doe2020 for details, [@smith2019 p. 4] and @fig:chart.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (citation)
+      (text)
+      (citation_group)
+      (text)
+      (cross_reference)
+      (text))))

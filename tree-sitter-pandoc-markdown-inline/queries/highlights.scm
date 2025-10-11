@@ -20,6 +20,10 @@
 
 (autolink) @text.uri
 
+(citation_group) @text.reference
+(citation) @text.reference
+(cross_reference) @text.reference
+
 (html_inline) @tag
 
 (attribute_list) @property
