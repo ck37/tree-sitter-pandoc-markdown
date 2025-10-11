@@ -22,3 +22,5 @@
 
 (html_inline) @tag
 
+(attribute_list) @property
+

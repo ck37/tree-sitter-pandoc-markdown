@@ -19,6 +19,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -39,6 +40,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -49,6 +51,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -65,6 +68,8 @@ module.exports = grammar({
     )),
 
     html_inline: $ => token(/<\/?[A-Za-z][^>\r\n]*>/),
+
+    attribute_list: $ => token(/\{[^{}\r\n]*\}/),
 
     link: $ => seq(
       '[',
@@ -117,7 +122,7 @@ module.exports = grammar({
     link_label: $ => repeat1($._link_text_element),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`<>\[\]]+/, 
+      /[^\n\r*_`<>\[\]{}]+/, 
       /[*_`]/
     )))
   }

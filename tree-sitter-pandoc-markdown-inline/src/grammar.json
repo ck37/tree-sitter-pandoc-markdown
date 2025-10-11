@@ -37,6 +37,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "attribute_list"
+        },
+        {
+          "type": "SYMBOL",
           "name": "image"
         },
         {
@@ -176,6 +180,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "attribute_list"
+        },
+        {
+          "type": "SYMBOL",
           "name": "image"
         },
         {
@@ -206,6 +214,10 @@
         {
           "type": "SYMBOL",
           "name": "html_inline"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "attribute_list"
         },
         {
           "type": "SYMBOL",
@@ -276,6 +288,13 @@
       "content": {
         "type": "PATTERN",
         "value": "<\\/?[A-Za-z][^>\\r\\n]*>"
+      }
+    },
+    "attribute_list": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\{[^{}\\r\\n]*\\}"
       }
     },
     "link": {
@@ -515,7 +534,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`<>\\[\\]]+"
+              "value": "[^\\n\\r*_`<>\\[\\]{}]+"
             },
             {
               "type": "PATTERN",

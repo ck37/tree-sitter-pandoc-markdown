@@ -62,6 +62,37 @@ After core markdown works, add Pandoc-specific features:
 - Shortcodes (`{{< name >}}`, `{{% name %}}`)
 - Chunk options (`#|` comment lines in code blocks)
 
+**Phase 1C Work Plan (current focus):**
+1. **Attribute Lists**
+   - Support `{.class #id key=val}` tokens in both block and inline grammars.
+   - Allow attribute lists to appear in info strings, fenced div markers, and inline sequences.
+   - Update highlight/injection queries and corpus coverage accordingly.
+2. **Fenced Div Blocks (`:::`)**
+   - Introduce a `fenced_div` block rule with open/close delimiters and optional attribute list.
+   - Ensure proper nesting by tuning precedence/associativity.
+   - Add targeted corpus fixtures and highlighting.
+3. **Pandoc Inline Extensions**
+   - Implement tokens for `@cite`, `[@cite p. 4]`, and `@fig:name`.
+   - Integrate with existing inline precedence so they coexist cleanly with links and emphasis.
+   - Extend highlight queries and corpus coverage for these nodes.
+4. **Shortcodes (`{{< ... >}}`, `{{% ... %}}`)**
+   - Parse shortcodes as standalone block nodes (and inline variants if needed).
+   - Handle surrounding whitespace/newlines and highlight as macros.
+   - Add representative corpus cases.
+5. **Chunk Option Lines (`#| option: value`)**
+   - Recognize chunk option lines inside fenced code blocks without disrupting link/reference parsing.
+   - Emit dedicated nodes (e.g., `chunk_option`) alongside regular code fence text for highlighting.
+   - Extend corpora and highlighting to cover these lines.
+6. **Plan & Regression Tests**
+   - After each feature: regenerate parsers (`npm run build`), extend corpora, and run `npm test`.
+   - Update this plan and mark Phase 1C checklist items once their implementation stabilizes.
+
+**Parse Conflict Mitigation Notes**
+- Add one grammar feature at a time and run `npm run build` immediately to surface conflicts early.
+- Prefer tuning `prec`, `prec.left`, or `prec.right` before resorting to global `conflicts` declarations to keep the parser deterministic.
+- Keep complex constructs (citations, chunk options, shortcodes) as lexical tokens where possible to avoid high-level rule contention.
+- Expand the corpus alongside new constructs so regression tests catch issues as soon as they’re introduced.
+
 ### Technical Requirements
 
 #### ABI Version Compatibility

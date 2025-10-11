@@ -77,6 +77,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -97,6 +98,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -107,6 +109,7 @@ module.exports = grammar({
       $.link,
       $.autolink,
       $.html_inline,
+      $.attribute_list,
       $.image,
       $.text
     ),
@@ -124,8 +127,10 @@ module.exports = grammar({
 
     html_inline: $ => token(/<\/?[A-Za-z][^>\r\n]*>/),
 
+    attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#<>\-\[\]]+/, 
+      /[^\n\r*_`#<>\-\[\]{}]+/, 
       /[>*_`]/
     ))),
 
@@ -207,14 +212,14 @@ module.exports = grammar({
 
     info_string: $ => seq(
       choice(
-        alias(token(/\{[^}\r\n]*\}/), $.attribute_list),
+        $.attribute_list,
         alias(token(/[A-Za-z0-9_+-]+/), $.language),
         alias(token(/[^\s\r\n{}]+/), $.info_string_text)
       ),
       repeat(seq(
         optional(/[ \t]+/),
         choice(
-          alias(token(/\{[^}\r\n]*\}/), $.attribute_list),
+          $.attribute_list,
           alias(token(/[A-Za-z0-9_+-]+/), $.language),
           alias(token(/[^\s\r\n{}]+/), $.info_string_text)
         )

@@ -305,3 +305,16 @@ Text with <strong>inline</strong> HTML.
       (text)
       (html_inline)
       (text))))
+
+================================================================================
+Paragraph with attribute list
+================================================================================
+Paragraph text {.class #id}
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (attribute_list))))

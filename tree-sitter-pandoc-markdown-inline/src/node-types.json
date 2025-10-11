@@ -24,6 +24,10 @@
       "required": true,
       "types": [
         {
+          "type": "attribute_list",
+          "named": true
+        },
+        {
           "type": "autolink",
           "named": true
         },
@@ -98,6 +102,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute_list",
+          "named": true
+        },
         {
           "type": "autolink",
           "named": true
@@ -232,6 +240,10 @@
       "required": true,
       "types": [
         {
+          "type": "attribute_list",
+          "named": true
+        },
+        {
           "type": "autolink",
           "named": true
         },
@@ -310,6 +322,10 @@
   {
     "type": "`",
     "named": false
+  },
+  {
+    "type": "attribute_list",
+    "named": true
   },
   {
     "type": "autolink",

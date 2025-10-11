@@ -356,6 +356,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "attribute_list"
+        },
+        {
+          "type": "SYMBOL",
           "name": "image"
         },
         {
@@ -495,6 +499,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "attribute_list"
+        },
+        {
+          "type": "SYMBOL",
           "name": "image"
         },
         {
@@ -525,6 +533,10 @@
         {
           "type": "SYMBOL",
           "name": "html_inline"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "attribute_list"
         },
         {
           "type": "SYMBOL",
@@ -597,6 +609,13 @@
         "value": "<\\/?[A-Za-z][^>\\r\\n]*>"
       }
     },
+    "attribute_list": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\{[^{}\\r\\n]*\\}"
+      }
+    },
     "text": {
       "type": "PREC_RIGHT",
       "value": 0,
@@ -607,7 +626,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`#<>\\-\\[\\]]+"
+              "value": "[^\\n\\r*_`#<>\\-\\[\\]{}]+"
             },
             {
               "type": "PATTERN",
@@ -1079,16 +1098,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "ALIAS",
-              "content": {
-                "type": "TOKEN",
-                "content": {
-                  "type": "PATTERN",
-                  "value": "\\{[^}\\r\\n]*\\}"
-                }
-              },
-              "named": true,
-              "value": "attribute_list"
+              "type": "SYMBOL",
+              "name": "attribute_list"
             },
             {
               "type": "ALIAS",
@@ -1137,16 +1148,8 @@
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "ALIAS",
-                    "content": {
-                      "type": "TOKEN",
-                      "content": {
-                        "type": "PATTERN",
-                        "value": "\\{[^}\\r\\n]*\\}"
-                      }
-                    },
-                    "named": true,
-                    "value": "attribute_list"
+                    "type": "SYMBOL",
+                    "name": "attribute_list"
                   },
                   {
                     "type": "ALIAS",
