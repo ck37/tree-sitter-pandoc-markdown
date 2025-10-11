@@ -117,6 +117,10 @@
           "named": true
         },
         {
+          "type": "link_reference_definition",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -243,12 +247,85 @@
           }
         ]
       },
+      "reference": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "link_label",
+            "named": true
+          }
+        ]
+      },
       "text": {
         "multiple": false,
         "required": false,
         "types": [
           {
             "type": "link_text",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "link_label",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "emphasis",
+          "named": true
+        },
+        {
+          "type": "strong_emphasis",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "link_reference_definition",
+    "named": true,
+    "fields": {
+      "destination": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "link_destination",
+            "named": true
+          }
+        ]
+      },
+      "label": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "link_label",
+            "named": true
+          }
+        ]
+      },
+      "title": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "link_title",
             "named": true
           }
         ]
@@ -281,6 +358,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "link_title",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "list",
@@ -411,6 +493,14 @@
     "fields": {}
   },
   {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "'",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -432,6 +522,10 @@
   },
   {
     "type": "]",
+    "named": false
+  },
+  {
+    "type": "]:",
     "named": false
   },
   {

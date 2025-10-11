@@ -87,6 +87,16 @@
           }
         ]
       },
+      "reference": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "link_label",
+            "named": true
+          }
+        ]
+      },
       "text": {
         "multiple": false,
         "required": false,
@@ -97,6 +107,33 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "link_label",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "emphasis",
+          "named": true
+        },
+        {
+          "type": "strong_emphasis",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
     }
   },
   {

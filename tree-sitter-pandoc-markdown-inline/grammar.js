@@ -54,9 +54,18 @@ module.exports = grammar({
       '[',
       field('text', optional($.link_text)),
       ']',
-      '(',
-      field('destination', optional($.link_destination)),
-      ')'
+      choice(
+        seq(
+          '(',
+          field('destination', optional($.link_destination)),
+          ')'
+        ),
+        seq(
+          '[',
+          field('reference', optional($.link_label)),
+          ']'
+        )
+      )
     ),
 
     link_text: $ => repeat1($._link_text_element),
@@ -69,6 +78,8 @@ module.exports = grammar({
     ),
 
     link_destination: $ => /[^)\r\n]+/,
+
+    link_label: $ => repeat1($._link_text_element),
 
     text: $ => prec.right(repeat1(choice(
       /[^\n\r*_`\[\]]+/, 

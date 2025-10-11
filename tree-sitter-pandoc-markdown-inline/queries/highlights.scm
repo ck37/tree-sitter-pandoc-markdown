@@ -8,3 +8,6 @@
   (link_text) @text.reference
   (link_destination) @text.uri)
 
+(link
+  (link_label) @text.reference)
+

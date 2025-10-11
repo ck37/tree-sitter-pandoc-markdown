@@ -16,6 +16,7 @@ module.exports = grammar({
       $.atx_heading,
       $.setext_heading,
       $.block_quote,
+      $.link_reference_definition,
       $.paragraph,
       $.fenced_code_block,
       $.list,
@@ -104,9 +105,18 @@ module.exports = grammar({
       '[',
       field('text', optional($.link_text)),
       ']',
-      '(',
-      field('destination', optional($.link_destination)),
-      ')'
+      choice(
+        seq(
+          '(',
+          field('destination', optional($.link_destination)),
+          ')'
+        ),
+        seq(
+          '[',
+          field('reference', optional($.link_label)),
+          ']'
+        )
+      )
     ),
 
     link_text: $ => repeat1($._link_text_element),
@@ -119,6 +129,24 @@ module.exports = grammar({
     ),
 
     link_destination: $ => /[^)\r\n]+/,
+
+    link_label: $ => repeat1($._link_text_element),
+
+    link_reference_definition: $ => seq(
+      '[',
+      field('label', $.link_label),
+      ']:',
+      optional(/[ \t]*/),
+      field('destination', optional($.link_destination)),
+      optional(seq(/[ \t]+/, field('title', $.link_title))),
+      /\r?\n/
+    ),
+
+    link_title: $ => choice(
+      seq('"', /[^"]*/, '"'),
+      seq("'", /[^']*/, "'"),
+      seq('(', /[^)]*/, ')')
+    ),
 
     // Fenced code blocks
     fenced_code_block: $ => seq(

@@ -106,3 +106,39 @@ Block quote
       (block_quote_marker)
       (inline
         (text)))))
+
+================================================================================
+Reference definition
+================================================================================
+[ref]: https://example.com
+
+--------------------------------------------------------------------------------
+
+(document
+  (link_reference_definition
+    (link_label
+      (text))
+    (link_destination)))
+
+================================================================================
+Reference link usage
+================================================================================
+See [Example][ref].
+[ref]: https://example.com
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (link
+        (link_text
+          (text))
+        (link_label
+          (text)))
+      (text)))
+  (link_reference_definition
+    (link_label
+      (text))
+    (link_destination)))

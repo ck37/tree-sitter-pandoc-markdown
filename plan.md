@@ -48,7 +48,7 @@ Once foundation is stable, incrementally add:
 - [ ] Thematic breaks (extended patterns)
 - [ ] HTML blocks
 - [ ] Fenced code blocks with language info (extended metadata)
-- [ ] Reference-style links (basic inline link syntax restored; definitions pending)
+- [x] Reference-style links (inline reference usage and definitions)
 - [ ] Images
 - [ ] Autolinks
 - [ ] HTML inline tags
