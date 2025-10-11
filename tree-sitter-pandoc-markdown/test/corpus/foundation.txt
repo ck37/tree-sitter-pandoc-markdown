@@ -318,3 +318,21 @@ Paragraph text {.class #id}
     (inline
       (text)
       (attribute_list))))
+
+================================================================================
+Fenced div with attribute
+================================================================================
+:::{.note}
+Paragraph text inside
+:::
+
+--------------------------------------------------------------------------------
+
+(document
+  (fenced_div
+    (fenced_div_delimiter)
+    (attribute_list)
+    (paragraph
+      (inline
+        (text)))
+    (fenced_div_delimiter)))

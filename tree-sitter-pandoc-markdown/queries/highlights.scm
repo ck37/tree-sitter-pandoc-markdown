@@ -12,6 +12,8 @@
 (fenced_code_block_delimiter) @punctuation.delimiter
 (code_fence_content) @text.literal
 
+(fenced_div_delimiter) @punctuation.special
+
 (list_marker) @punctuation.special
 (block_quote_marker) @punctuation.special
 (thematic_break) @punctuation.special

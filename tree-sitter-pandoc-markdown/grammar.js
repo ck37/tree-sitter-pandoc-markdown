@@ -21,6 +21,7 @@ module.exports = grammar({
       $.setext_heading,
       $.block_quote,
       $.link_reference_definition,
+      $.fenced_div,
       $.paragraph,
       $.html_block,
       $.fenced_code_block,
@@ -66,6 +67,15 @@ module.exports = grammar({
       field('close', alias(token(/<\/[A-Za-z][^>]*>/), $.html_close_tag)),
       /\r?\n/
     ),
+
+    fenced_div: $ => prec.right(seq(
+      field('open', alias(token(/:::+/), $.fenced_div_delimiter)),
+      optional(field('attributes', $.attribute_list)),
+      /\r?\n/,
+      repeat($._block),
+      field('close', alias(token(/:::+/), $.fenced_div_delimiter)),
+      /\r?\n/
+    )),
 
     // Inline content
     inline: $ => prec.right(repeat1($._inline_element)),
@@ -189,7 +199,7 @@ module.exports = grammar({
       field('label', $.link_label),
       ']:',
       optional(/[ \t]*/),
-      field('destination', optional($.link_destination)),
+      optional(field('destination', $.link_destination)),
       optional(seq(/[ \t]+/, field('title', $.link_title))),
       /\r?\n/
     ),
