@@ -12,6 +12,7 @@ YAML front matter
 ================================================================================
 ---
 title: Sample Report
+subtitle: A Longitudinal Study
 author: Jane Doe
 ---
 
@@ -22,6 +23,7 @@ Paragraph after front matter.
 (document
   (yaml_front_matter
     (yaml_front_matter_start)
+    (yaml_front_matter_content)
     (yaml_front_matter_content)
     (yaml_front_matter_delimiter))
   (paragraph
