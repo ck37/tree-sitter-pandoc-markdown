@@ -18,6 +18,22 @@
 (yaml_front_matter_delimiter) @punctuation.special
 (yaml_front_matter_content) @comment
 
+(inline_math
+  (math_content)? @string)
+
+(display_math
+  (math_content)? @string)
+
+(math_delimiter) @punctuation.special
+
+(pipe_table_header_cell
+  (pipe_table_cell_content)? @text.title)
+
+(pipe_table_cell
+  (pipe_table_cell_content)? @string)
+
+(pipe_table_alignment_marker) @punctuation.special
+
 (fenced_div_delimiter) @punctuation.special
 
 (list_marker) @punctuation.special

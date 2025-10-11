@@ -25,6 +25,8 @@ module.exports = grammar({
       $.block_quote,
       $.link_reference_definition,
       $.fenced_div,
+      $.display_math,
+      $.pipe_table,
       $.shortcode_block,
       $.paragraph,
       $.html_block,
@@ -107,6 +109,7 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.inline_math,
       $.text
     ),
 
@@ -173,8 +176,75 @@ module.exports = grammar({
 
     shortcode: $ => token(/\{\{[<%][^{}\r\n]*[>%]\}\}/),
 
+    inline_math: $ => prec(2, seq(
+      field('open', alias(token('$'), $.math_delimiter)),
+      field('content', optional(alias($.inline_math_content, $.math_content))),
+      field('close', alias(token('$'), $.math_delimiter))
+    )),
+
+    inline_math_content: $ => prec.right(repeat1(choice(
+      token.immediate(/[^\\$\r\n]+/),
+      seq('\\', token.immediate(/./))
+    ))),
+
+    display_math: $ => prec.right(seq(
+      field('open', alias(token('$$'), $.math_delimiter)),
+      optional(/\r?\n/),
+      field('content', optional(alias($.display_math_content, $.math_content))),
+      field('close', alias(token('$$'), $.math_delimiter)),
+      /\r?\n/
+    )),
+
+    display_math_content: $ => prec.right(repeat1(choice(
+      token.immediate(/[^\\$]+/),
+      seq('\\', token.immediate(/./)),
+      token.immediate(/\r?\n/)
+    ))),
+
+    pipe_table: $ => prec.right(seq(
+      field('header', $.pipe_table_header),
+      field('delimiter', $.pipe_table_delimiter),
+      repeat1(field('row', $.pipe_table_row))
+    )),
+
+    pipe_table_header: $ => seq(
+      '|',
+      field('cell', $.pipe_table_header_cell),
+      repeat1(seq('|', field('cell', $.pipe_table_header_cell))),
+      optional('|'),
+      /\r?\n/
+    ),
+
+    pipe_table_header_cell: $ => seq(
+      field('content', alias(token(/[^\r\n|]+/), $.pipe_table_cell_content))
+    ),
+
+    pipe_table_delimiter: $ => seq(
+      '|',
+      field('alignment', $.pipe_table_alignment),
+      repeat1(seq('|', field('alignment', $.pipe_table_alignment))),
+      optional('|'),
+      /\r?\n/
+    ),
+
+    pipe_table_alignment: $ => seq(
+      field('marker', alias(token(prec(2, /:?-{3,}:?/)), $.pipe_table_alignment_marker))
+    ),
+
+    pipe_table_row: $ => seq(
+      '|',
+      field('cell', $.pipe_table_cell),
+      repeat1(seq('|', field('cell', $.pipe_table_cell))),
+      optional('|'),
+      /\r?\n/
+    ),
+
+    pipe_table_cell: $ => seq(
+      field('content', alias(token(/[^\r\n|]+/), $.pipe_table_cell_content))
+    ),
+
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#<>\-\[\]{}@]+/, 
+      /[^\n\r*_`#<>\-\[\]{}@$|]+/, 
       /[>*_`]/
     ))),
 

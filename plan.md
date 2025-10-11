@@ -94,15 +94,17 @@ After core markdown works, add Pandoc-specific features:
 #### Phase 1D: Mathematical Notation & Tables (Next Up)
 Focus on high-impact Pandoc features that benefit all users (not Quarto-specific).
 
-1. **Inline & Display Math**
-   - Add `inline_math` and `display_math` nodes with `math_content` capturing interior LaTeX.
-   - Support `$...$` and `$$...$$` delimiters (single-line and multi-line) with escape handling.
-   - Inject LaTeX highlighting for math content and tag delimiters as punctuation.
-   - Expand corpus with inline, block, adjacent math, and malformed delimiter cases.
-2. **Pipe Tables**
-   - Introduce `pipe_table`, `pipe_table_header`, `pipe_table_delimiter`, `pipe_table_row`, `pipe_table_cell`, and alignment markers.
-   - Handle leading/trailing pipes, column alignment (`:---`, `---:`, `:---:`), and ensure tables coexist with surrounding paragraphs.
-   - Provide highlight coverage for headers, alignment cues, and cell boundaries; add comprehensive corpus fixtures (optionally noting captions for later phases).
+**Status:** Inline/display math and pipe tables implemented.
+
+1. **Inline & Display Math** ✓
+   - Add `inline_math` and `display_math` nodes with `math_content` capturing interior LaTeX. ✓
+   - Support `$...$` and `$$...$$` delimiters (single-line and multi-line) with escape handling. ✓
+   - Inject LaTeX highlighting for math content and tag delimiters as punctuation. ✓
+   - Expand corpus with inline, block, adjacent math, and malformed delimiter cases. ✓
+2. **Pipe Tables** ✓
+   - Introduce `pipe_table`, `pipe_table_header`, `pipe_table_delimiter`, `pipe_table_row`, `pipe_table_cell`, and alignment markers. ✓
+   - Handle leading/trailing pipes, column alignment (`:---`, `---:`, `:---:`), and ensure tables coexist with surrounding paragraphs. ✓
+   - Provide highlight coverage for headers, alignment cues, and cell boundaries; add comprehensive corpus fixtures (optionally noting captions for later phases). ✓
 
 #### Phase 1E: Document Semantics & Typography
 Enhance inline semantics and block structures once math/tables are stable.

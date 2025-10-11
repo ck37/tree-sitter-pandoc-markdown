@@ -1,12 +1,3 @@
-(document
-  (fenced_code_block
-    (fenced_code_block_delimiter)
-    (info_string
-      (language)
-      (info_string_text)
-      (attribute_list))
-    (code_fence_content)
-    (fenced_code_block_delimiter)))
 ================================================================================
 YAML front matter
 ================================================================================
@@ -29,6 +20,7 @@ Paragraph after front matter.
   (paragraph
     (inline
       (text))))
+
 ================================================================================
 YAML front matter delimiters
 ================================================================================
@@ -47,6 +39,7 @@ Body text.
   (paragraph
     (inline
       (text))))
+
 ================================================================================
 Heading block
 ================================================================================
@@ -418,6 +411,71 @@ See @doe2020 for details, [@smith2019 p. 4] and @fig:chart.
       (text)
       (cross_reference)
       (text))))
+
+================================================================================
+Paragraph with inline math
+================================================================================
+Energy equals $E = mc^2$ in this sentence.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (inline_math
+        (math_delimiter)
+        (math_content)
+        (math_delimiter))
+      (text))))
+
+================================================================================
+Display math block
+================================================================================
+$$
+E = mc^2
+$$
+
+--------------------------------------------------------------------------------
+
+(document
+  (display_math
+    (math_delimiter)
+    (math_content)
+    (math_delimiter)))
+
+================================================================================
+Pipe table
+================================================================================
+| Name | Value |
+| :--- | ---: |
+| Foo  | 42    |
+| Bar  | 17    |
+
+--------------------------------------------------------------------------------
+
+(document
+  (pipe_table
+    (pipe_table_header
+      (pipe_table_header_cell
+        (pipe_table_cell_content))
+      (pipe_table_header_cell
+        (pipe_table_cell_content)))
+    (pipe_table_delimiter
+      (pipe_table_alignment
+        (pipe_table_alignment_marker))
+      (pipe_table_alignment
+        (pipe_table_alignment_marker)))
+    (pipe_table_row
+      (pipe_table_cell
+        (pipe_table_cell_content))
+      (pipe_table_cell
+        (pipe_table_cell_content)))
+    (pipe_table_row
+      (pipe_table_cell
+        (pipe_table_cell_content))
+      (pipe_table_cell
+        (pipe_table_cell_content)))))
 
 ================================================================================
 Shortcode block

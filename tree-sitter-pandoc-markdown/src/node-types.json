@@ -107,6 +107,42 @@
     }
   },
   {
+    "type": "display_math",
+    "named": true,
+    "fields": {
+      "close": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "math_delimiter",
+            "named": true
+          }
+        ]
+      },
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "math_content",
+            "named": true
+          }
+        ]
+      },
+      "open": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "math_delimiter",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "document",
     "named": true,
     "fields": {},
@@ -124,6 +160,10 @@
         },
         {
           "type": "block_quote",
+          "named": true
+        },
+        {
+          "type": "display_math",
           "named": true
         },
         {
@@ -148,6 +188,10 @@
         },
         {
           "type": "paragraph",
+          "named": true
+        },
+        {
+          "type": "pipe_table",
           "named": true
         },
         {
@@ -312,6 +356,10 @@
           "named": true
         },
         {
+          "type": "display_math",
+          "named": true
+        },
+        {
           "type": "fenced_code_block",
           "named": true
         },
@@ -333,6 +381,10 @@
         },
         {
           "type": "paragraph",
+          "named": true
+        },
+        {
+          "type": "pipe_table",
           "named": true
         },
         {
@@ -490,6 +542,10 @@
           "named": true
         },
         {
+          "type": "inline_math",
+          "named": true
+        },
+        {
           "type": "link",
           "named": true
         },
@@ -502,6 +558,42 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "inline_math",
+    "named": true,
+    "fields": {
+      "close": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "math_delimiter",
+            "named": true
+          }
+        ]
+      },
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "math_content",
+            "named": true
+          }
+        ]
+      },
+      "open": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "math_delimiter",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -681,6 +773,11 @@
     }
   },
   {
+    "type": "math_content",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "paragraph",
     "named": true,
     "fields": {
@@ -690,6 +787,138 @@
         "types": [
           {
             "type": "inline",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table",
+    "named": true,
+    "fields": {
+      "delimiter": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_delimiter",
+            "named": true
+          }
+        ]
+      },
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_header",
+            "named": true
+          }
+        ]
+      },
+      "row": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_row",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_alignment",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_alignment_marker",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_cell",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_cell_content",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_delimiter",
+    "named": true,
+    "fields": {
+      "alignment": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_alignment",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_header",
+    "named": true,
+    "fields": {
+      "cell": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_header_cell",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_header_cell",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_cell_content",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "pipe_table_row",
+    "named": true,
+    "fields": {
+      "cell": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "pipe_table_cell",
             "named": true
           }
         ]
@@ -783,6 +1012,10 @@
           "named": true
         },
         {
+          "type": "inline_math",
+          "named": true
+        },
+        {
           "type": "link",
           "named": true
         },
@@ -873,6 +1106,10 @@
   },
   {
     "type": "[",
+    "named": false
+  },
+  {
+    "type": "\\",
     "named": false
   },
   {
@@ -976,6 +1213,18 @@
     "named": true
   },
   {
+    "type": "math_delimiter",
+    "named": true
+  },
+  {
+    "type": "pipe_table_alignment_marker",
+    "named": true
+  },
+  {
+    "type": "pipe_table_cell_content",
+    "named": true
+  },
+  {
     "type": "setext_heading_marker",
     "named": true
   },
@@ -994,5 +1243,9 @@
   {
     "type": "yaml_front_matter_start",
     "named": true
+  },
+  {
+    "type": "|",
+    "named": false
   }
 ]

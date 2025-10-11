@@ -24,6 +24,11 @@
 (citation) @text.reference
 (cross_reference) @text.reference
 
+(inline_math
+  (math_content)? @string)
+
+(math_delimiter) @punctuation.special
+
 (html_inline) @tag
 
 (attribute_list) @property
