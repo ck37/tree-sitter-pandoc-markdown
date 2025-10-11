@@ -413,6 +413,31 @@ See @doe2020 for details, [@smith2019 p. 4] and @fig:chart.
       (text))))
 
 ================================================================================
+Paragraph with strikethrough, highlight, subscript, superscript, underline, and attribute span
+================================================================================
+~~Removed~~ ==Marked== H~2~O and E^2^ plus +underline+ and [span]{.highlight}
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (strikethrough)
+      (text)
+      (highlight)
+      (text)
+      (subscript)
+      (text)
+      (superscript)
+      (text)
+      (underline)
+      (text)
+      (attribute_span
+        (inline
+          (text))
+        (attribute_list)))))
+
+================================================================================
 Footnote definitions and references
 ================================================================================
 Here is a reference [^note].

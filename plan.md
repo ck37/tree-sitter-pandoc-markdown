@@ -112,12 +112,15 @@ Enhance inline semantics and block structures now that math/tables are stable.
 1. **Footnotes** *(in progress)*
    - Parse `footnote_reference`, `footnote_definition`, and `inline_footnote`, supporting multi-paragraph definitions.
    - Ensure references integrate with inline precedence and definitions align with block parsing.
-2. **Definition Lists**
-   - Implement `definition_list`, `definition_term`, `definition_description` with support for multiple definitions per term.
+2. **Definition Lists** *(deferred)*
+   - Multiple implementation attempts caused widespread regressions because the colon-led description marker is indistinguishable from ordinary paragraph lines without a lookahead.
+   - Future work likely requires an external scanner or a more sophisticated newline classification strategy before re-introducing this rule; revisit after remaining typography is complete.
 3. **Strikethrough, Subscript, Superscript**
    - Add inline nodes for `~~text~~`, `H~2~O`, `x^2^`, resolving precedence relative to emphasis and code spans.
 4. **Attribute Spans**
    - Support `[text]{.class #id}` spans reusing `attribute_list`, ensuring they can nest within inline content.
+5. **Highlighting and Underline**
+   - Implement `==highlight==` and `+underline+` inline nodes with precedence rules comparable to strikethrough/sub/superscript and add corpus/highlight coverage.
 
 #### Phase 1F: Raw Content, Line Blocks, and Additional Tables
 Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.

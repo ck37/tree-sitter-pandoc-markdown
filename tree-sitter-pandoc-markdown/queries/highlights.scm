@@ -30,6 +30,7 @@
 (footnote_reference) @text.reference
 (inline_footnote) @comment
 
+
 (pipe_table_header_cell
   (pipe_table_cell_content)? @text.title)
 
@@ -46,6 +47,11 @@
 
 (emphasis) @text.emphasis
 (strong_emphasis) @text.strong
+(strikethrough) @text.strike
+(highlight) @text.highlight
+(subscript) @text.subscript
+(superscript) @text.super
+(underline) @text.underline
 (code_span) @text.literal
 (code_span_content) @text.literal
 
@@ -82,5 +88,10 @@
 (html_inline) @tag
 
 (language) @type
+(attribute_span
+  (inline)? @text)
+(attribute_span
+  (attribute_list) @property)
+
 (attribute_list) @property
 (info_string_text) @string

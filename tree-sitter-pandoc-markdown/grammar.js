@@ -13,6 +13,10 @@ module.exports = grammar({
 
   extras: $ => [/\s/],
 
+  conflicts: $ => [
+    [$._inline_element, $._link_text_element],
+  ],
+
   rules: {
     document: $ => choice(
       seq($.yaml_front_matter, repeat($._block)),
@@ -63,7 +67,7 @@ module.exports = grammar({
     ),
 
     // Paragraph
-    paragraph: $ => prec.right(seq(
+    paragraph: $ => prec.left(-2, seq(
       field('content', $.inline),
       /\r?\n/
     )),
@@ -110,6 +114,12 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.strikethrough,
+      $.highlight,
+      $.subscript,
+      $.superscript,
+      $.underline,
+      $.attribute_span,
       $.footnote_reference,
       $.inline_footnote,
       $.inline_math,
@@ -137,6 +147,12 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.strikethrough,
+      $.highlight,
+      $.subscript,
+      $.superscript,
+      $.underline,
+      $.attribute_span,
       $.text
     ),
 
@@ -151,6 +167,12 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.strikethrough,
+      $.highlight,
+      $.subscript,
+      $.superscript,
+      $.underline,
+      $.attribute_span,
       $.text
     ),
 
@@ -174,6 +196,23 @@ module.exports = grammar({
     citation: $ => token(/@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]/),
 
     attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+
+    strikethrough: $ => token(/~~[^~\r\n]+~~/),
+
+    highlight: $ => token(/==[^=\r\n]+==/),
+
+    subscript: $ => token(/~[^~\r\n]+~/),
+
+    superscript: $ => token(/\^[^\[\^\r\n][^\^\r\n]*\^/),
+
+    underline: $ => token(/\+[^+\r\n]+\+/),
+
+    attribute_span: $ => seq(
+      '[',
+      field('content', optional($.inline)),
+      ']',
+      field('attributes', alias(token.immediate(/\{[^{}\r\n]*\}/), $.attribute_list))
+    ),
 
     shortcode_block: $ => seq(field('shortcode', $.shortcode), /\r?\n/),
 
@@ -258,7 +297,7 @@ module.exports = grammar({
     ),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#<>\-\[\]{}@\^$|]+/, 
+      /[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/, 
       /[>*_`]/
     ))),
 
@@ -305,6 +344,12 @@ module.exports = grammar({
       $.emphasis,
       $.strong_emphasis,
       $.code_span,
+      $.strikethrough,
+      $.highlight,
+      $.subscript,
+      $.superscript,
+      $.underline,
+      $.attribute_span,
       $.text
     ),
 

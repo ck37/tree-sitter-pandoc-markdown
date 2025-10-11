@@ -27,6 +27,17 @@
 (footnote_reference) @text.reference
 (inline_footnote) @comment
 
+(strikethrough) @text.strike
+(highlight) @text.highlight
+(subscript) @text.subscript
+(superscript) @text.super
+(underline) @text.underline
+
+(attribute_span
+  (inline)? @text)
+(attribute_span
+  (attribute_list) @property)
+
 (inline_math
   (math_content)? @string)
 
