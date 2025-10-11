@@ -11,6 +11,8 @@
 (fenced_code_block) @text.literal
 (fenced_code_block_delimiter) @punctuation.delimiter
 (code_fence_content) @text.literal
+(code_fence_line_text) @text.literal
+(chunk_option) @comment
 
 (fenced_div_delimiter) @punctuation.special
 

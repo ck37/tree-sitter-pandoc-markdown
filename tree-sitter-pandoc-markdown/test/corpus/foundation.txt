@@ -71,7 +71,8 @@ console.log('hi')
     (fenced_code_block_delimiter)
     (info_string
       (language))
-    (code_fence_content)
+    (code_fence_content
+      (code_fence_line_text))
     (fenced_code_block_delimiter)))
 
 ================================================================================
@@ -90,7 +91,30 @@ print("hi")
       (language)
       (info_string_text)
       (attribute_list))
-    (code_fence_content)
+    (code_fence_content
+      (code_fence_line_text))
+    (fenced_code_block_delimiter)))
+
+================================================================================
+Fenced code block with chunk options
+================================================================================
+```python
+#| label: chunk-1
+#| include: true
+print("hi")
+```
+
+--------------------------------------------------------------------------------
+
+(document
+  (fenced_code_block
+    (fenced_code_block_delimiter)
+    (info_string
+      (language))
+    (code_fence_content
+      (chunk_option)
+      (chunk_option)
+      (code_fence_line_text))
     (fenced_code_block_delimiter)))
 
 ================================================================================

@@ -55,30 +55,29 @@ Once foundation is stable, incrementally add:
 
 #### Phase 1C: Pandoc Extensions
 After core markdown works, add Pandoc-specific features:
-- Fenced divs with attributes (`:::`)
-- Attribute lists (`{.class #id key=value}`)
-- Citations (`@item`, `[@item p. 4]`)
-- Cross references (`@fig:name`)
-- Shortcodes (`{{< name >}}`, `{{% name %}}`)
-- Chunk options (`#|` comment lines in code blocks)
+- [x] Fenced divs with attributes (`:::`)
+- [x] Attribute lists (`{.class #id key=value}`)
+- [x] Citations (`@item`, `[@item p. 4]`)
+- [x] Cross references (`@fig:name`)
+- [x] Shortcodes (`{{< name >}}`, `{{% name %}}`)
+- [ ] Chunk options (`#|` comment lines in code blocks)
 
 **Phase 1C Work Plan (current focus):**
-1. **Attribute Lists**
+1. **Attribute Lists** ✓
    - Support `{.class #id key=val}` tokens in both block and inline grammars.
    - Allow attribute lists to appear in info strings, fenced div markers, and inline sequences.
    - Update highlight/injection queries and corpus coverage accordingly.
-2. **Fenced Div Blocks (`:::`)**
+2. **Fenced Div Blocks (`:::`)** ✓
    - Introduce a `fenced_div` block rule with open/close delimiters and optional attribute list.
    - Ensure proper nesting by tuning precedence/associativity.
    - Add targeted corpus fixtures and highlighting.
-3. **Pandoc Inline Extensions**
+3. **Pandoc Inline Extensions** ✓
    - Implement tokens for `@cite`, `[@cite p. 4]`, and `@fig:name`.
    - Integrate with existing inline precedence so they coexist cleanly with links and emphasis.
    - Extend highlight queries and corpus coverage for these nodes.
-4. **Shortcodes (`{{< ... >}}`, `{{% ... %}}`)**
-   - Parse shortcodes as standalone block nodes (and inline variants if needed).
-   - Handle surrounding whitespace/newlines and highlight as macros.
-   - Add representative corpus cases.
+4. **Shortcodes (`{{< ... >}}`, `{{% ... %}}`)** ✓
+   - Parse shortcodes as standalone block nodes.
+   - Highlight as macros and add representative corpus cases.
 5. **Chunk Option Lines (`#| option: value`)**
    - Recognize chunk option lines inside fenced code blocks without disrupting link/reference parsing.
    - Emit dedicated nodes (e.g., `chunk_option`) alongside regular code fence text for highlighting.

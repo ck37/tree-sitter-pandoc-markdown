@@ -1206,17 +1206,35 @@
               "content": {
                 "type": "ALIAS",
                 "content": {
-                  "type": "REPEAT",
+                  "type": "REPEAT1",
                   "content": {
-                    "type": "SEQ",
+                    "type": "CHOICE",
                     "members": [
                       {
-                        "type": "PATTERN",
-                        "value": "[^\\r\\n]*"
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "chunk_option"
+                          },
+                          {
+                            "type": "PATTERN",
+                            "value": "\\r?\\n"
+                          }
+                        ]
                       },
                       {
-                        "type": "PATTERN",
-                        "value": "\\r?\\n"
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "code_fence_line_text"
+                          },
+                          {
+                            "type": "PATTERN",
+                            "value": "\\r?\\n"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -1251,6 +1269,24 @@
           "value": "\\r?\\n"
         }
       ]
+    },
+    "chunk_option": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[ \\t]*#\\|[^\\r\\n]*"
+        }
+      }
+    },
+    "code_fence_line_text": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\r\\n]*"
+      }
     },
     "info_string": {
       "type": "SEQ",

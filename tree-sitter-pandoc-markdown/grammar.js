@@ -235,10 +235,17 @@ module.exports = grammar({
       field('delimiter', alias(token(/```+/), $.fenced_code_block_delimiter)),
       optional(field('info', $.info_string)),
       /\r?\n/,
-      optional(field('content', alias(repeat(seq(/[^\r\n]*/, /\r?\n/)), $.code_fence_content))),
+      optional(field('content', alias(repeat1(choice(
+        seq($.chunk_option, /\r?\n/),
+        seq($.code_fence_line_text, /\r?\n/)
+      )), $.code_fence_content))),
       field('delimiter', alias(token(/```+/), $.fenced_code_block_delimiter)),
       /\r?\n/
     ),
+
+    chunk_option: $ => token(prec(1, /[ \t]*#\|[^\r\n]*/)),
+
+    code_fence_line_text: $ => token(/[^\r\n]*/),
 
     info_string: $ => seq(
       choice(
