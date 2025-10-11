@@ -50,7 +50,7 @@ Once foundation is stable, incrementally add:
 - [ ] Fenced code blocks with language info (extended metadata)
 - [x] Reference-style links (inline reference usage and definitions)
 - [x] Images (inline and reference)
-- [ ] Autolinks
+- [x] Autolinks
 - [ ] HTML inline tags
 
 #### Phase 1C: Pandoc Extensions

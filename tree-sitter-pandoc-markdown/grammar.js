@@ -75,6 +75,7 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.autolink,
       $.image,
       $.text
     ),
@@ -111,8 +112,13 @@ module.exports = grammar({
       '`'
     )),
 
+    autolink: $ => token(choice(
+      /<[^\s<>]+:[^\s<>]+>/,
+      /<[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+>/
+    )),
+
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#>\-\[\]]+/,
+      /[^\n\r*_`#<>\-\[\]]+/, 
       /[>*_`]/
     ))),
 

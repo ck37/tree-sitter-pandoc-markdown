@@ -203,3 +203,19 @@ HTML block
     (html_open_tag)
     (html_block_content)
     (html_close_tag)))
+
+================================================================================
+Autolinks
+================================================================================
+Visit <https://example.com> or email <user@example.com>.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (autolink)
+      (text)
+      (autolink)
+      (text))))

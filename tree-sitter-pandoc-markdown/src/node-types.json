@@ -291,6 +291,10 @@
       "required": true,
       "types": [
         {
+          "type": "autolink",
+          "named": true
+        },
+        {
           "type": "code_span",
           "named": true
         },
@@ -544,6 +548,10 @@
       "required": true,
       "types": [
         {
+          "type": "autolink",
+          "named": true
+        },
+        {
           "type": "code_span",
           "named": true
         },
@@ -634,6 +642,10 @@
   },
   {
     "type": "atx_heading_marker",
+    "named": true
+  },
+  {
+    "type": "autolink",
     "named": true
   },
   {

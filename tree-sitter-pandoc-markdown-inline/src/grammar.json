@@ -29,6 +29,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "autolink"
+        },
+        {
+          "type": "SYMBOL",
           "name": "image"
         },
         {
@@ -227,6 +231,22 @@
           {
             "type": "STRING",
             "value": "`"
+          }
+        ]
+      }
+    },
+    "autolink": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "<[^\\s<>]+:[^\\s<>]+>"
+          },
+          {
+            "type": "PATTERN",
+            "value": "<[A-Za-z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[A-Za-z0-9.-]+>"
           }
         ]
       }
@@ -468,7 +488,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`\\[\\]]+"
+              "value": "[^\\n\\r*_`<>\\[\\]]+"
             },
             {
               "type": "PATTERN",

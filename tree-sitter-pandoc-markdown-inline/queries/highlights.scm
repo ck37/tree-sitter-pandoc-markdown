@@ -18,3 +18,5 @@
 (image
   (link_label) @text.reference)
 
+(autolink) @text.uri
+

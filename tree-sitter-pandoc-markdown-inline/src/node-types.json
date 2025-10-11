@@ -91,6 +91,10 @@
       "required": true,
       "types": [
         {
+          "type": "autolink",
+          "named": true
+        },
+        {
           "type": "code_span",
           "named": true
         },
@@ -216,6 +220,10 @@
       "required": true,
       "types": [
         {
+          "type": "autolink",
+          "named": true
+        },
+        {
           "type": "code_span",
           "named": true
         },
@@ -286,6 +294,10 @@
   {
     "type": "`",
     "named": false
+  },
+  {
+    "type": "autolink",
+    "named": true
   },
   {
     "type": "code_span_content",

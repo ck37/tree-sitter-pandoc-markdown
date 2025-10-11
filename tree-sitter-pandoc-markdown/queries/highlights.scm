@@ -43,3 +43,5 @@
   (link_label) @text.reference
   (link_destination)? @text.uri
   (link_title)? @string)
+
+(autolink) @text.uri
