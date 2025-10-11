@@ -34,7 +34,6 @@
     "node-gyp-build": "^4.8.1"
   },
   "devDependencies": {
-    "tree-sitter-markdown": "file:./tree-sitter-markdown",
     "prebuildify": "^6.0.1",
     "tree-sitter-cli": "^0.23.0"
   },

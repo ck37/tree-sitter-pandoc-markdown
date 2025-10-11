@@ -132,6 +132,12 @@ Round out remaining Pandoc Markdown constructs before considering Quarto-only en
 
 Each Phase 1D–1F feature should follow the established workflow: update grammar(s), queries, corpora, regenerate parsers, run tests, and log progress here.
 
+### Cleanup & Repository Hygiene
+- [x] Remove the legacy `tree-sitter-markdown` git submodule and drop it from `package.json` / `package-lock.json` now that the grammar is fully standalone.
+- [x] Update documentation (README, CONTRIBUTING, plan notes) to eliminate references to extending upstream grammars and clarify the standalone architecture.
+- [x] Run a final `git submodule status` after removal to ensure no stale submodule state remains.
+- [x] Execute `npm run build` and `npm test` to confirm tooling works without the submodule.
+
 **Parse Conflict Mitigation Notes**
 - Add one grammar feature at a time and run `npm run build` immediately to surface conflicts early.
 - Prefer tuning `prec`, `prec.left`, or `prec.right` before resorting to global `conflicts` declarations to keep the parser deterministic.

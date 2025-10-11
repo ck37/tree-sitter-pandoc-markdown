@@ -1,6 +1,5 @@
 # tree-sitter-pandoc-markdown
 
-A [tree-sitter](https://tree-sitter.github.io) grammar for Pandoc's Markdown as an extension of the [tree-sitter-markdown grammar](https://github.com/tree-sitter-grammars/tree-sitter-markdown).
 
 ## Setup
 
@@ -14,8 +13,6 @@ npm run build
 npm run test
 ```
 
-Note: `tree-sitter-markdown` is added here as a git module, such that it can be used in `package.json` as
-`"tree-sitter-markdown": "file:./tree-sitter-markdown",`.
 When used via npm it wouldn't find its `common/common.js` file.
 
 ## Testing in Neovim
