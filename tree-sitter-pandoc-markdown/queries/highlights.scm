@@ -28,6 +28,10 @@
 (link
   (link_label) @text.reference)
 
+(html_open_tag) @tag
+(html_close_tag) @tag
+(html_block_content) @text.literal
+
 (image
   (link_text) @text.reference
   (link_destination)? @text.uri)

@@ -33,6 +33,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "html_block"
+        },
+        {
+          "type": "SYMBOL",
           "name": "fenced_code_block"
         },
         {
@@ -245,6 +249,72 @@
           }
         ]
       }
+    },
+    "html_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "open",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "TOKEN",
+              "content": {
+                "type": "PREC",
+                "value": 1,
+                "content": {
+                  "type": "PATTERN",
+                  "value": "<[^>\\s]+[^>]*>"
+                }
+              }
+            },
+            "named": true,
+            "value": "html_open_tag"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[^<\\r\\n][^\\r\\n]*"
+                },
+                "named": true,
+                "value": "html_block_content"
+              },
+              {
+                "type": "PATTERN",
+                "value": "\\r?\\n"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "close",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "<\\/[A-Za-z][^>]*>"
+              }
+            },
+            "named": true,
+            "value": "html_close_tag"
+          }
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\r?\\n"
+        }
+      ]
     },
     "inline": {
       "type": "PREC_RIGHT",
@@ -1095,16 +1165,25 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "PATTERN",
-              "value": "---+"
+              "type": "TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "\\*(?:[ \t]*\\*){2,}[ \t]*"
+              }
             },
             {
-              "type": "PATTERN",
-              "value": "\\*\\*\\*+"
+              "type": "TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "-(?:[ \t]*-){2,}[ \t]*"
+              }
             },
             {
-              "type": "PATTERN",
-              "value": "___+"
+              "type": "TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "_(?:[ \t]*_){2,}[ \t]*"
+              }
             }
           ]
         },

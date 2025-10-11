@@ -45,8 +45,8 @@ Build **standalone** Tree-sitter grammars for Pandoc Markdown that work independ
 Once foundation is stable, incrementally add:
 - [x] Setext headings
 - [x] Block quotes
-- [ ] Thematic breaks (extended patterns)
-- [ ] HTML blocks
+- [x] Thematic breaks (extended patterns)
+- [x] HTML blocks
 - [ ] Fenced code blocks with language info (extended metadata)
 - [x] Reference-style links (inline reference usage and definitions)
 - [x] Images (inline and reference)

@@ -117,6 +117,10 @@
           "named": true
         },
         {
+          "type": "html_block",
+          "named": true
+        },
+        {
           "type": "link_reference_definition",
           "named": true
         },
@@ -204,6 +208,42 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "html_block",
+    "named": true,
+    "fields": {
+      "close": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "html_close_tag",
+            "named": true
+          }
+        ]
+      },
+      "open": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "html_open_tag",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "html_block_content",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -606,6 +646,18 @@
   },
   {
     "type": "fenced_code_block_delimiter",
+    "named": true
+  },
+  {
+    "type": "html_block_content",
+    "named": true
+  },
+  {
+    "type": "html_close_tag",
+    "named": true
+  },
+  {
+    "type": "html_open_tag",
     "named": true
   },
   {

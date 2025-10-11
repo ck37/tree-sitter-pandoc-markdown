@@ -4,6 +4,10 @@
 // Standalone Pandoc Markdown Block Grammar
 // Phase 1A: Minimal working grammar foundation
 
+function thematicLine(char) {
+  return token(new RegExp(`${char}(?:[ \t]*${char}){2,}[ \t]*`));
+}
+
 module.exports = grammar({
   name: 'pandoc_markdown',
 
@@ -18,6 +22,7 @@ module.exports = grammar({
       $.block_quote,
       $.link_reference_definition,
       $.paragraph,
+      $.html_block,
       $.fenced_code_block,
       $.list,
       $.thematic_break,
@@ -54,6 +59,13 @@ module.exports = grammar({
       field('content', $.inline),
       /\r?\n/
     )),
+
+    html_block: $ => seq(
+      field('open', alias(token(prec(1, /<[^>\s]+[^>]*>/)), $.html_open_tag)),
+      repeat(seq(alias(/[^<\r\n][^\r\n]*/, $.html_block_content), /\r?\n/)),
+      field('close', alias(token(/<\/[A-Za-z][^>]*>/), $.html_close_tag)),
+      /\r?\n/
+    ),
 
     // Inline content
     inline: $ => prec.right(repeat1($._inline_element)),
@@ -200,9 +212,9 @@ module.exports = grammar({
     // Thematic break
     thematic_break: $ => seq(
       choice(
-        /---+/,
-        /\*\*\*+/,
-        /___+/
+        thematicLine('\\*'),
+        thematicLine('\-'),
+        thematicLine('_')
       ),
       /\r?\n/
     ),
