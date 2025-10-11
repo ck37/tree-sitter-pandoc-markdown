@@ -1,7 +1,7 @@
 ## Phase 1: Standalone Pandoc Markdown Grammar
 
 ### Current Status
-After investigation, the repository's grammar inheritance approach is broken due to structural changes in the tree-sitter-markdown submodule. The require paths no longer exist, and tests have been failing for multiple commits.
+After investigation, the repository's grammar inheritance approach is broken due to structural changes in the tree-sitter-markdown submodule. In upstream revisions the generated parser artifacts were relocated under nested directories (e.g. `tree-sitter-markdown/tree-sitter-markdown/grammar.js`), while this project still referenced the prior flat layout via `require('tree-sitter-markdown/grammar')`. As a result, Node emits `Cannot find module 'tree-sitter-markdown/tree-sitter-markdown/grammar'` during the build step, and every commit since that structural change has produced failing tests because the inherited grammar can no longer be loaded.
 
 ### Revised Approach
 Build **standalone** Tree-sitter grammars for Pandoc Markdown that work independently, rather than attempting to extend tree-sitter-markdown. This provides:
