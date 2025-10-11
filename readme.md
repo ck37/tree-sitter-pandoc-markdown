@@ -3,17 +3,16 @@
 
 ## Setup
 
-Install [treesitter dependencies](https://tree-sitter.github.io/tree-sitter/creating-parsers#dependencies), then
+Install [tree-sitter dependencies](https://tree-sitter.github.io/tree-sitter/creating-parsers#dependencies), then
 
 ```bash
-git clone --recurse-submodules git@github.com:jmbuhr/tree-sitter-pandoc-markdown.git
+git clone git@github.com:jmbuhr/tree-sitter-pandoc-markdown.git
 cd tree-sitter-pandoc-markdown
 npm install
 npm run build
 npm run test
 ```
-
-When used via npm it wouldn't find its `common/common.js` file.
+This repository now ships fully standalone grammars for Pandoc Markdown and no longer depends on the upstream `tree-sitter-markdown` project or any git submodules.
 
 ## Testing in Neovim
 
