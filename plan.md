@@ -60,7 +60,7 @@ After core markdown works, add Pandoc-specific features:
 - [x] Citations (`@item`, `[@item p. 4]`)
 - [x] Cross references (`@fig:name`)
 - [x] Shortcodes (`{{< name >}}`, `{{% name %}}`)
-- [ ] Chunk options (`#|` comment lines in code blocks)
+- [x] Chunk options (`#|` comment lines in code blocks)
 
 **Phase 1C Work Plan (current focus):**
 1. **Attribute Lists** ✓
@@ -78,7 +78,7 @@ After core markdown works, add Pandoc-specific features:
 4. **Shortcodes (`{{< ... >}}`, `{{% ... %}}`)** ✓
    - Parse shortcodes as standalone block nodes.
    - Highlight as macros and add representative corpus cases.
-5. **Chunk Option Lines (`#| option: value`)**
+5. **Chunk Option Lines (`#| option: value`)** ✓
    - Recognize chunk option lines inside fenced code blocks without disrupting link/reference parsing.
    - Emit dedicated nodes (e.g., `chunk_option`) alongside regular code fence text for highlighting.
    - Extend corpora and highlighting to cover these lines.
