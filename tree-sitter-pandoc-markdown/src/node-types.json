@@ -206,12 +206,12 @@
           }
         ]
       },
-      "language": {
+      "info": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "language",
+            "type": "info_string",
             "named": true
           }
         ]
@@ -288,6 +288,29 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "info_string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_list",
+          "named": true
+        },
+        {
+          "type": "info_string_text",
+          "named": true
+        },
+        {
+          "type": "language",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -657,6 +680,10 @@
     "named": false
   },
   {
+    "type": "attribute_list",
+    "named": true
+  },
+  {
     "type": "atx_heading_marker",
     "named": true
   },
@@ -690,6 +717,10 @@
   },
   {
     "type": "html_open_tag",
+    "named": true
+  },
+  {
+    "type": "info_string_text",
     "named": true
   },
   {

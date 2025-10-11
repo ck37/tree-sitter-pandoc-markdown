@@ -1,3 +1,12 @@
+(document
+  (fenced_code_block
+    (fenced_code_block_delimiter)
+    (info_string
+      (language)
+      (info_string_text)
+      (attribute_list))
+    (code_fence_content)
+    (fenced_code_block_delimiter)))
 ================================================================================
 Heading block
 ================================================================================
@@ -60,7 +69,27 @@ console.log('hi')
 (document
   (fenced_code_block
     (fenced_code_block_delimiter)
-    (language)
+    (info_string
+      (language))
+    (code_fence_content)
+    (fenced_code_block_delimiter)))
+
+================================================================================
+Fenced code block with metadata
+================================================================================
+```python key=val {.chunk}
+print("hi")
+```
+
+--------------------------------------------------------------------------------
+
+(document
+  (fenced_code_block
+    (fenced_code_block_delimiter)
+    (info_string
+      (language)
+      (info_string_text)
+      (attribute_list))
     (code_fence_content)
     (fenced_code_block_delimiter)))
 

@@ -47,3 +47,7 @@
 (autolink) @text.uri
 
 (html_inline) @tag
+
+(language) @type
+(attribute_list) @property
+(info_string_text) @string

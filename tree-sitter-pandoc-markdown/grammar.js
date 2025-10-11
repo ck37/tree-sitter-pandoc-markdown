@@ -198,14 +198,28 @@ module.exports = grammar({
     // Fenced code blocks
     fenced_code_block: $ => seq(
       field('delimiter', alias(token(/```+/), $.fenced_code_block_delimiter)),
-      optional(field('language', $.language)),
+      optional(field('info', $.info_string)),
       /\r?\n/,
       optional(field('content', alias(repeat(seq(/[^\r\n]*/, /\r?\n/)), $.code_fence_content))),
       field('delimiter', alias(token(/```+/), $.fenced_code_block_delimiter)),
       /\r?\n/
     ),
 
-    language: $ => token(/[^\r\n]+/),
+    info_string: $ => seq(
+      choice(
+        alias(token(/\{[^}\r\n]*\}/), $.attribute_list),
+        alias(token(/[A-Za-z0-9_+-]+/), $.language),
+        alias(token(/[^\s\r\n{}]+/), $.info_string_text)
+      ),
+      repeat(seq(
+        optional(/[ \t]+/),
+        choice(
+          alias(token(/\{[^}\r\n]*\}/), $.attribute_list),
+          alias(token(/[A-Za-z0-9_+-]+/), $.language),
+          alias(token(/[^\s\r\n{}]+/), $.info_string_text)
+        )
+      ))
+    ),
 
     // Lists
     list: $ => prec.right(seq(

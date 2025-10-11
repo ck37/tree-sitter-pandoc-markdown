@@ -47,7 +47,7 @@ Once foundation is stable, incrementally add:
 - [x] Block quotes
 - [x] Thematic breaks (extended patterns)
 - [x] HTML blocks
-- [ ] Fenced code blocks with language info (extended metadata)
+- [x] Fenced code blocks with language info (extended metadata)
 - [x] Reference-style links (inline reference usage and definitions)
 - [x] Images (inline and reference)
 - [x] Autolinks
