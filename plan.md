@@ -109,18 +109,18 @@ Focus on high-impact Pandoc features that benefit all users (not Quarto-specific
 #### Phase 1E: Document Semantics & Typography
 Enhance inline semantics and block structures now that math/tables are stable.
 
-1. **Footnotes** *(in progress)*
-   - Parse `footnote_reference`, `footnote_definition`, and `inline_footnote`, supporting multi-paragraph definitions.
-   - Ensure references integrate with inline precedence and definitions align with block parsing.
+1. **Footnotes** ✓
+   - `footnote_reference`, `footnote_definition`, and `inline_footnote` nodes implemented with corpus coverage.
+   - References integrate cleanly with inline precedence and block parsing.
 2. **Definition Lists** *(deferred)*
    - Multiple implementation attempts caused widespread regressions because the colon-led description marker is indistinguishable from ordinary paragraph lines without a lookahead.
-   - Future work likely requires an external scanner or a more sophisticated newline classification strategy before re-introducing this rule; revisit after remaining typography is complete.
-3. **Strikethrough, Subscript, Superscript**
-   - Add inline nodes for `~~text~~`, `H~2~O`, `x^2^`, resolving precedence relative to emphasis and code spans.
-4. **Attribute Spans**
-   - Support `[text]{.class #id}` spans reusing `attribute_list`, ensuring they can nest within inline content.
-5. **Highlighting and Underline**
-   - Implement `==highlight==` and `+underline+` inline nodes with precedence rules comparable to strikethrough/sub/superscript and add corpus/highlight coverage.
+   - Future work likely requires an external scanner or a more sophisticated newline classification strategy before re-introducing this rule; revisit after completing the remaining phases.
+3. **Strikethrough, Subscript, Superscript** ✓
+   - Inline tokens for `~~text~~`, `H~2~O`, and `x^2^` in both grammars with highlights and tests.
+4. **Attribute Spans** ✓
+   - `[text]{.class #id}` spans supported for inline nesting; highlights and corpus cases in place.
+5. **Highlighting and Underline** ✓
+   - `==highlight==` and `+underline+` inline tokens implemented with precedence rules, highlighting, and fixture coverage.
 
 #### Phase 1F: Raw Content, Line Blocks, and Additional Tables
 Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.
