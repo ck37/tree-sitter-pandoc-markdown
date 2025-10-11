@@ -11,3 +11,10 @@
 (link
   (link_label) @text.reference)
 
+(image
+  (link_text) @text.reference
+  (link_destination)? @text.uri)
+
+(image
+  (link_label) @text.reference)
+

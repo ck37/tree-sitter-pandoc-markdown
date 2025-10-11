@@ -63,6 +63,7 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.image,
       $.text
     ),
 
@@ -80,6 +81,7 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.image,
       $.text
     ),
 
@@ -87,6 +89,7 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.image,
       $.text
     ),
 
@@ -104,6 +107,25 @@ module.exports = grammar({
     link: $ => seq(
       '[',
       field('text', optional($.link_text)),
+      ']',
+      choice(
+        seq(
+          '(',
+          field('destination', optional($.link_destination)),
+          ')'
+        ),
+        seq(
+          '[',
+          field('reference', optional($.link_label)),
+          ']'
+        )
+      )
+    ),
+
+    image: $ => seq(
+      '!',
+      '[',
+      field('alt', optional($.link_text)),
       ']',
       choice(
         seq(

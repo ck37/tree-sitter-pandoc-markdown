@@ -49,7 +49,7 @@ Once foundation is stable, incrementally add:
 - [ ] HTML blocks
 - [ ] Fenced code blocks with language info (extended metadata)
 - [x] Reference-style links (inline reference usage and definitions)
-- [ ] Images
+- [x] Images (inline and reference)
 - [ ] Autolinks
 - [ ] HTML inline tags
 

@@ -30,7 +30,6 @@
     "common/html_entities.json"
   ],
   "dependencies": {
-    "gyp": "^0.5.0",
     "node-addon-api": "^8.1.0",
     "node-gyp-build": "^4.8.1"
   },
@@ -46,6 +45,9 @@
     "tree_sitter": {
       "optional": true
     }
+  },
+  "overrides": {
+    "tar-fs": "^2.1.4"
   },
   "scripts": {
     "test": "node scripts/test.js",
