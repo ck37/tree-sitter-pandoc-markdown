@@ -45,3 +45,5 @@
   (link_title)? @string)
 
 (autolink) @text.uri
+
+(html_inline) @tag

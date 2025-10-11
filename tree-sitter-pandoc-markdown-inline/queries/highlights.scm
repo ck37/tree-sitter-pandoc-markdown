@@ -20,3 +20,5 @@
 
 (autolink) @text.uri
 
+(html_inline) @tag
+

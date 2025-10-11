@@ -24,7 +24,15 @@
       "required": true,
       "types": [
         {
+          "type": "autolink",
+          "named": true
+        },
+        {
           "type": "code_span",
+          "named": true
+        },
+        {
+          "type": "html_inline",
           "named": true
         },
         {
@@ -100,6 +108,10 @@
         },
         {
           "type": "emphasis",
+          "named": true
+        },
+        {
+          "type": "html_inline",
           "named": true
         },
         {
@@ -232,6 +244,10 @@
           "named": true
         },
         {
+          "type": "html_inline",
+          "named": true
+        },
+        {
           "type": "image",
           "named": true
         },
@@ -301,6 +317,10 @@
   },
   {
     "type": "code_span_content",
+    "named": true
+  },
+  {
+    "type": "html_inline",
     "named": true
   },
   {

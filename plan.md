@@ -51,7 +51,7 @@ Once foundation is stable, incrementally add:
 - [x] Reference-style links (inline reference usage and definitions)
 - [x] Images (inline and reference)
 - [x] Autolinks
-- [ ] HTML inline tags
+- [x] HTML inline tags
 
 #### Phase 1C: Pandoc Extensions
 After core markdown works, add Pandoc-specific features:

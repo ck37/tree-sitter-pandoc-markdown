@@ -18,6 +18,7 @@ module.exports = grammar({
       $.code_span,
       $.link,
       $.autolink,
+      $.html_inline,
       $.image,
       $.text
     ),
@@ -36,6 +37,8 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.autolink,
+      $.html_inline,
       $.image,
       $.text
     ),
@@ -44,6 +47,8 @@ module.exports = grammar({
       $.strong_emphasis,
       $.code_span,
       $.link,
+      $.autolink,
+      $.html_inline,
       $.image,
       $.text
     ),
@@ -58,6 +63,8 @@ module.exports = grammar({
       /<[^\s<>]+:[^\s<>]+>/,
       /<[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+>/
     )),
+
+    html_inline: $ => token(/<\/?[A-Za-z][^>\r\n]*>/),
 
     link: $ => seq(
       '[',

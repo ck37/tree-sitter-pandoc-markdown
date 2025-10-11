@@ -207,7 +207,7 @@ HTML block
 ================================================================================
 Autolinks
 ================================================================================
-Visit <https://example.com> or email <user@example.com>.
+Visit <https://example.com>, *<mailto:info@example.com>*, or email <user@example.com>.
 
 --------------------------------------------------------------------------------
 
@@ -217,5 +217,62 @@ Visit <https://example.com> or email <user@example.com>.
       (text)
       (autolink)
       (text)
+      (emphasis
+        (autolink))
+      (text)
       (autolink)
+      (text))))
+
+================================================================================
+Paragraph with spaced thematic break regression
+================================================================================
+Intro paragraph
+
+* * *
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)))
+  (thematic_break))
+
+================================================================================
+HTML block with surrounding text
+================================================================================
+Intro paragraph.
+<div>
+  <p>Content</p>
+</div>
+Final paragraph.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)))
+  (html_block
+    (html_open_tag)
+    (html_block_content)
+    (html_close_tag))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+HTML inline tags
+================================================================================
+Text with <strong>inline</strong> HTML.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (html_inline)
+      (text)
+      (html_inline)
       (text))))
