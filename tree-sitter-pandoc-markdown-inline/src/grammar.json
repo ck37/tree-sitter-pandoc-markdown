@@ -25,6 +25,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "link"
+        },
+        {
+          "type": "SYMBOL",
           "name": "text"
         }
       ]
@@ -148,6 +152,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "link"
+        },
+        {
+          "type": "SYMBOL",
           "name": "text"
         }
       ]
@@ -162,6 +170,10 @@
         {
           "type": "SYMBOL",
           "name": "code_span"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "link"
         },
         {
           "type": "SYMBOL",
@@ -207,6 +219,91 @@
         ]
       }
     },
+    "link": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "FIELD",
+          "name": "text",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "link_text"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "FIELD",
+          "name": "destination",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "link_destination"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "link_text": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_link_text_element"
+      }
+    },
+    "_link_text_element": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "emphasis"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "strong_emphasis"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "code_span"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "text"
+        }
+      ]
+    },
+    "link_destination": {
+      "type": "PATTERN",
+      "value": "[^)\\r\\n]+"
+    },
     "text": {
       "type": "PREC_RIGHT",
       "value": 0,
@@ -217,7 +314,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`\\[]+"
+              "value": "[^\\n\\r*_`\\[\\]]+"
             },
             {
               "type": "PATTERN",

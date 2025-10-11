@@ -16,6 +16,7 @@ module.exports = grammar({
       $.emphasis,
       $.strong_emphasis,
       $.code_span,
+      $.link,
       $.text
     ),
 
@@ -32,12 +33,14 @@ module.exports = grammar({
     _inline_no_star: $ => choice(
       $.strong_emphasis,
       $.code_span,
+      $.link,
       $.text
     ),
 
     _inline_no_underscore: $ => choice(
       $.strong_emphasis,
       $.code_span,
+      $.link,
       $.text
     ),
 
@@ -47,8 +50,28 @@ module.exports = grammar({
       '`'
     )),
 
+    link: $ => seq(
+      '[',
+      field('text', optional($.link_text)),
+      ']',
+      '(',
+      field('destination', optional($.link_destination)),
+      ')'
+    ),
+
+    link_text: $ => repeat1($._link_text_element),
+
+    _link_text_element: $ => choice(
+      $.emphasis,
+      $.strong_emphasis,
+      $.code_span,
+      $.text
+    ),
+
+    link_destination: $ => /[^)\r\n]+/,
+
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`\[]+/, 
+      /[^\n\r*_`\[\]]+/, 
       /[*_`]/
     )))
   }
