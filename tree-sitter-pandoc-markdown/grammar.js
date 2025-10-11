@@ -22,6 +22,7 @@ module.exports = grammar({
       $.block_quote,
       $.link_reference_definition,
       $.fenced_div,
+      $.shortcode_block,
       $.paragraph,
       $.html_block,
       $.fenced_code_block,
@@ -153,6 +154,10 @@ module.exports = grammar({
     citation: $ => token(/@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]/),
 
     attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+
+    shortcode_block: $ => seq(field('shortcode', $.shortcode), /\r?\n/),
+
+    shortcode: $ => token(/\{\{[<%][^{}\r\n]*[>%]\}\}/),
 
     text: $ => prec.right(repeat1(choice(
       /[^\n\r*_`#<>\-\[\]{}@]+/, 

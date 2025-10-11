@@ -51,6 +51,7 @@
 (citation_group) @text.reference
 (citation) @text.reference
 (cross_reference) @text.reference
+(shortcode) @constant.macro
 
 (html_inline) @tag
 

@@ -141,6 +141,10 @@
           "named": true
         },
         {
+          "type": "shortcode_block",
+          "named": true
+        },
+        {
           "type": "thematic_break",
           "named": true
         }
@@ -315,6 +319,10 @@
         },
         {
           "type": "setext_heading",
+          "named": true
+        },
+        {
+          "type": "shortcode_block",
           "named": true
         },
         {
@@ -697,6 +705,22 @@
     }
   },
   {
+    "type": "shortcode_block",
+    "named": true,
+    "fields": {
+      "shortcode": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "shortcode",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "strong_emphasis",
     "named": true,
     "fields": {},
@@ -891,6 +915,10 @@
   },
   {
     "type": "setext_heading_marker",
+    "named": true
+  },
+  {
+    "type": "shortcode",
     "named": true
   }
 ]
