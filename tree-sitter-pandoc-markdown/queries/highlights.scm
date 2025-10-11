@@ -26,6 +26,10 @@
 
 (math_delimiter) @punctuation.special
 
+(footnote_label) @text.reference
+(footnote_reference) @text.reference
+(inline_footnote) @comment
+
 (pipe_table_header_cell
   (pipe_table_cell_content)? @text.title)
 

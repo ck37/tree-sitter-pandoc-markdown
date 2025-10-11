@@ -94,7 +94,7 @@ After core markdown works, add Pandoc-specific features:
 #### Phase 1D: Mathematical Notation & Tables (Next Up)
 Focus on high-impact Pandoc features that benefit all users (not Quarto-specific).
 
-**Status:** Inline/display math and pipe tables implemented.
+**Status:** Inline/display math and pipe tables implemented. Beginning Phase 1E work.
 
 1. **Inline & Display Math** ✓
    - Add `inline_math` and `display_math` nodes with `math_content` capturing interior LaTeX. ✓
@@ -107,9 +107,9 @@ Focus on high-impact Pandoc features that benefit all users (not Quarto-specific
    - Provide highlight coverage for headers, alignment cues, and cell boundaries; add comprehensive corpus fixtures (optionally noting captions for later phases). ✓
 
 #### Phase 1E: Document Semantics & Typography
-Enhance inline semantics and block structures once math/tables are stable.
+Enhance inline semantics and block structures now that math/tables are stable.
 
-1. **Footnotes**
+1. **Footnotes** *(in progress)*
    - Parse `footnote_reference`, `footnote_definition`, and `inline_footnote`, supporting multi-paragraph definitions.
    - Ensure references integrate with inline precedence and definitions align with block parsing.
 2. **Definition Lists**

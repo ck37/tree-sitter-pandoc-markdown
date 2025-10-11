@@ -413,6 +413,26 @@ See @doe2020 for details, [@smith2019 p. 4] and @fig:chart.
       (text))))
 
 ================================================================================
+Footnote definitions and references
+================================================================================
+Here is a reference [^note].
+
+[^note]: Footnote content
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (footnote_reference)
+      (text)))
+  (footnote_definition
+    (footnote_label)
+    (inline
+      (text))))
+
+================================================================================
 Paragraph with inline math
 ================================================================================
 Energy equals $E = mc^2$ in this sentence.

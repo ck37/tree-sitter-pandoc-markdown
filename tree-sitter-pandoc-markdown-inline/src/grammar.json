@@ -57,6 +57,14 @@
         },
         {
           "type": "SYMBOL",
+          "name": "footnote_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inline_footnote"
+        },
+        {
+          "type": "SYMBOL",
           "name": "inline_math"
         },
         {
@@ -216,6 +224,14 @@
         },
         {
           "type": "SYMBOL",
+          "name": "footnote_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inline_footnote"
+        },
+        {
+          "type": "SYMBOL",
           "name": "inline_math"
         },
         {
@@ -266,6 +282,14 @@
         {
           "type": "SYMBOL",
           "name": "image"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "footnote_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inline_footnote"
         },
         {
           "type": "SYMBOL",
@@ -364,6 +388,20 @@
       "content": {
         "type": "PATTERN",
         "value": "\\{[^{}\\r\\n]*\\}"
+      }
+    },
+    "footnote_reference": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\[\\^[^\\]\\r\\n]+\\]"
+      }
+    },
+    "inline_footnote": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\^\\[[^\\]\\r\\n]+\\]"
       }
     },
     "inline_math": {
@@ -700,7 +738,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`<>\\[\\]{}@$|]+"
+              "value": "[^\\n\\r*_`<>\\[\\]{}@\\^$|]+"
             },
             {
               "type": "PATTERN",

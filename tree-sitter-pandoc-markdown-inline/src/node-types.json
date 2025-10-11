@@ -48,11 +48,19 @@
           "named": true
         },
         {
+          "type": "footnote_reference",
+          "named": true
+        },
+        {
           "type": "html_inline",
           "named": true
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "inline_footnote",
           "named": true
         },
         {
@@ -147,11 +155,19 @@
           "named": true
         },
         {
+          "type": "footnote_reference",
+          "named": true
+        },
+        {
           "type": "html_inline",
           "named": true
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "inline_footnote",
           "named": true
         },
         {
@@ -341,11 +357,19 @@
           "named": true
         },
         {
+          "type": "footnote_reference",
+          "named": true
+        },
+        {
           "type": "html_inline",
           "named": true
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "inline_footnote",
           "named": true
         },
         {
@@ -441,7 +465,15 @@
     "named": true
   },
   {
+    "type": "footnote_reference",
+    "named": true
+  },
+  {
     "type": "html_inline",
+    "named": true
+  },
+  {
+    "type": "inline_footnote",
     "named": true
   },
   {

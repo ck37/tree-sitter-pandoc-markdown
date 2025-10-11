@@ -46,6 +46,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "footnote_definition"
+        },
+        {
+          "type": "SYMBOL",
           "name": "link_reference_definition"
         },
         {
@@ -597,6 +601,14 @@
         },
         {
           "type": "SYMBOL",
+          "name": "footnote_reference"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inline_footnote"
+        },
+        {
+          "type": "SYMBOL",
           "name": "inline_math"
         },
         {
@@ -920,6 +932,77 @@
       "content": {
         "type": "PATTERN",
         "value": "\\{\\{[<%][^{}\\r\\n]*[>%]\\}\\}"
+      }
+    },
+    "footnote_definition": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "label",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "\\[\\^[^\\]\\r\\n]+\\]:"
+                }
+              },
+              "named": true,
+              "value": "footnote_label"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[ \\t]*"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "FIELD",
+            "name": "content",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "inline"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\r?\\n"
+          }
+        ]
+      }
+    },
+    "footnote_reference": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\[\\^[^\\]\\r\\n]+\\]"
+      }
+    },
+    "inline_footnote": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\^\\[[^\\]\\r\\n]+\\]"
       }
     },
     "inline_math": {
@@ -1411,7 +1494,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r*_`#<>\\-\\[\\]{}@$|]+"
+              "value": "[^\\n\\r*_`#<>\\-\\[\\]{}@\\^$|]+"
             },
             {
               "type": "PATTERN",

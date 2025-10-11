@@ -24,6 +24,9 @@
 (citation) @text.reference
 (cross_reference) @text.reference
 
+(footnote_reference) @text.reference
+(inline_footnote) @comment
+
 (inline_math
   (math_content)? @string)
 

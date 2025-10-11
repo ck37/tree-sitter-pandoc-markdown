@@ -175,6 +175,10 @@
           "named": true
         },
         {
+          "type": "footnote_definition",
+          "named": true
+        },
+        {
           "type": "html_block",
           "named": true
         },
@@ -368,6 +372,10 @@
           "named": true
         },
         {
+          "type": "footnote_definition",
+          "named": true
+        },
+        {
           "type": "html_block",
           "named": true
         },
@@ -400,6 +408,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "footnote_definition",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "inline",
+            "named": true
+          }
+        ]
+      },
+      "label": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "footnote_label",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -534,11 +568,19 @@
           "named": true
         },
         {
+          "type": "footnote_reference",
+          "named": true
+        },
+        {
           "type": "html_inline",
           "named": true
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "inline_footnote",
           "named": true
         },
         {
@@ -1004,11 +1046,19 @@
           "named": true
         },
         {
+          "type": "footnote_reference",
+          "named": true
+        },
+        {
           "type": "html_inline",
           "named": true
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "inline_footnote",
           "named": true
         },
         {
@@ -1181,6 +1231,14 @@
     "named": true
   },
   {
+    "type": "footnote_label",
+    "named": true
+  },
+  {
+    "type": "footnote_reference",
+    "named": true
+  },
+  {
     "type": "html_block_content",
     "named": true
   },
@@ -1198,6 +1256,10 @@
   },
   {
     "type": "info_string_text",
+    "named": true
+  },
+  {
+    "type": "inline_footnote",
     "named": true
   },
   {

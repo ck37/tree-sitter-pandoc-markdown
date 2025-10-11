@@ -24,6 +24,8 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.footnote_reference,
+      $.inline_footnote,
       $.inline_math,
       $.text
     ),
@@ -49,6 +51,8 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.footnote_reference,
+      $.inline_footnote,
       $.inline_math,
       $.text
     ),
@@ -64,6 +68,8 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.footnote_reference,
+      $.inline_footnote,
       $.inline_math,
       $.text
     ),
@@ -88,6 +94,10 @@ module.exports = grammar({
     citation: $ => token(/@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]/),
 
     attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+
+    footnote_reference: $ => token(/\[\^[^\]\r\n]+\]/),
+
+    inline_footnote: $ => token(/\^\[[^\]\r\n]+\]/),
 
     inline_math: $ => prec(2, seq(
       field('open', alias(token('$'), $.math_delimiter)),
@@ -151,7 +161,7 @@ module.exports = grammar({
     link_label: $ => repeat1($._link_text_element),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`<>\[\]{}@$|]+/, 
+      /[^\n\r*_`<>\[\]{}@\^$|]+/, 
       /[*_`]/
     )))
   }

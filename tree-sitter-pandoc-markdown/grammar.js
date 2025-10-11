@@ -23,6 +23,7 @@ module.exports = grammar({
       $.atx_heading,
       $.setext_heading,
       $.block_quote,
+      $.footnote_definition,
       $.link_reference_definition,
       $.fenced_div,
       $.display_math,
@@ -109,6 +110,8 @@ module.exports = grammar({
       $.citation,
       $.attribute_list,
       $.image,
+      $.footnote_reference,
+      $.inline_footnote,
       $.inline_math,
       $.text
     ),
@@ -175,6 +178,17 @@ module.exports = grammar({
     shortcode_block: $ => seq(field('shortcode', $.shortcode), /\r?\n/),
 
     shortcode: $ => token(/\{\{[<%][^{}\r\n]*[>%]\}\}/),
+
+    footnote_definition: $ => prec(1, seq(
+      field('label', alias(token(/\[\^[^\]\r\n]+\]:/), $.footnote_label)),
+      optional(/[ \t]*/),
+      field('content', optional($.inline)),
+      /\r?\n/
+    )),
+
+    footnote_reference: $ => token(/\[\^[^\]\r\n]+\]/),
+
+    inline_footnote: $ => token(/\^\[[^\]\r\n]+\]/),
 
     inline_math: $ => prec(2, seq(
       field('open', alias(token('$'), $.math_delimiter)),
@@ -244,7 +258,7 @@ module.exports = grammar({
     ),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#<>\-\[\]{}@$|]+/, 
+      /[^\n\r*_`#<>\-\[\]{}@\^$|]+/, 
       /[>*_`]/
     ))),
 
