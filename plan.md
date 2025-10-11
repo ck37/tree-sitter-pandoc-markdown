@@ -125,6 +125,14 @@ Enhance inline semantics and block structures now that math/tables are stable.
 #### Phase 1F: Raw Content, Line Blocks, and Additional Tables
 Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.
 
+**Status:** Not started. Prioritize raw content parsing first so the inline grammar can recognize format-qualified segments before layering on block structures and additional table variants.
+
+**Next Steps:**
+1. Implement raw inline and raw block nodes with corresponding highlights, injections, and corpus coverage; ensure they coexist with existing code spans and fenced code blocks.
+2. Add line block support (`line_block`, `line_block_line`) with precedence tuned against paragraphs and block quotes; cover edge cases with nested inline content.
+3. Extend block grammar for simple and grid tables, including highlighting for borders/delimiters and fixtures covering multi-line cells.
+4. Parse leading percent metadata lines into a `percent_metadata` block, confirming they gracefully hand off to subsequent blocks when absent.
+
 1. **Raw Inline and Raw Blocks**
    - Parse backtick + format markers (`` `code`{=html} ``) and fenced raw blocks (```{=latex}``).
    - Emit `raw_inline`, `raw_block`, and `raw_format` nodes and inject appropriate languages based on format identifiers.
