@@ -91,6 +91,47 @@ After core markdown works, add Pandoc-specific features:
    - After each feature: regenerate parsers (`npm run build`), extend corpora, and run `npm test`.
    - Update this plan and mark Phase 1C checklist items once their implementation stabilizes.
 
+#### Phase 1D: Mathematical Notation & Tables (Next Up)
+Focus on high-impact Pandoc features that benefit all users (not Quarto-specific).
+
+1. **Inline & Display Math**
+   - Add `inline_math` and `display_math` nodes with `math_content` capturing interior LaTeX.
+   - Support `$...$` and `$$...$$` delimiters (single-line and multi-line) with escape handling.
+   - Inject LaTeX highlighting for math content and tag delimiters as punctuation.
+   - Expand corpus with inline, block, adjacent math, and malformed delimiter cases.
+2. **Pipe Tables**
+   - Introduce `pipe_table`, `pipe_table_header`, `pipe_table_delimiter`, `pipe_table_row`, `pipe_table_cell`, and alignment markers.
+   - Handle leading/trailing pipes, column alignment (`:---`, `---:`, `:---:`), and ensure tables coexist with surrounding paragraphs.
+   - Provide highlight coverage for headers, alignment cues, and cell boundaries; add comprehensive corpus fixtures (optionally noting captions for later phases).
+
+#### Phase 1E: Document Semantics & Typography
+Enhance inline semantics and block structures once math/tables are stable.
+
+1. **Footnotes**
+   - Parse `footnote_reference`, `footnote_definition`, and `inline_footnote`, supporting multi-paragraph definitions.
+   - Ensure references integrate with inline precedence and definitions align with block parsing.
+2. **Definition Lists**
+   - Implement `definition_list`, `definition_term`, `definition_description` with support for multiple definitions per term.
+3. **Strikethrough, Subscript, Superscript**
+   - Add inline nodes for `~~text~~`, `H~2~O`, `x^2^`, resolving precedence relative to emphasis and code spans.
+4. **Attribute Spans**
+   - Support `[text]{.class #id}` spans reusing `attribute_list`, ensuring they can nest within inline content.
+
+#### Phase 1F: Raw Content, Line Blocks, and Additional Tables
+Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.
+
+1. **Raw Inline and Raw Blocks**
+   - Parse backtick + format markers (`` `code`{=html} ``) and fenced raw blocks (```{=latex}``).
+   - Emit `raw_inline`, `raw_block`, and `raw_format` nodes and inject appropriate languages based on format identifiers.
+2. **Line Blocks**
+   - Implement `line_block` and `line_block_line` for leading `|` syntax, preserving indentation and blank-line handling.
+3. **Additional Table Forms**
+   - Extend grammar for grid tables and simple tables, including optional captions and multi-line cells.
+4. **Percent Metadata Blocks**
+   - Recognize `% Title`, `% Author`, `% Date` sequences at the document start as `percent_metadata` (alternative to YAML front matter).
+
+Each Phase 1D–1F feature should follow the established workflow: update grammar(s), queries, corpora, regenerate parsers, run tests, and log progress here.
+
 **Parse Conflict Mitigation Notes**
 - Add one grammar feature at a time and run `npm run build` immediately to surface conflicts early.
 - Prefer tuning `prec`, `prec.left`, or `prec.right` before resorting to global `conflicts` declarations to keep the parser deterministic.
