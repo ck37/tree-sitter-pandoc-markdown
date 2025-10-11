@@ -161,6 +161,10 @@
         {
           "type": "thematic_break",
           "named": true
+        },
+        {
+          "type": "yaml_front_matter",
+          "named": true
         }
       ]
     }
@@ -804,6 +808,42 @@
     "fields": {}
   },
   {
+    "type": "yaml_front_matter",
+    "named": true,
+    "fields": {
+      "close": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "yaml_front_matter_delimiter",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "yaml_front_matter_start",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "yaml_front_matter_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "!",
     "named": false
   },
@@ -941,6 +981,18 @@
   },
   {
     "type": "shortcode",
+    "named": true
+  },
+  {
+    "type": "yaml_front_matter_content",
+    "named": true
+  },
+  {
+    "type": "yaml_front_matter_delimiter",
+    "named": true
+  },
+  {
+    "type": "yaml_front_matter_start",
     "named": true
   }
 ]

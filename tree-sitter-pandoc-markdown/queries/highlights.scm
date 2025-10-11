@@ -14,6 +14,10 @@
 (code_fence_line_text) @text.literal
 (chunk_option) @comment
 
+(yaml_front_matter_start) @comment
+(yaml_front_matter_delimiter) @punctuation.special
+(yaml_front_matter_content) @comment
+
 (fenced_div_delimiter) @punctuation.special
 
 (list_marker) @punctuation.special

@@ -61,6 +61,7 @@ After core markdown works, add Pandoc-specific features:
 - [x] Cross references (`@fig:name`)
 - [x] Shortcodes (`{{< name >}}`, `{{% name %}}`)
 - [x] Chunk options (`#|` comment lines in code blocks)
+- [x] YAML front matter (Pandoc metadata block)
 
 **Phase 1C Work Plan (current focus):**
 1. **Attribute Lists** ✓
@@ -82,6 +83,10 @@ After core markdown works, add Pandoc-specific features:
    - Recognize chunk option lines inside fenced code blocks without disrupting link/reference parsing.
    - Emit dedicated nodes (e.g., `chunk_option`) alongside regular code fence text for highlighting.
    - Extend corpora and highlighting to cover these lines.
+6. **YAML Front Matter** ✓
+   - Parse Pandoc metadata blocks delimited by `---` / `...` at the start of the document.
+   - Tag the opening segment, metadata lines, and closing delimiter for highlighting.
+   - Add foundation corpus coverage to confirm interaction with downstream blocks.
 6. **Plan & Regression Tests**
    - After each feature: regenerate parsers (`npm run build`), extend corpora, and run `npm test`.
    - Update this plan and mark Phase 1C checklist items once their implementation stabilizes.

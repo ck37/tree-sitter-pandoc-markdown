@@ -14,7 +14,10 @@ module.exports = grammar({
   extras: $ => [/\s/],
 
   rules: {
-    document: $ => repeat($._block),
+    document: $ => choice(
+      seq($.yaml_front_matter, repeat($._block)),
+      repeat($._block)
+    ),
 
     _block: $ => choice(
       $.atx_heading,
@@ -75,6 +78,17 @@ module.exports = grammar({
       /\r?\n/,
       repeat($._block),
       field('close', alias(token(/:::+/), $.fenced_div_delimiter)),
+      /\r?\n/
+    )),
+
+    yaml_front_matter: $ => prec(-1, seq(
+      field('start', alias(token(seq('---', /\r?\n/, /[^:\r\n]+:[^\r\n]*/)), $.yaml_front_matter_start)),
+      /\r?\n/,
+      repeat(choice(
+        seq(alias(token(prec(-1, /[^\r\n]+/)), $.yaml_front_matter_content), /\r?\n/),
+        /\r?\n/
+      )),
+      field('close', alias(token(prec(1, choice('---', '...'))), $.yaml_front_matter_delimiter)),
       /\r?\n/
     )),
 

@@ -2,11 +2,32 @@
   "name": "pandoc_markdown",
   "rules": {
     "document": {
-      "type": "REPEAT",
-      "content": {
-        "type": "SYMBOL",
-        "name": "_block"
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "yaml_front_matter"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_block"
+              }
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_block"
+          }
+        }
+      ]
     },
     "_block": {
       "type": "CHOICE",
@@ -387,6 +408,118 @@
               },
               "named": true,
               "value": "fenced_div_delimiter"
+            }
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\r?\\n"
+          }
+        ]
+      }
+    },
+    "yaml_front_matter": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "start",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "TOKEN",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "---"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": "\\r?\\n"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": "[^:\\r\\n]+:[^\\r\\n]*"
+                    }
+                  ]
+                }
+              },
+              "named": true,
+              "value": "yaml_front_matter_start"
+            }
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\r?\\n"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "TOKEN",
+                        "content": {
+                          "type": "PREC",
+                          "value": -1,
+                          "content": {
+                            "type": "PATTERN",
+                            "value": "[^\\r\\n]+"
+                          }
+                        }
+                      },
+                      "named": true,
+                      "value": "yaml_front_matter_content"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": "\\r?\\n"
+                    }
+                  ]
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\r?\\n"
+                }
+              ]
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "close",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "TOKEN",
+                "content": {
+                  "type": "PREC",
+                  "value": 1,
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "---"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "..."
+                      }
+                    ]
+                  }
+                }
+              },
+              "named": true,
+              "value": "yaml_front_matter_delimiter"
             }
           },
           {
