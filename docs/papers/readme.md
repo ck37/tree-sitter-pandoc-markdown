@@ -384,6 +384,27 @@ marker pdfs/wagner-parsing.pdf --output_format markdown
 
 Markdown output will be placed in `pdfs/` directory alongside the original PDFs by default.
 
+#### Apple Silicon GPU Acceleration
+
+On Apple Silicon Macs (M1/M2/M3), you may see this warning:
+
+```
+[WARNING] surya: `TableRecEncoderDecoderModel` is not compatible with mps backend. Defaulting to cpu instead
+```
+
+**This is expected behavior:**
+- The table recognition model specifically doesn't support Apple's MPS (Metal Performance Shaders) backend
+- Most of the pipeline (OCR, layout detection) still uses GPU acceleration via MPS
+- Only table recognition falls back to CPU
+- Conversion will complete successfully, just slightly slower for table processing
+
+**What to do:**
+- ✅ **Recommended:** Accept the warning and let it run in mixed mode (GPU + CPU)
+- Alternative: Force full CPU mode with `PYTORCH_DEVICE=cpu marker pdfs --output_format markdown`
+- Alternative: Disable table processing if you don't need it (see marker docs for processor configuration)
+
+The warning doesn't indicate an error - marker will work correctly with mixed GPU/CPU processing.
+
 ---
 
 **Last Updated:** 2025-10-12
