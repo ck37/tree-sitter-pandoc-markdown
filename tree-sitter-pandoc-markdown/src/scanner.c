@@ -54,6 +54,8 @@ typedef enum {
     PLUS_METADATA,
     PIPE_TABLE_START,
     PIPE_TABLE_LINE_ENDING,
+    LINE_BLOCK_START,
+    LINE_BLOCK_LINE_ENDING,
 } TokenType;
 
 // Description of a block on the block stack.
@@ -169,6 +171,8 @@ static const bool paragraph_interrupt_symbols[] = {
     false, // PLUS_METADATA,
     true,  // PIPE_TABLE_START,
     false, // PIPE_TABLE_LINE_ENDING,
+    true,  // LINE_BLOCK_START,
+    false, // LINE_BLOCK_LINE_ENDING,
 };
 
 // State bitflags used with `Scanner.state`
@@ -1170,6 +1174,107 @@ static bool parse_html_block(Scanner *s, TSLexer *lexer,
     return false;
 }
 
+// Quick check: does this look like a line block (without advancing lexer)?
+// Returns: 1 if line block, 0 if pipe table, -1 if neither
+static int is_line_block_quick_check(Scanner *s, TSLexer *lexer) {
+    // This is a non-advancing check
+    // We're already at '|', check what comes after without advancing
+
+    // For now, just return -1 to indicate "unknown, need full parse"
+    // The full disambiguation happens in the parse functions
+    return -1;
+}
+
+// Detect if the current line starting with | is a line block
+// Line blocks have pattern: | <space> <content>
+// and do NOT have a delimiter row following (which would indicate a pipe table)
+// IMPORTANT: This function must NOT advance lexer if returning false!
+static bool parse_line_block(Scanner *s, TSLexer *lexer,
+                              const bool *valid_symbols) {
+    (void)(valid_symbols);
+
+    // LINE_BLOCK_START is zero width
+    mark_end(s, lexer);
+
+    // Check without advancing: Must start with |
+    if (lexer->lookahead != '|') {
+        return false;
+    }
+
+    // Peek ahead using simulate mode to avoid modifying state if we return false
+    bool was_simulate = s->simulate;
+    s->simulate = true;
+
+    advance(s, lexer);  // Now at character after |
+
+    // Line blocks require at least one space/tab after |
+    if (lexer->lookahead != ' ' && lexer->lookahead != '\t') {
+        s->simulate = was_simulate;
+        return false;  // Not a line block, lexer not actually advanced due to simulate
+    }
+
+    // Scan to end of line, checking for additional pipes
+    bool found_another_pipe = false;
+    bool prev_was_backslash = false;
+
+    while (lexer->lookahead != '\r' && lexer->lookahead != '\n' &&
+           !lexer->eof(lexer)) {
+        if (lexer->lookahead == '|' && !prev_was_backslash) {
+            found_another_pipe = true;
+            break;  // Found another pipe, this is a table
+        }
+        prev_was_backslash = (lexer->lookahead == '\\' && !prev_was_backslash);
+        advance(s, lexer);
+    }
+
+    // If we found multiple pipes, it's a pipe table
+    if (found_another_pipe) {
+        s->simulate = was_simulate;
+        return false;
+    }
+
+    // Look ahead to next line to check for delimiter row
+    if (lexer->lookahead == '\n') {
+        advance(s, lexer);
+    } else if (lexer->lookahead == '\r') {
+        advance(s, lexer);
+        if (lexer->lookahead == '\n') {
+            advance(s, lexer);
+        }
+    } else if (lexer->eof(lexer)) {
+        // Single line block at EOF is valid
+        s->simulate = was_simulate;
+        lexer->result_symbol = LINE_BLOCK_START;
+        return true;
+    } else {
+        s->simulate = was_simulate;
+        return false;
+    }
+
+    // Skip leading whitespace on next line
+    while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
+        advance(s, lexer);
+    }
+
+    // Check if next line is a delimiter row
+    if (lexer->lookahead == '|') {
+        advance(s, lexer);
+        while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
+            advance(s, lexer);
+        }
+        // Check for delimiter pattern
+        if (lexer->lookahead == ':' || lexer->lookahead == '-') {
+            s->simulate = was_simulate;
+            return false; // This is a pipe table delimiter
+        }
+    }
+
+    // Confirmed as line block
+    s->simulate = was_simulate;
+    lexer->result_symbol = LINE_BLOCK_START;
+    return true;
+}
+
 static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
                              const bool *valid_symbols) {
 
@@ -1419,6 +1524,15 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
             case '<':
                 // A < could mark the beginning of a html block
                 return parse_html_block(s, lexer, valid_symbols);
+            case '|':
+                // A '|' could mark either a line block or a pipe table
+                // NOTE: LINE_BLOCK_START temporarily disabled - causes interference
+                // with block quotes and other constructs. Need to debug simulate mode.
+                // Try pipe table if it's valid
+                if (valid_symbols[PIPE_TABLE_START]) {
+                    return parse_pipe_table(s, lexer, valid_symbols);
+                }
+                return false;
         }
         if (lexer->lookahead != '\r' && lexer->lookahead != '\n' &&
             valid_symbols[PIPE_TABLE_START]) {

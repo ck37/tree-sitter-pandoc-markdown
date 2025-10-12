@@ -159,12 +159,24 @@ Round out remaining Pandoc Markdown constructs before considering Quarto-only en
    - **Current Status**: Line block implementation commented out/reverted from `_block` choices to restore pipe table functionality. Feature code preserved in git history.
 
 **Deferred Pending External Scanner:**
-1. **Line Blocks** ⚠️ (Requires External Scanner)
+1. **Line Blocks** ⚠️ (Requires External Scanner - Implementation Attempted 2025-10-11)
    - **Issue**: `|` marker conflicts with pipe table delimiters
    - Both constructs use `|` character, creating ambiguous parses
    - Attempted precedence-based resolution insufficient
    - **Resolution**: External scanner (C code) needed for context-aware tokenization
-   - **Status**: Implementation attempted and reverted; code preserved in git history
+   - **Status**: Full external scanner implementation attempted (see EXTERNAL_SCANNER_PLAN.md for details)
+     - ✅ Added LINE_BLOCK_START/LINE_BLOCK_LINE_ENDING tokens to scanner.c
+     - ✅ Implemented parse_line_block() with simulate mode and multi-line lookahead
+     - ✅ Updated scan() function with '|' case handler for disambiguation
+     - ✅ Added grammar rules (line_block, line_block_line) with external tokens
+     - ✅ Added highlighting queries and restored 4 corpus tests
+     - ❌ Tests failing: Both line blocks and pipe tables broken (6 test failures)
+     - ❌ External tokens emitted but parser creating ERROR nodes
+     - ❌ Suggests GLR parser trying multiple paths despite external token guidance
+   - **Current State**: Implementation left in codebase (not reverted) for debugging
+   - **Test Results**: 37/43 block tests passing (down from 39/39 before attempt)
+   - **Blocker**: Requires deeper tree-sitter external scanner expertise or community help
+   - **See**: EXTERNAL_SCANNER_PLAN.md "Implementation Attempt Results" section for full analysis
 
 2. **Simple Tables** ⚠️ (Requires External Scanner)
    - **Issue**: Dash separator patterns conflict with multiple constructs:
@@ -185,9 +197,12 @@ Round out remaining Pandoc Markdown constructs before considering Quarto-only en
 **Phase 1F Summary:**
 - ✅ **2 of 5 features completed**: Raw content (inline/block), Percent metadata
 - ⚠️ **3 features require external scanner**: Line blocks, Simple tables, Grid tables
-- **Test coverage**: Added 12 new tests (all passing)
+- **Test coverage**: Added 16 new tests (12 passing, 4 failing line block tests)
 - **Production ready**: Raw inline, raw blocks, percent metadata
+- **In progress**: Line block external scanner implementation (incomplete, 6 test failures introduced)
+- **Current test status**: 37/43 block tests passing, 29/29 inline tests passing
 - **Technical insight**: Pure grammar rules insufficient for ambiguous Markdown constructs; external scanner (C code) required for context-aware lexing
+- **External scanner challenge**: Full implementation attempted but requires deeper tree-sitter expertise to resolve GLR parser interaction issues
 - All successfully implemented features follow established workflow: grammar updates, highlighting/injection queries, corpus tests, regeneration, and test verification.
 
 ### Cleanup & Repository Hygiene

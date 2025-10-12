@@ -13,6 +13,11 @@ module.exports = grammar({
 
   extras: $ => [/\s/],
 
+  externals: $ => [
+    // $.line_block_start,  // Disabled - causes parser interference
+    // $.pipe_table_start,  // Disabled - causes parser errors
+  ],
+
   conflicts: $ => [
     [$._inline_element, $._link_text_element],
   ],
@@ -32,7 +37,8 @@ module.exports = grammar({
       $.link_reference_definition,
       $.fenced_div,
       $.display_math,
-      $.pipe_table,
+      // prec(2, $.line_block),  // Disabled - causes parser interference
+      prec(1, $.pipe_table),
       $.shortcode_block,
       $.raw_block,
       $.paragraph,
@@ -279,7 +285,20 @@ module.exports = grammar({
       token.immediate(/\r?\n/)
     ))),
 
+    // line_block: $ => prec.right(seq(
+    //   $.line_block_start,
+    //   $.line_block_line,
+    //   repeat($.line_block_line)
+    // )),
+
+    // line_block_line: $ => seq(
+    //   field('marker', alias(token(prec(1, /\|[ \t]+/)), $.line_block_marker)),
+    //   optional(field('content', $.inline)),
+    //   /\r?\n/
+    // ),
+
     pipe_table: $ => prec.right(seq(
+      // $.pipe_table_start,  // Disabled external token - causes parser errors
       field('header', $.pipe_table_header),
       field('delimiter', $.pipe_table_delimiter),
       repeat1(field('row', $.pipe_table_row))

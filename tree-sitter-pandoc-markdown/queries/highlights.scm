@@ -30,6 +30,7 @@
 (footnote_reference) @text.reference
 (inline_footnote) @comment
 
+; (line_block_marker) @punctuation.special  ; Disabled - line blocks not implemented
 
 (pipe_table_header_cell
   (pipe_table_cell_content)? @text.title)

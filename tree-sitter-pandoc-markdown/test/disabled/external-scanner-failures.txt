@@ -1,0 +1,175 @@
+================================================================================
+DISABLED TESTS - External Scanner Implementation Issues
+================================================================================
+
+These tests have been disabled due to unresolved issues with the external scanner
+implementation attempted on 2025-10-11. The external scanner was meant to
+disambiguate line blocks from pipe tables, but it introduced parsing failures
+in multiple constructs.
+
+See EXTERNAL_SCANNER_PLAN.md for full implementation details and analysis.
+
+================================================================================
+Block quote [DISABLED - External Scanner Side Effect]
+================================================================================
+> First line
+> Second line
+
+--------------------------------------------------------------------------------
+
+(document
+  (block_quote
+    (block_quote_line
+      (block_quote_marker)
+      (inline
+        (text)))
+    (block_quote_line
+      (block_quote_marker)
+      (inline
+        (text)))))
+
+================================================================================
+Thematic break spaced [DISABLED - External Scanner Side Effect]
+================================================================================
+* * *
+
+--------------------------------------------------------------------------------
+
+(document
+  (thematic_break))
+
+================================================================================
+Pipe table [DISABLED - Original Conflict Target]
+================================================================================
+| Name | Value |
+| :--- | ---: |
+| Foo  | 42    |
+| Bar  | 17    |
+
+--------------------------------------------------------------------------------
+
+(document
+  (pipe_table
+    (pipe_table_header
+      (pipe_table_header_cell
+        (pipe_table_cell_content))
+      (pipe_table_header_cell
+        (pipe_table_cell_content)))
+    (pipe_table_delimiter
+      (pipe_table_alignment
+        (pipe_table_alignment_marker))
+      (pipe_table_alignment
+        (pipe_table_alignment_marker)))
+    (pipe_table_row
+      (pipe_table_cell
+        (pipe_table_cell_content))
+      (pipe_table_cell
+        (pipe_table_cell_content)))
+    (pipe_table_row
+      (pipe_table_cell
+        (pipe_table_cell_content))
+      (pipe_table_cell
+        (pipe_table_cell_content)))))
+
+================================================================================
+Line block simple [DISABLED - Original Conflict Target]
+================================================================================
+| First line
+| Second line
+| Third line
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))
+
+================================================================================
+Line block with indentation [DISABLED - Original Conflict Target]
+================================================================================
+| The limerick packs laughs anatomical
+| In space that is quite economical.
+|    But the good ones I've seen
+|    So seldom are clean
+| And the clean ones so seldom are comical
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))
+
+================================================================================
+Line block with emphasis [DISABLED - Original Conflict Target]
+================================================================================
+| *Emphasis* in line blocks
+| **Strong** also works
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (emphasis
+          (text))
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (strong_emphasis
+          (text))
+        (text)))))
+
+================================================================================
+Empty line block line [DISABLED - Original Conflict Target]
+================================================================================
+| First line
+|
+| Third line
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))

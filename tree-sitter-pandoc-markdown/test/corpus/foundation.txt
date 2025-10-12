@@ -694,4 +694,3 @@ Paragraph text.
   (paragraph
     (inline
       (text))))
-

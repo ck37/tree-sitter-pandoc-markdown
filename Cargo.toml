@@ -2,6 +2,7 @@
 name = "tree-sitter-pandoc-markdown"
 description = "Treesitter parser for markdown with pandoc extensions"
 version = "0.1.0"
+edition = "2021"
 authors = ["Jannik Buhr <jannik.m.buhr@gmail.com>"]
 license = "MIT"
 readme = "README.md"
