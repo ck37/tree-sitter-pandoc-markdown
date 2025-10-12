@@ -14,13 +14,13 @@ This document tracks all improvements, features, and architectural changes made 
 This branch represents a complete rewrite and reimplementation of the tree-sitter-pandoc-markdown parser, transforming it from an extension of tree-sitter-markdown into a **fully standalone grammar** with comprehensive Pandoc feature support.
 
 **Key Achievements:**
-- ✅ **100% test pass rate** (67/67 tests passing)
-- ✅ **38 block-level features** implemented and tested
+- ✅ **100% test pass rate** (73/73 tests passing)
+- ✅ **44 block-level features** implemented and tested
 - ✅ **29 inline-level features** implemented and tested
 - ✅ **Standalone architecture** - no git submodule dependencies
 - ✅ **Grammar-first approach** - minimal external scanner usage
 - ✅ **ABI version 14** for Zed editor compatibility
-- ✅ **Comprehensive documentation** - 2,896 lines of technical docs
+- ✅ **Comprehensive documentation** - 3,100+ lines of technical docs
 
 **Code Changes:**
 - **38,483 insertions, 155,390 deletions** (net reduction: 116,907 lines)
@@ -114,7 +114,7 @@ This branch represents a complete rewrite and reimplementation of the tree-sitte
 
 All Pandoc Markdown features that can be implemented with pure grammar rules are complete and tested.
 
-#### Block-Level Features (38 tests)
+#### Block-Level Features (44 tests)
 
 **Standard Markdown:**
 - ✅ ATX headings (`#` through `######`)
@@ -127,7 +127,7 @@ All Pandoc Markdown features that can be implemented with pure grammar rules are
 - ✅ Paragraphs with inline content
 
 **Pandoc Extensions:**
-- ✅ Fenced divs (`:::`) with attributes
+- ✅ Fenced divs (`:::`) with attributes **[Bug fixed 2025-10-12: content after divs now parses correctly]**
 - ✅ Chunk options (`#|` comment lines in code blocks)
 - ✅ YAML front matter (`---` delimiters)
 - ✅ Percent metadata (`% Title`, `% Author`, `% Date`)
@@ -207,7 +207,7 @@ The following features require external scanner implementation for disambiguatio
 
 **Test organization:**
 ```
-Block Grammar Tests (38):
+Block Grammar Tests (44):
 ├── Headings (ATX, Setext)
 ├── Block quotes
 ├── Lists (ordered, unordered, nested)
@@ -251,7 +251,7 @@ Inline Grammar Tests (29):
 - `test/corpus/pandoc.txt` (20 lines) - Incomplete tests
 
 **Test files added:**
-- `tree-sitter-pandoc-markdown/test/corpus/foundation.txt` (663 lines)
+- `tree-sitter-pandoc-markdown/test/corpus/foundation.txt` (690 lines)
 - `tree-sitter-pandoc-markdown-inline/test/corpus/foundation.txt` (341 lines)
 - `test/disabled/` directory with deferred tests for Phase 2 features
 
@@ -465,6 +465,30 @@ Total: 67/67 tests passing (100%)
 **Commits:** 52c6abe, 46a32c2, 955fe54, 5e2213e
 
 **Documentation:** docs/plan.md "Critical Fix: External Scanner Interference"
+
+### 4. Fenced Div Parser Bug (Critical Fix - 2025-10-12)
+
+**Problem:** Content after fenced divs was parsed as ERROR nodes, making fenced divs unusable in real documents.
+
+**Root cause:** The `repeat($._block)` in fenced_div grammar rule greedily consumed all blocks until EOF, not recognizing the closing `:::` delimiter as a stopping point.
+
+**Solution:**
+- Added `prec(10)` to closing delimiter token
+- Changed from: `field('close', alias(token(/:::+/), $.fenced_div_delimiter))`
+- Changed to: `field('close', alias(token(prec(10, /:::+/)), $.fenced_div_delimiter))`
+- This gives closing delimiter higher priority than continuing to parse blocks
+
+**Impact:**
+- ✅ Fenced divs now work correctly with subsequent content
+- ✅ Added test "Fenced div with content after"
+- ✅ Test coverage: 73/73 passing (added 6 new tests)
+- ✅ `examples/feature-showcase.md` now uses real fenced divs
+
+**Commits:** 53285b1, d728c68, 7aaed7a
+
+**Documentation:**
+- docs/fenced-div-fix.md (detailed technical analysis)
+- docs/known-issues.md (updated to show bug fixed)
 
 ### 2. Test Suite Restoration
 
@@ -696,8 +720,8 @@ Total: 67/67 tests passing (100%)
 
 ### Test Coverage
 - **Before:** 6,000+ tests (many failing)
-- **After:** 67 tests (100% passing)
-- **Block tests:** 38 comprehensive tests
+- **After:** 73 tests (100% passing)
+- **Block tests:** 44 comprehensive tests
 - **Inline tests:** 29 comprehensive tests
 
 ### Features Implemented
@@ -730,8 +754,8 @@ Total: 67/67 tests passing (100%)
 | **Dependencies** | Git submodule required | No submodules |
 | **External Scanner** | 40+ tokens (inherited) | 1 token (pipe_table_start) |
 | **Grammar Approach** | Scanner-heavy | Grammar-first |
-| **Test Suite** | 6,000+ CommonMark tests | 67 Pandoc-specific tests |
-| **Test Pass Rate** | Many failures | 100% (67/67) |
+| **Test Suite** | 6,000+ CommonMark tests | 73 Pandoc-specific tests |
+| **Test Pass Rate** | Many failures | 100% (73/73) |
 | **Parser Size** | ~130k-140k lines | ~78k-82k lines |
 | **Documentation** | Basic README | 2,896 lines technical docs |
 | **ABI Version** | Variable | 14 (enforced) |
@@ -768,13 +792,14 @@ The following features are documented and planned but require external scanner i
 
 This branch represents a complete reimagining and reimplementation of the tree-sitter-pandoc-markdown parser, with:
 
-- **43 commits** of focused development
-- **2,896 lines** of technical documentation
-- **100% test pass rate** (67/67 tests)
+- **52+ commits** of focused development
+- **3,100+ lines** of technical documentation
+- **100% test pass rate** (73/73 tests)
 - **42 Pandoc features** fully implemented
 - **39-41% parser size reduction**
 - **Comprehensive research** across 6 tree-sitter grammars
 - **Clear architecture** with documented rationale
+- **Critical bug fixes** for production readiness
 
 The work demonstrates deep understanding of tree-sitter parsing mechanics, Pandoc Markdown syntax, and software architecture principles.
 
@@ -789,6 +814,8 @@ The work demonstrates deep understanding of tree-sitter parsing mechanics, Pando
 - `docs/options-for-proceeding.md` - Decision analysis
 - `docs/external-scanner-plan.md` - Line block attempt
 - `docs/external-scanner-resources.md` - Research resources
+- `docs/fenced-div-fix.md` - Detailed bug fix analysis
+- `docs/known-issues.md` - Known limitations and workarounds
 
 ### External Resources
 - [Pandoc Manual](https://pandoc.org/MANUAL.html)
