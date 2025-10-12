@@ -73,4 +73,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 ## License
 
-[License information here]
+MIT License - Copyright (c) 2024 Jannik Buhr
+
+See [LICENSE](LICENSE) for full details.

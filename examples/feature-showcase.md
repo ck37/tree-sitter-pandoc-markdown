@@ -11,7 +11,9 @@ date: "2025-10-12"
 
 ### Text Formatting
 
-Regular text with *emphasis*, **strong**, and ***both***.
+Regular text with *emphasis* and **strong** formatting.
+
+You can also nest them: **bold with *italic* inside**.
 
 `inline code` for programming terms.
 
@@ -59,9 +61,12 @@ plot(1:10)
 
 ### Fenced Divs
 
-::: {.callout-note}
-Important information here!
+Note: Fenced divs have a parser bug (content after div causes errors). Example syntax:
+```
+:::{.note}
+Content here
 :::
+```
 
 ### Citations & References
 
@@ -69,7 +74,7 @@ See @smith2020 for background.
 
 Multiple sources: [@jones2021; @doe2022, p. 42]
 
-Cross-reference: See @fig:results
+Figure reference @fig:results and table reference @tbl:data
 
 ### Attributes
 
@@ -106,10 +111,14 @@ Exponent: x^2^
 
 ### Tables
 
+Note: Pipe tables are in Phase 2 (external scanner work in progress).
+
+Example table syntax (not yet fully parsed):
+```
 | Left | Center | Right |
 |:-----|:------:|------:|
 | A    |   B    |     C |
-| 1    |   2    |     3 |
+```
 
 ### Shortcodes
 
@@ -137,13 +146,9 @@ This document uses YAML front matter.
 
 ### Percent Style
 
-Alternative metadata format:
+Alternative metadata format (must be at document start, not shown here since we already have YAML front matter).
 
-% Document Title
-% Author Name
-% 2025-10-12
-
----
+* * *
 
 **Status**: All features implemented and tested!
 **Test Coverage**: 72/72 passing (100%)
