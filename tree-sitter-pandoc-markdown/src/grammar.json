@@ -1599,40 +1599,40 @@
       }
     },
     "pipe_table": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "pipe_table_start"
-        },
-        {
-          "type": "FIELD",
-          "name": "header",
-          "content": {
-            "type": "SYMBOL",
-            "name": "pipe_table_header"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "delimiter",
-          "content": {
-            "type": "SYMBOL",
-            "name": "pipe_table_delimiter"
-          }
-        },
-        {
-          "type": "REPEAT1",
-          "content": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "FIELD",
-            "name": "row",
+            "name": "header",
             "content": {
               "type": "SYMBOL",
-              "name": "pipe_table_row"
+              "name": "pipe_table_header"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "delimiter",
+            "content": {
+              "type": "SYMBOL",
+              "name": "pipe_table_delimiter"
+            }
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "FIELD",
+              "name": "row",
+              "content": {
+                "type": "SYMBOL",
+                "name": "pipe_table_row"
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "pipe_table_header": {
       "type": "SEQ",
@@ -1640,6 +1640,10 @@
         {
           "type": "STRING",
           "value": "|"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pipe_table_start"
         },
         {
           "type": "FIELD",

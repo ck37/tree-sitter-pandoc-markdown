@@ -305,15 +305,15 @@ module.exports = grammar({
     //   /\r?\n/
     // ),
 
-    pipe_table: $ => seq(
-      $.pipe_table_start,
+    pipe_table: $ => prec.right(seq(
       field('header', $.pipe_table_header),
       field('delimiter', $.pipe_table_delimiter),
       repeat1(field('row', $.pipe_table_row))
-    ),
+    )),
 
     pipe_table_header: $ => seq(
       '|',
+      $.pipe_table_start,  // Zero-width token to validate this is a pipe table
       field('cell', $.pipe_table_header_cell),
       repeat1(seq('|', field('cell', $.pipe_table_header_cell))),
       optional('|'),

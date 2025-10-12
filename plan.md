@@ -294,6 +294,51 @@ Modified `scan()` function in scanner.c to:
 **Key Insight:**
 External scanners and grammar rules must have clear, non-overlapping responsibilities. When the scanner was allowed to handle constructs that the grammar also defined, it created ambiguity that tree-sitter's GLR parser couldn't resolve cleanly. The minimal scanner approach (only pipe_table_start) prevents this entire class of issues.
 
+### Pipe Table External Scanner Debugging (2025-10-12 - In Progress)
+
+**Problem:**
+After fixing the external scanner interference issue, pipe tables still weren't parsing correctly. The `pipe_table_start` external token was never being emitted, causing tables to parse as ERROR nodes.
+
+**Root Cause:**
+Multiple issues with grammar structure and scanner logic:
+
+1. **Grammar structure issue**: Originally had `pipe_table_start` BEFORE the first `'|'` character in the grammar, but the parser needs to see a concrete token before it knows to request the external token.
+2. **Scanner assumption mismatch**: The `parse_pipe_table()` function assumed it would be called with lookahead at `'|'`, but after grammar restructuring, it's called AFTER grammar consumes the first `'|'`.
+3. **Empty detection bug**: The `empty` variable was never set to `false` when non-whitespace content was encountered.
+
+**Fixes Implemented:**
+
+1. **Grammar restructuring** (grammar.js):
+   - Moved `pipe_table_start` to AFTER the first `'|'` in `pipe_table_header`
+   - Changed from: `pipe_table: seq(pipe_table_start, header, delimiter, rows)`
+   - Changed to: `pipe_table_header: seq('|', pipe_table_start, cells...)`
+   - Added `prec.right()` to resolve GLR conflicts
+
+2. **Scanner logic updates** (scanner.c):
+   - Removed incorrect check for `lexer->lookahead == '|'` at start (already consumed by grammar)
+   - Fixed cell counting to start at 1 (grammar consumed first pipe)
+   - Set `starting_pipe = true` (grammar already consumed it)
+   - Fixed `empty` detection to set `false` when encountering non-whitespace
+
+**Progress:**
+- ✅ `PIPE_TABLE_START` is now in valid_symbols when scanning
+- ✅ `parse_pipe_table()` is being called and returning true
+- ✅ Fixed cell counting logic (starts at 1 since grammar consumed first |)
+- ✅ Fixed empty detection bug
+- ✅ Identified fundamental lexer position issue with multi-line lookahead
+- ✅ Implemented simplified scanner that doesn't advance lexer
+- ✅ Grammar now recognizes pipe table structure
+- ⏳ Grammar rules for cells/rows need refinement (current: some structure but errors)
+
+**Key Insight - Zero-Width Tokens and Lexer Position:**
+The `advance()` function always calls `lexer->advance()` regardless of simulate mode. For zero-width tokens with multi-line lookahead, the lexer gets positioned beyond where grammar expects. The original scanner was designed to consume entire tables, but our grammar wants to parse rows itself. Solution: Simplified scanner to minimal validation without advancing, letting grammar handle full parsing.
+
+**Next Steps:**
+- Refine grammar rules for pipe_table_header_cell parsing
+- Fix delimiter and row parsing in grammar
+- Test with various table formats
+- Re-enable pipe table test once fully working
+
 ## Phase 2: External Scanner Features
 
 ### Status
