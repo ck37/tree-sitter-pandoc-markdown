@@ -56,22 +56,23 @@ Term
 ## Edge Cases / Limitations
 
 ### 1. Triple Asterisks (Nested Bold + Italic)
-**Status**: Limitation
-**Severity**: Low - rare usage
+**Status**: ✅ FIXED (2025-10-12)
+**Severity**: N/A
 
-**Issue**: `***both bold and italic***` doesn't parse correctly. The parser interprets this as emphasis/strong conflicts.
+**Issue**: ~~`***both bold and italic***` didn't parse correctly.~~ **Now works correctly!**
 
-**Example that fails**:
+**Resolution**:
+- Fixed by integrating external scanner emphasis tokens (commit 77de308)
+- Added comprehensive test coverage including triple asterisks, quadruple asterisks, and more
+- All emphasis nesting now works as expected per CommonMark spec
+
+**Example that now works**:
 ```markdown
 Regular text with ***both bold and italic***.
+Also works: ___underscores___ and ****deeply nested****
 ```
 
-**Workaround**: Use nested formatting:
-```markdown
-**bold with *italic* inside**
-```
-
-**Notes**: Not tested in corpus (tree-sitter-pandoc-markdown-inline/test/corpus/foundation.txt has no `***` tests).
+**Test Coverage**: 7 new emphasis tests added covering edge cases (commit f614eae)
 
 ### 2. Cross-References After Colons
 **Status**: Edge case
@@ -112,9 +113,9 @@ Some content...
 
 ## Test Coverage
 
-**Passing Tests**: 73/73 (100%)
-- Block grammar: 44/44 tests (added "Fenced div with content after")
-- Inline grammar: 29/29 tests
+**Passing Tests**: 80/80 (100%)
+- Block grammar: 43/43 tests
+- Inline grammar: 37/37 tests (enhanced with comprehensive emphasis tests)
 
 **Example Files**:
 - `examples/simple-test.md` - ✅ Parses with ZERO errors
