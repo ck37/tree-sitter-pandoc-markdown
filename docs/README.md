@@ -6,6 +6,7 @@ This directory contains comprehensive documentation for the tree-sitter-pandoc-m
 
 - **[ARCHITECTURE_RATIONALE.md](ARCHITECTURE_RATIONALE.md)** - Why we use separate block and inline grammars (and why they shouldn't be unified)
 - **[plan.md](plan.md)** - Implementation roadmap, phases, and current status
+- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Complete changelog of all improvements made in this branch vs upstream repository
 
 ## External Scanner Research
 
@@ -16,8 +17,11 @@ This directory contains comprehensive documentation for the tree-sitter-pandoc-m
 
 ## Quick Navigation
 
+### New to the Project?
+Start with [IMPROVEMENTS.md](IMPROVEMENTS.md) to see what's been accomplished in this branch compared to the upstream repository.
+
 ### Understanding the Architecture
-Start with [ARCHITECTURE_RATIONALE.md](ARCHITECTURE_RATIONALE.md) to understand why the project uses separate grammars.
+Read [ARCHITECTURE_RATIONALE.md](ARCHITECTURE_RATIONALE.md) to understand why the project uses separate grammars.
 
 ### Contributing Features
 1. Read [plan.md](plan.md) to see what's implemented and what's planned
