@@ -1,5 +1,82 @@
 # tree-sitter-pandoc-markdown
 
+Tree-sitter parser for Pandoc-flavored Markdown, including support for Quarto and RMarkdown.
+
+This repository ships **fully standalone grammars** that work independently without extending tree-sitter-markdown. The implementation provides complete control over grammar structure, Zed editor compatibility (ABI version 14), and incremental addition of Pandoc-specific features.
+
+## Status
+
+**Phase 1 Complete** - All grammar-only Pandoc Markdown features are implemented and tested.
+
+**Test Coverage:**
+- ✅ 39/39 block grammar tests passing
+- ✅ 29/29 inline grammar tests passing
+
+## Supported Features
+
+### Block-Level Constructs
+- ATX headings (`#` through `######`)
+- Setext headings (underlined with `=` or `-`)
+- Block quotes (`>`)
+- Fenced code blocks with chunk options (`#|`)
+- HTML blocks
+- Fenced divs (`:::`) with attributes
+- YAML front matter (`---`)
+- Percent metadata (`% Title`, `% Author`, `% Date`)
+- Pipe tables with alignment markers
+- Display math (`$$...$$`)
+- Raw blocks (` ```{=format} `)
+- Footnote definitions
+- Link reference definitions
+- Shortcode blocks (`{{< ... >}}`, `{{% ... %}}`)
+- Lists (ordered and unordered)
+- Thematic breaks
+- Paragraphs
+
+### Inline-Level Constructs
+- Emphasis (`*` and `_`)
+- Strong emphasis (`**` and `__`)
+- Code spans (`` ` ``)
+- Raw inline (`` `code`{=format} ``)
+- Links (inline and reference-style)
+- Images (inline and reference-style)
+- Autolinks
+- HTML inline tags
+- Citations (`@key`, `[@key]`)
+- Cross-references (`@fig:id`)
+- Attribute lists (`{.class #id key=val}`)
+- Attribute spans (`[text]{.attrs}`)
+- Footnote references (`[^1]`)
+- Inline footnotes (`^[text]`)
+- Inline math (`$...$`)
+- Strikethrough (`~~text~~`)
+- Highlight (`==text==`)
+- Subscript (`~text~`)
+- Superscript (`^text^`)
+- Underline (`+text+`)
+
+## Not Yet Implemented
+
+The following features require external scanner implementation and are planned for Phase 2:
+
+- **Definition lists** - Colon syntax conflicts with paragraphs
+- **Line blocks** - `|` marker conflicts with pipe tables
+- **Simple tables** - Dash patterns conflict with multiple constructs
+- **Grid tables** - Complex border syntax
+
+See `plan.md` for implementation roadmap and `EXTERNAL_SCANNER_PLAN.md` for technical details.
+
+## Architecture
+
+The project ships two separate but related grammars:
+- **Block grammar** (`tree-sitter-pandoc-markdown/`): Document structure (headings, lists, code blocks, tables, etc.)
+- **Inline grammar** (`tree-sitter-pandoc-markdown-inline/`): Inline formatting (emphasis, links, citations, math, etc.)
+
+**Key technical details:**
+- ABI version 14 for Zed editor compatibility
+- External scanner (C code) for list markers, HTML blocks, and pipe tables
+- Grammar-only implementation (no external scanner) for most features
+- Shared common code in `common/` directory
 
 ## Setup
 
@@ -10,9 +87,8 @@ git clone git@github.com:jmbuhr/tree-sitter-pandoc-markdown.git
 cd tree-sitter-pandoc-markdown
 npm install
 npm run build
-npm run test
+npm test
 ```
-This repository now ships fully standalone grammars for Pandoc Markdown and no longer depends on the upstream `tree-sitter-markdown` project or any git submodules.
 
 ## Testing in Neovim
 
