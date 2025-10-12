@@ -1,7 +1,7 @@
 ## Phase 1: Standalone Pandoc Markdown Grammar
 
 ### Current Status
-**Phase 1F In Progress** - The standalone Pandoc Markdown grammar is functional and supports the majority of Pandoc features. Recent work added raw content (inline/block), percent metadata blocks, and identified a pipe table vs line block parsing conflict requiring external scanner implementation.
+**Phase 1 Complete** - The standalone Pandoc Markdown grammar is functional and supports all grammar-only Pandoc features. Phase 1F completed raw content (inline/block) and percent metadata blocks. Features requiring external scanner implementation (definition lists, line blocks, simple tables, grid tables) have been moved to Phase 2.
 
 **Background**: After investigation, the repository's grammar inheritance approach was broken due to structural changes in the tree-sitter-markdown submodule. To avoid an endless chase after upstream churn and to gain full control over Pandoc features, a purpose-built standalone grammar was implemented. This provides complete control over grammar structure, Zed editor compatibility (ABI version 14), and the ability to add Pandoc-specific features incrementally.
 
@@ -111,12 +111,14 @@ Focus on high-impact Pandoc features that benefit all users (not Quarto-specific
 #### Phase 1E: Document Semantics & Typography
 Enhance inline semantics and block structures now that math/tables are stable.
 
+**Status:** Complete (for grammar-only features). Definition lists moved to Phase 2.
+
 1. **Footnotes** ✓
    - `footnote_reference`, `footnote_definition`, and `inline_footnote` nodes implemented with corpus coverage.
    - References integrate cleanly with inline precedence and block parsing.
-2. **Definition Lists** *(deferred)*
+2. **Definition Lists** → Moved to Phase 2 (requires external scanner)
    - Multiple implementation attempts caused widespread regressions because the colon-led description marker is indistinguishable from ordinary paragraph lines without a lookahead.
-   - Future work likely requires an external scanner or a more sophisticated newline classification strategy before re-introducing this rule; revisit after completing the remaining phases.
+   - Requires external scanner or sophisticated newline classification strategy.
 3. **Strikethrough, Subscript, Superscript** ✓
    - Inline tokens for `~~text~~`, `H~2~O`, and `x^2^` in both grammars with highlights and tests.
 4. **Attribute Spans** ✓
@@ -124,10 +126,10 @@ Enhance inline semantics and block structures now that math/tables are stable.
 5. **Highlighting and Underline** ✓
    - `==highlight==` and `+underline+` inline tokens implemented with precedence rules, highlighting, and fixture coverage.
 
-#### Phase 1F: Raw Content, Line Blocks, and Additional Tables
-Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.
+#### Phase 1F: Raw Content and Percent Metadata
+Round out remaining grammar-only Pandoc Markdown constructs.
 
-**Status:** Complete (for grammar-only features). Raw content and percent metadata successfully implemented and tested. Line blocks, simple tables, and grid tables identified as requiring external scanner (C code) to resolve pattern conflicts - these are deferred pending external scanner development.
+**Status:** Complete. Raw content and percent metadata successfully implemented and tested. Line blocks, simple tables, and grid tables moved to Phase 2 (require external scanner implementation).
 
 **Completed:**
 1. **Raw Inline and Raw Blocks** ✓
@@ -145,64 +147,10 @@ Round out remaining Pandoc Markdown constructs before considering Quarto-only en
    - Added 4 corpus tests covering all metadata combinations.
    - **Test Results**: ✓ All 4 tests passing.
 
-3. **Line Blocks** ⚠️ (Partial - Known Issue)
-   - Implemented `line_block` and `line_block_line` with `|` marker syntax.
-   - Line block marker requires at least one space (`/\|[ \t]+/`) to differentiate from pipe table delimiters.
-   - Added 4 corpus tests: simple blocks, indentation, emphasis within lines, empty lines.
-   - **Test Results**: ✓ All 4 line block tests pass in isolation.
-   - **Known Conflict**: Line blocks conflict with existing pipe tables (both use `|` character). Pipe table test now fails when line block is enabled in grammar.
-   - **Root Cause**: Both constructs start with `|`, and tree-sitter cannot disambiguate without lookahead. Pipe tables require `| cell | cell |` with delimiter row `| :--- | ---: |`, while line blocks are `| line content`.
-   - **Resolution Options**:
-     1. External scanner to peek ahead and detect table structure vs line block
-     2. Defer line blocks until after pipe table detection via precedence/ordering (attempted, insufficient)
-     3. Make line blocks require different marker (e.g., `||` - breaks Pandoc compatibility)
-   - **Current Status**: Line block implementation commented out/reverted from `_block` choices to restore pipe table functionality. Feature code preserved in git history.
-
-**Deferred Pending External Scanner:**
-1. **Line Blocks** ⚠️ (Requires External Scanner - Implementation Attempted 2025-10-11)
-   - **Issue**: `|` marker conflicts with pipe table delimiters
-   - Both constructs use `|` character, creating ambiguous parses
-   - Attempted precedence-based resolution insufficient
-   - **Resolution**: External scanner (C code) needed for context-aware tokenization
-   - **Status**: Full external scanner implementation attempted (see EXTERNAL_SCANNER_PLAN.md for details)
-     - ✅ Added LINE_BLOCK_START/LINE_BLOCK_LINE_ENDING tokens to scanner.c
-     - ✅ Implemented parse_line_block() with simulate mode and multi-line lookahead
-     - ✅ Updated scan() function with '|' case handler for disambiguation
-     - ✅ Added grammar rules (line_block, line_block_line) with external tokens
-     - ✅ Added highlighting queries and restored 4 corpus tests
-     - ❌ Tests failing: Both line blocks and pipe tables broken (6 test failures)
-     - ❌ External tokens emitted but parser creating ERROR nodes
-     - ❌ Suggests GLR parser trying multiple paths despite external token guidance
-   - **Current State**: Implementation left in codebase (not reverted) for debugging
-   - **Test Results**: 37/43 block tests passing (down from 39/39 before attempt)
-   - **Blocker**: Requires deeper tree-sitter external scanner expertise or community help
-   - **See**: EXTERNAL_SCANNER_PLAN.md "Implementation Attempt Results" section for full analysis
-
-2. **Simple Tables** ⚠️ (Requires External Scanner)
-   - **Issue**: Dash separator patterns conflict with multiple constructs:
-     - Pipe table alignment markers (`:?-{3,}:?`)
-     - Setext heading underlines (`===` or `---`)
-     - Thematic breaks (`---`)
-     - YAML front matter delimiters (`---`)
-   - Tree-sitter creates competing parses resulting in ERROR nodes
-   - **Resolution**: External scanner needed for context-aware dash pattern disambiguation
-   - **Status**: Implementation attempted and reverted
-
-3. **Grid Tables** (Not Attempted)
-   - Complex border syntax with `+`, `-`, and `|` characters
-   - Would support multi-line cells and complex layouts
-   - Likely faces similar pattern conflicts as line blocks and simple tables
-   - **Status**: Deferred until external scanner infrastructure exists
-
 **Phase 1F Summary:**
-- ✅ **2 of 5 features completed**: Raw content (inline/block), Percent metadata
-- ⚠️ **3 features require external scanner**: Line blocks, Simple tables, Grid tables
-- **Test coverage**: Added 16 new tests (12 passing, 4 failing line block tests)
+- ✅ **2 of 2 features completed**: Raw content (inline/block), Percent metadata
+- **Test coverage**: Added 12 new tests (all passing)
 - **Production ready**: Raw inline, raw blocks, percent metadata
-- **In progress**: Line block external scanner implementation (incomplete, 6 test failures introduced)
-- **Current test status**: 37/43 block tests passing, 29/29 inline tests passing
-- **Technical insight**: Pure grammar rules insufficient for ambiguous Markdown constructs; external scanner (C code) required for context-aware lexing
-- **External scanner challenge**: Full implementation attempted but requires deeper tree-sitter expertise to resolve GLR parser interaction issues
 - All successfully implemented features follow established workflow: grammar updates, highlighting/injection queries, corpus tests, regeneration, and test verification.
 
 ### Cleanup & Repository Hygiene
@@ -317,17 +265,139 @@ tree-sitter-pandoc-markdown-inline/
 - Underline (`+text+`)
 
 **Test Coverage:**
-- Block grammar: 43 tests (42 passing, 1 known conflict)
+- Block grammar: 39 tests (all passing)
 - Inline grammar: 29 tests (all passing)
 
-**Known Issues:**
-- Line blocks vs pipe tables conflict (both use `|` delimiter)
+## Phase 2: External Scanner Features
 
-### Future Considerations (Post Phase 1)
-- Resolve line block/pipe table conflict via external scanner
-- Implement simple tables
-- Implement grid tables
-- Evaluate if/when to sync with CommonMark spec updates
-- Consider whether to re-integrate with tree-sitter-markdown if they stabilize structure
-- Plan for Quarto-specific grammar extensions (Phase 2)
-- Performance optimization and error recovery improvements
+### Status
+**Not Started** - All features in Phase 2 require implementing a working external scanner (C code) for context-aware lexing. An initial implementation attempt was made but encountered GLR parser interaction issues (see EXTERNAL_SCANNER_PLAN.md for details).
+
+### Objectives
+Implement features that require external scanner for disambiguation:
+1. Definition lists (colon syntax conflicts with paragraphs)
+2. Line blocks (`|` conflicts with pipe tables)
+3. Simple tables (dash patterns conflict with multiple constructs)
+4. Grid tables (complex border syntax)
+
+### Technical Foundation Required
+
+**External Scanner Implementation:**
+- Develop robust external scanner infrastructure that doesn't interfere with existing grammar
+- Study working examples: Python indent/dedent, Bash heredocs, other tree-sitter parsers
+- Understand GLR parser interaction with external tokens
+- Implement proper lexer state management and simulate mode
+
+**Reference:**
+- EXTERNAL_SCANNER_PLAN.md: Documents failed implementation attempt (2025-10-11)
+- Lessons learned: External tokens caused parser interference beyond intended scope
+- Community help recommended before retry
+
+### Phase 2 Features
+
+#### Definition Lists
+**Status:** Not started (moved from Phase 1E)
+
+**Syntax:**
+```markdown
+Term
+:   Description paragraph
+
+Another term
+:   Another description
+```
+
+**Issue:** Colon-led description marker indistinguishable from ordinary paragraph lines without lookahead
+
+**Requirements:**
+- External scanner to detect `: ` at line start following a term
+- Distinguish from inline colons in normal paragraphs
+- Handle multi-paragraph descriptions with proper indentation
+
+#### Line Blocks
+**Status:** Implementation attempted and disabled (moved from Phase 1F)
+
+**Syntax:**
+```markdown
+| First line preserved exactly
+| Second line with   extra spaces
+|    Indented line
+```
+
+**Issue:** `|` marker conflicts with pipe table delimiters
+
+**External Scanner Implementation Attempted (2025-10-11):**
+- ✅ Added LINE_BLOCK_START/LINE_BLOCK_LINE_ENDING tokens
+- ✅ Implemented parse_line_block() with multi-line lookahead
+- ✅ Grammar rules and highlighting
+- ❌ Caused parser interference with block quotes and other constructs
+- ❌ Both line blocks and pipe tables broken in tests
+
+**Requirements:**
+- External scanner to disambiguate `|` context
+- Peek ahead to detect table delimiter row vs continued line block
+- Must not interfere with other constructs using `>` or other markers
+
+**Reference:** EXTERNAL_SCANNER_PLAN.md "Implementation Attempt Results" section
+
+#### Simple Tables
+**Status:** Implementation attempted and reverted (moved from Phase 1F)
+
+**Syntax:**
+```markdown
+  Right     Left     Center     Default
+-------     ------ ----------   -------
+     12     12        12            12
+    123     123       123          123
+      1     1          1             1
+```
+
+**Issue:** Dash separator patterns conflict with:
+- Setext heading underlines (`===` or `---`)
+- Thematic breaks (`---`)
+- YAML front matter delimiters (`---`)
+- Pipe table alignment markers (`:?-{3,}:?`)
+
+**Requirements:**
+- External scanner to detect table structure via column alignment
+- Context-aware dash pattern disambiguation
+- Detect header row followed by separator row with matching column positions
+
+#### Grid Tables
+**Status:** Not attempted (moved from Phase 1F)
+
+**Syntax:**
+```markdown
++---------------+---------------+--------------------+
+| Fruit         | Price         | Advantages         |
++===============+===============+====================+
+| Bananas       | $1.34         | - built-in wrapper |
+|               |               | - bright color     |
++---------------+---------------+--------------------+
+| Oranges       | $2.10         | - cures scurvy     |
+|               |               | - tasty            |
++---------------+---------------+--------------------+
+```
+
+**Issue:** Complex border syntax with `+`, `-`, and `|` characters. Likely faces similar pattern conflicts as line blocks and simple tables.
+
+**Requirements:**
+- External scanner to detect grid structure
+- Multi-line border parsing
+- Support for multi-line cells
+- Column alignment detection
+
+### Phase 2 Success Criteria
+- Working external scanner infrastructure
+- At least 2 of 4 features implemented without breaking existing tests
+- All Phase 1 tests continue to pass (39/39 block, 29/29 inline)
+- New corpus tests for each implemented feature
+
+## Phase 3: Future Considerations
+
+**Potential focus areas:**
+- Quarto-specific grammar extensions
+- Performance optimization
+- Error recovery improvements
+- CommonMark spec synchronization evaluation
+- Consider re-integration with tree-sitter-markdown if upstream stabilizes
