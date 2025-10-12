@@ -3,6 +3,8 @@
 pdfs/
 markdown/
 
-# Keep the readme with paper references
+# Keep the readme with paper references and build tools
 !readme.md
 !.gitignore
+!Makefile
+!marker-config.json

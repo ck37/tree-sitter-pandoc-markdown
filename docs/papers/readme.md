@@ -366,19 +366,38 @@ All papers have been downloaded to `docs/papers/pdfs/`:
 
 ### Converting PDFs to Markdown
 
-To convert the PDFs to markdown, use the `marker-pdf` tool:
+**Quick Start with Makefile:**
 
 ```bash
 # Install marker-pdf (requires Python)
 pip3 install marker-pdf psutil --user
 
-# Convert all PDFs in the pdfs/ directory
+# Convert all PDFs using the provided Makefile
 cd docs/papers
-marker pdfs --output_format markdown
+make convert
 
 # Or convert a single PDF
-marker pdfs/wagner-parsing.pdf --output_format markdown
+make convert-single PDF=wagner-parsing.pdf
+
+# See all available commands
+make help
 ```
+
+**Manual conversion:**
+
+```bash
+# Convert all PDFs in the pdfs/ directory
+cd docs/papers
+marker pdfs --config_json marker-config.json
+
+# Or convert a single PDF
+marker pdfs/wagner-parsing.pdf --config_json marker-config.json
+```
+
+The `marker-config.json` file is configured to:
+- Disable forced table layout (avoids MPS backend warnings on Apple Silicon)
+- Disable multiprocessing for better compatibility
+- Output in markdown format
 
 **Note:** Marker uses ML models for high-quality conversion and may take several minutes on first run while downloading models (~2GB). Subsequent conversions are faster.
 
