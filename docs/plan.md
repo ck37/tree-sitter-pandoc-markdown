@@ -372,7 +372,7 @@ The external token `pipe_table_start` is meant to validate AFTER consuming '|', 
 **Status:** Pipe tables require deeper tree-sitter expertise and potentially fundamental grammar restructuring. Feature deferred for Phase 2 focused external scanner work.
 
 **Scanner Research Completed (2025-10-12 PM):**
-Comprehensive analysis of external scanner patterns across 6 grammars documented in SCANNER_RESEARCH.md:
+Comprehensive analysis of external scanner patterns across 6 grammars documented in scanner-research.md:
 - **tree-sitter-markdown**: 40+ external tokens, scanner classifies ALL blocks
 - **Python**: State management (INDENT/DEDENT tracking)
 - **TypeScript**: Extensive conflicts array (30+ declarations)
@@ -397,7 +397,7 @@ Scanner architecture is sound. The issue is grammar rule structure for cells/row
 **Next Steps:**
 - Consider adopting tree-sitter-markdown's complex cell/row patterns
 - Or expand external scanner to handle full table structure (not just start token)
-- See SCANNER_RESEARCH.md for detailed analysis and recommendations
+- See scanner-research.md for detailed analysis and recommendations
 - For now, focus on other features that are working (67/67 tests passing without pipe tables)
 
 ## Phase 2: External Scanner Features
@@ -405,7 +405,7 @@ Scanner architecture is sound. The issue is grammar rule structure for cells/row
 ### Status
 **Line Blocks Deferred - Pipe Tables Working** (2025-10-11) - After extensive research and debugging, line blocks have been deferred to avoid grammar conflicts with pipe tables. The issue is that both `LINE_BLOCK_START` and `PIPE_TABLE_START` external tokens become valid simultaneously in tree-sitter's GLR parser, causing parse errors even in unrelated constructs.
 
-**Decision**: Implement Option 2 from OPTIONS_FOR_PROCEEDING.md - defer line blocks while keeping pipe tables functional. Line blocks are rarely used in practice compared to pipe tables.
+**Decision**: Implement Option 2 from options-for-proceeding.md - defer line blocks while keeping pipe tables functional. Line blocks are rarely used in practice compared to pipe tables.
 
 ### Objectives
 Implement features that require external scanner for disambiguation:
@@ -455,7 +455,7 @@ Research into tree-sitter external scanners, Python indent/dedent implementation
 - Only consider if grammar-level fixes prove impossible
 
 **References:**
-- EXTERNAL_SCANNER_PLAN.md: Documents failed implementation attempt details
+- external-scanner-plan.md: Documents failed implementation attempt details
 - Tree-sitter docs: External scanner mechanics, valid_symbols usage, mark_end() pattern
 - Python scanner: Successful indent/dedent disambiguation strategy
 - Bash scanner: Complex state tracking for heredocs and similar constructs
@@ -528,7 +528,7 @@ The implementation was mechanically correct. The failure occurred because:
 - Verify with `tree-sitter parse --debug` before full test suite
 
 **Why Deferred:**
-Extensive research (see EXTERNAL_SCANNER_RESOURCES.md and OPTIONS_FOR_PROCEEDING.md) revealed that both `LINE_BLOCK_START` and `PIPE_TABLE_START` external tokens become valid simultaneously in many parse states, causing tree-sitter's GLR parser to insert them during error recovery even in unrelated constructs (e.g., block quotes). Fixing this requires:
+Extensive research (see external-scanner-resources.md and options-for-proceeding.md) revealed that both `LINE_BLOCK_START` and `PIPE_TABLE_START` external tokens become valid simultaneously in many parse states, causing tree-sitter's GLR parser to insert them during error recovery even in unrelated constructs (e.g., block quotes). Fixing this requires:
 - Deep grammar restructuring (context-specific block rules), OR
 - Alternative syntax (`||` instead of `|`), OR
 - Advanced scanner state management with context tracking
@@ -539,9 +539,9 @@ Extensive research (see EXTERNAL_SCANNER_RESOURCES.md and OPTIONS_FOR_PROCEEDING
 - Pragmatic approach: ship working parser now, enhance later
 
 **References:**
-- EXTERNAL_SCANNER_PLAN.md: Initial implementation attempt
-- EXTERNAL_SCANNER_RESOURCES.md: Comprehensive research findings
-- OPTIONS_FOR_PROCEEDING.md: Detailed analysis of 7 possible approaches
+- external-scanner-plan.md: Initial implementation attempt
+- external-scanner-resources.md: Comprehensive research findings
+- options-for-proceeding.md: Detailed analysis of 7 possible approaches
 
 #### Simple Tables
 **Status:** Implementation attempted and reverted (moved from Phase 1F)

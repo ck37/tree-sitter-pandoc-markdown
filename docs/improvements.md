@@ -65,7 +65,7 @@ This branch represents a complete rewrite and reimplementation of the tree-sitte
 - **Minimal scanner** - only emits `pipe_table_start` token
 - Grammar handles all other constructs through pure rules
 - Clear separation: scanner for disambiguation, grammar for structure
-- Documented design rationale in ARCHITECTURE_RATIONALE.md
+- Documented design rationale in architecture-rationale.md
 
 **Benefits:**
 - Easier to understand and debug
@@ -181,7 +181,7 @@ The following features require external scanner implementation for disambiguatio
 
 **Rationale:** These features have pattern ambiguities that cannot be resolved with pure grammar rules due to tree-sitter's LR parsing approach. Requires context-aware tokenization in external scanner.
 
-**Documentation:** See docs/plan.md Phase 2, docs/OPTIONS_FOR_PROCEEDING.md, docs/EXTERNAL_SCANNER_PLAN.md
+**Documentation:** See docs/plan.md Phase 2, docs/options-for-proceeding.md, docs/external-scanner-plan.md
 
 ---
 
@@ -277,7 +277,7 @@ The branch adds comprehensive technical documentation explaining design decision
 
 **Commits:** 7c6e11e, 5d0df70, 3843b71, f9d6861, 16c0a03, be1db3f
 
-#### 2. **docs/ARCHITECTURE_RATIONALE.md** (336 lines)
+#### 2. **docs/architecture-rationale.md** (336 lines)
 **Purpose:** Explains why separate block/inline grammars and why they should NOT be unified
 
 **Key arguments:**
@@ -289,7 +289,7 @@ The branch adds comprehensive technical documentation explaining design decision
 
 **Commit:** 581a827
 
-#### 3. **docs/SCANNER_RESEARCH.md** (873 lines)
+#### 3. **docs/scanner-research.md** (873 lines)
 **Purpose:** Comprehensive analysis of external scanner patterns across 6 tree-sitter grammars
 
 **Grammars analyzed:**
@@ -312,7 +312,7 @@ The branch adds comprehensive technical documentation explaining design decision
 
 **Commit:** 072c84b
 
-#### 4. **docs/OPTIONS_FOR_PROCEEDING.md** (336 lines)
+#### 4. **docs/options-for-proceeding.md** (336 lines)
 **Purpose:** Analysis of approaches to resolve line block/pipe table conflicts
 
 **Options analyzed:**
@@ -325,7 +325,7 @@ The branch adds comprehensive technical documentation explaining design decision
 
 **Commit:** Part of scanner debugging work
 
-#### 5. **docs/EXTERNAL_SCANNER_PLAN.md** (669 lines)
+#### 5. **docs/external-scanner-plan.md** (669 lines)
 **Purpose:** Documents line block implementation attempt and findings
 
 **Contents:**
@@ -339,7 +339,7 @@ The branch adds comprehensive technical documentation explaining design decision
 
 **Commit:** Part of scanner debugging work
 
-#### 6. **docs/EXTERNAL_SCANNER_RESOURCES.md** (335 lines)
+#### 6. **docs/external-scanner-resources.md** (335 lines)
 **Purpose:** Research resources and references for external scanner implementation
 
 **Resources:**
@@ -503,7 +503,7 @@ Total: 67/67 tests passing (100%)
 
 **Commits:** d2e2081, 884fcc7, 072c84b, be1db3f
 
-**Documentation:** docs/plan.md "Pipe Table External Scanner Debugging", docs/SCANNER_RESEARCH.md
+**Documentation:** docs/plan.md "Pipe Table External Scanner Debugging", docs/scanner-research.md
 
 ---
 
@@ -754,7 +754,7 @@ The following features are documented and planned but require external scanner i
 ### Pipe Table Grammar Improvement
 - Adopt tree-sitter-markdown's complex cell patterns
 - Or expand scanner to handle full table structure
-- See docs/SCANNER_RESEARCH.md for recommendations
+- See docs/scanner-research.md for recommendations
 
 ### Additional Enhancements
 - More comprehensive query files (highlights.scm, injections.scm)
@@ -784,11 +784,11 @@ The work demonstrates deep understanding of tree-sitter parsing mechanics, Pando
 
 ### Internal Documentation
 - `docs/plan.md` - Implementation roadmap
-- `docs/ARCHITECTURE_RATIONALE.md` - Why split grammars
-- `docs/SCANNER_RESEARCH.md` - External scanner patterns
-- `docs/OPTIONS_FOR_PROCEEDING.md` - Decision analysis
-- `docs/EXTERNAL_SCANNER_PLAN.md` - Line block attempt
-- `docs/EXTERNAL_SCANNER_RESOURCES.md` - Research resources
+- `docs/architecture-rationale.md` - Why split grammars
+- `docs/scanner-research.md` - External scanner patterns
+- `docs/options-for-proceeding.md` - Decision analysis
+- `docs/external-scanner-plan.md` - Line block attempt
+- `docs/external-scanner-resources.md` - Research resources
 
 ### External Resources
 - [Pandoc Manual](https://pandoc.org/MANUAL.html)

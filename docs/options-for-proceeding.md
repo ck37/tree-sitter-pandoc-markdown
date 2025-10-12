@@ -302,7 +302,7 @@ The alternative is to spend potentially days on Options 4/5 with uncertain succe
 1. Edit `tree-sitter-pandoc-markdown/grammar.js`:
    ```javascript
    externals: $ => [
-     // $.line_block_start,  // Deferred - see OPTIONS_FOR_PROCEEDING.md
+     // $.line_block_start,  // Deferred - see options-for-proceeding.md
      $.pipe_table_start,
    ],
 
@@ -320,7 +320,7 @@ The alternative is to spend potentially days on Options 4/5 with uncertain succe
 
 4. Update `README.md` and `plan.md` noting line blocks aren't yet supported
 
-5. Document decision in `EXTERNAL_SCANNER_RESOURCES.md` for future reference
+5. Document decision in `external-scanner-resources.md` for future reference
 
 ---
 

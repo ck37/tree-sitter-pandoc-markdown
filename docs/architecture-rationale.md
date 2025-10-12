@@ -275,7 +275,7 @@ But this is vastly outweighed by:
 **Status:** Overkill - no additional benefit.
 
 ### Option D: Scanner-Heavy Approach
-**Status:** Rejected - see SCANNER_RESEARCH.md. We want grammar-first approach.
+**Status:** Rejected - see scanner-research.md. We want grammar-first approach.
 
 ---
 

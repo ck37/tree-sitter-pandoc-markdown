@@ -20,7 +20,7 @@ This directory contains test cases that have been temporarily disabled because t
 
 **Resolution Required**: Deeper tree-sitter external scanner expertise needed to resolve GLR parser interaction issues. Community help recommended.
 
-**Reference**: See EXTERNAL_SCANNER_PLAN.md "Implementation Attempt Results" section for complete analysis.
+**Reference**: See external-scanner-plan.md "Implementation Attempt Results" section for complete analysis.
 
 ## Line Blocks (line-blocks.txt)
 
