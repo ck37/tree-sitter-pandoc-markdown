@@ -14,9 +14,9 @@
 (code_fence_line_text) @text.literal
 (chunk_option) @comment
 
-(yaml_front_matter_start) @comment
+(yaml_front_matter_start) @markup.raw.block
 (yaml_front_matter_delimiter) @punctuation.special
-(yaml_front_matter_content) @comment
+(yaml_front_matter_content) @markup.raw.block
 
 (inline_math
   (math_content)? @string)

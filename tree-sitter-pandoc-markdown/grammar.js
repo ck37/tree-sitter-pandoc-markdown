@@ -99,7 +99,7 @@ module.exports = grammar({
     ),
 
     yaml_front_matter: $ => prec(-1, seq(
-      field('start', alias(token(seq('---', /\r?\n/, /[^:\r\n]+:[^\r\n]*/)), $.yaml_front_matter_start)),
+      field('start', alias(token(seq('---', /\r?\n/, /[^\r\n]+/)), $.yaml_front_matter_start)),
       /\r?\n/,
       repeat(choice(
         seq(alias(token(prec(-1, /[^\r\n]+/)), $.yaml_front_matter_content), /\r?\n/),

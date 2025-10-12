@@ -10,3 +10,9 @@
 
 ((inline_math (math_content) @injection.content)
   (#set! injection.language "latex"))
+
+((yaml_front_matter_start) @injection.content
+  (#set! injection.language "yaml"))
+
+((yaml_front_matter_content) @injection.content
+  (#set! injection.language "yaml"))
