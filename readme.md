@@ -2,98 +2,34 @@
 
 Tree-sitter parser for Pandoc-flavored Markdown, including support for Quarto and RMarkdown.
 
-This repository ships **fully standalone grammars** that work independently without extending tree-sitter-markdown. The implementation provides complete control over grammar structure, Zed editor compatibility (ABI version 14), and incremental addition of Pandoc-specific features.
+**Fully standalone grammars** that work independently without extending tree-sitter-markdown. Compatible with Zed editor (ABI version 14).
 
 ## Status
 
-**Phase 1 Complete** - All grammar-only Pandoc Markdown features are implemented and tested.
+✅ **Phase 1 Complete** - All grammar-only Pandoc Markdown features implemented and tested.
 
-**Test Coverage:**
-- ✅ 38/38 block grammar tests passing (100%)
-- ✅ 29/29 inline grammar tests passing (100%)
-- **Total: 67/67 tests passing (100%)**
+**Test Coverage:** 67/67 tests passing (100%)
+- 38/38 block grammar tests
+- 29/29 inline grammar tests
 
-*Note: 1 pre-existing failing test (pipe table parsing) has been temporarily removed from the corpus and will be re-enabled once the external scanner issue is resolved.*
+## Features
 
-## Supported Features
+Supports **42+ Pandoc Markdown constructs** including:
 
-### Block-Level Constructs
-- ATX headings (`#` through `######`)
-- Setext headings (underlined with `=` or `-`)
-- Block quotes (`>`)
-- Fenced code blocks with chunk options (`#|`)
-- HTML blocks
-- Fenced divs (`:::`) with attributes
-- YAML front matter (`---`)
-- Percent metadata (`% Title`, `% Author`, `% Date`)
-- Pipe tables with alignment markers
-- Display math (`$$...$$`)
-- Raw blocks (` ```{=format} `)
-- Footnote definitions
-- Link reference definitions
-- Shortcode blocks (`{{< ... >}}`, `{{% ... %}}`)
-- Lists (ordered and unordered)
-- Thematic breaks
-- Paragraphs
+### Block-Level
+ATX/Setext headings, block quotes, fenced code blocks, fenced divs, YAML front matter, pipe tables, display math, footnote definitions, shortcodes, lists, and more.
 
-### Inline-Level Constructs
-- Emphasis (`*` and `_`)
-- Strong emphasis (`**` and `__`)
-- Code spans (`` ` ``)
-- Raw inline (`` `code`{=format} ``)
-- Links (inline and reference-style)
-- Images (inline and reference-style)
-- Autolinks
-- HTML inline tags
-- Citations (`@key`, `[@key]`)
-- Cross-references (`@fig:id`)
-- Attribute lists (`{.class #id key=val}`)
-- Attribute spans (`[text]{.attrs}`)
-- Footnote references (`[^1]`)
-- Inline footnotes (`^[text]`)
-- Inline math (`$...$`)
-- Strikethrough (`~~text~~`)
-- Highlight (`==text==`)
-- Subscript (`~text~`)
-- Superscript (`^text^`)
-- Underline (`+text+`)
+### Inline-Level
+Emphasis, strong, links, images, citations, cross-references, inline math, strikethrough, subscript/superscript, attribute spans, and more.
 
-## Not Yet Implemented
+**📚 [Complete feature list →](docs/improvements.md#feature-completeness)**
 
-The following features require external scanner implementation and are planned for Phase 2:
+### Coming in Phase 2
+Definition lists, line blocks, simple tables, grid tables (require external scanner).
 
-- **Definition lists** - Colon syntax conflicts with paragraphs
-- **Line blocks** - `|` marker conflicts with pipe tables (deferred after extensive research - see `docs/options-for-proceeding.md` and `docs/external-scanner-resources.md` for details)
-- **Simple tables** - Dash patterns conflict with multiple constructs
-- **Grid tables** - Complex border syntax
+**📖 [Full documentation →](docs/readme.md)**
 
-See `docs/plan.md` for implementation roadmap, `docs/external-scanner-plan.md` for the line block implementation attempt, and `docs/options-for-proceeding.md` for analysis of approaches to resolve the line block/pipe table conflict.
-
-## Architecture
-
-The project ships two separate but related grammars:
-- **Block grammar** (`tree-sitter-pandoc-markdown/`): Document structure (headings, lists, code blocks, tables, etc.)
-- **Inline grammar** (`tree-sitter-pandoc-markdown-inline/`): Inline formatting (emphasis, links, citations, math, etc.)
-
-**Key technical details:**
-- ABI version 14 for Zed editor compatibility
-- **Minimal external scanner** - Only handles `pipe_table_start` token
-- **Grammar-first approach** - All other constructs (headings, block quotes, lists, thematic breaks) handled by pure grammar rules
-- Shared common code in `common/` directory
-
-### External Scanner Design
-
-The external scanner in `scanner.c` is intentionally minimal:
-- **Only emits**: `pipe_table_start` (for detecting pipe table structures)
-- **Grammar handles**: All other block and inline constructs through regular expression matching and precedence rules
-
-This design prevents scanner interference with grammar rules. The scanner returns `false` for all cases except when `pipe_table_start` is valid, ensuring clean separation between scanner-based and grammar-based parsing.
-
-**Historical note**: The scanner.c originated from tree-sitter-markdown (which uses external scanner extensively). We modified it to only handle pipe tables, allowing our standalone grammar to control all other syntax.
-
-## Setup
-
-Install [tree-sitter dependencies](https://tree-sitter.github.io/tree-sitter/creating-parsers#dependencies), then
+## Quick Start
 
 ```bash
 git clone git@github.com:jmbuhr/tree-sitter-pandoc-markdown.git
@@ -103,22 +39,46 @@ npm run build
 npm test
 ```
 
-## Testing in Neovim
-
-Run
+### Neovim Setup
 
 ```bash
 sudo make install
 ```
 
-Add to your `init.lua` file:
+Add to `init.lua`:
 
 ```lua
-vim.treesitter.language.add('pandoc_markdown', { path = "/usr/local/lib/libtree-sitter-pandoc-markdown.so" })
-vim.treesitter.language.add('pandoc_markdown_inline', { path = "/usr/local/lib/libtree-sitter-pandoc-markdown-inline.so" })
+vim.treesitter.language.add('pandoc_markdown', {
+  path = "/usr/local/lib/libtree-sitter-pandoc-markdown.so"
+})
+vim.treesitter.language.add('pandoc_markdown_inline', {
+  path = "/usr/local/lib/libtree-sitter-pandoc-markdown-inline.so"
+})
 vim.treesitter.language.register('pandoc_markdown', { 'quarto', 'rmarkdown' })
 ```
 
-Add some querries for highlighting and injections for the pandoc-markdowm filetype e.g. from https://github.com/quarto-dev/quarto-nvim/pull/160/
+## Architecture
 
-Open e.g. a quarto file `test.qmd`.
+Two-grammar architecture following CommonMark's two-phase parsing strategy:
+- **Block grammar**: Document structure (headings, lists, tables, etc.)
+- **Inline grammar**: Inline formatting (emphasis, links, citations, etc.)
+
+**Grammar-first approach** with minimal external scanner usage.
+
+**🏗️ [Architecture details →](docs/architecture.md)**
+
+## Documentation
+
+- **[docs/](docs/)** - Complete project documentation
+- **[docs/architecture.md](docs/architecture.md)** - Architecture overview and feature lists
+- **[docs/improvements.md](docs/improvements.md)** - Full changelog vs upstream
+- **[docs/plan.md](docs/plan.md)** - Implementation roadmap
+- **[docs/papers/](docs/papers/)** - Academic papers and research
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
+
+## License
+
+[License information here]
