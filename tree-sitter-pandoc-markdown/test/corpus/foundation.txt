@@ -395,6 +395,35 @@ Paragraph text inside
     (fenced_div_delimiter)))
 
 ================================================================================
+Fenced div with content after
+================================================================================
+:::{.note}
+Content inside div
+:::
+
+# Heading After Div
+
+Paragraph after div.
+
+--------------------------------------------------------------------------------
+
+(document
+  (fenced_div
+    (fenced_div_delimiter)
+    (attribute_list)
+    (paragraph
+      (inline
+        (text)))
+    (fenced_div_delimiter))
+  (atx_heading
+    (atx_heading_marker)
+    (inline
+      (text)))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
 Paragraph with citations
 ================================================================================
 See @doe2020 for details, [@smith2019 p. 4] and @fig:chart.

@@ -89,14 +89,14 @@ module.exports = grammar({
       /\r?\n/
     ),
 
-    fenced_div: $ => prec.right(seq(
+    fenced_div: $ => seq(
       field('open', alias(token(/:::+/), $.fenced_div_delimiter)),
       optional(field('attributes', $.attribute_list)),
       /\r?\n/,
       repeat($._block),
-      field('close', alias(token(/:::+/), $.fenced_div_delimiter)),
+      field('close', alias(token(prec(10, /:::+/)), $.fenced_div_delimiter)),
       /\r?\n/
-    )),
+    ),
 
     yaml_front_matter: $ => prec(-1, seq(
       field('start', alias(token(seq('---', /\r?\n/, /[^:\r\n]+:[^\r\n]*/)), $.yaml_front_matter_start)),

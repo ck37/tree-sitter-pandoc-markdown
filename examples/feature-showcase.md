@@ -61,12 +61,13 @@ plot(1:10)
 
 ### Fenced Divs
 
-Note: Fenced divs have a parser bug (content after div causes errors). Example syntax:
-```
-:::{.note}
-Content here
+:::{.callout-note}
+Important information in a callout block!
 :::
-```
+
+:::{#special .custom-class key="value"}
+Divs support multiple attribute types.
+:::
 
 ### Citations & References
 

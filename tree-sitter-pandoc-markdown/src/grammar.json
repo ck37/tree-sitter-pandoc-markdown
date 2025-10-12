@@ -378,76 +378,76 @@
       ]
     },
     "fenced_div": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "open",
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "open",
+          "content": {
+            "type": "ALIAS",
             "content": {
-              "type": "ALIAS",
+              "type": "TOKEN",
               "content": {
-                "type": "TOKEN",
-                "content": {
-                  "type": "PATTERN",
-                  "value": ":::+"
-                }
-              },
-              "named": true,
-              "value": "fenced_div_delimiter"
-            }
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "FIELD",
-                "name": "attributes",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "attribute_list"
-                }
-              },
-              {
-                "type": "BLANK"
+                "type": "PATTERN",
+                "value": ":::+"
               }
-            ]
-          },
-          {
-            "type": "PATTERN",
-            "value": "\\r?\\n"
-          },
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_block"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "close",
-            "content": {
-              "type": "ALIAS",
+            },
+            "named": true,
+            "value": "fenced_div_delimiter"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "attributes",
               "content": {
-                "type": "TOKEN",
+                "type": "SYMBOL",
+                "name": "attribute_list"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\r?\\n"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_block"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "close",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "TOKEN",
+              "content": {
+                "type": "PREC",
+                "value": 10,
                 "content": {
                   "type": "PATTERN",
                   "value": ":::+"
                 }
-              },
-              "named": true,
-              "value": "fenced_div_delimiter"
-            }
-          },
-          {
-            "type": "PATTERN",
-            "value": "\\r?\\n"
+              }
+            },
+            "named": true,
+            "value": "fenced_div_delimiter"
           }
-        ]
-      }
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\r?\\n"
+        }
+      ]
     },
     "yaml_front_matter": {
       "type": "PREC",
