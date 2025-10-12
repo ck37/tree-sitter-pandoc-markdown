@@ -15,6 +15,10 @@ This directory contains comprehensive documentation for the tree-sitter-pandoc-m
 - **[external-scanner-resources.md](external-scanner-resources.md)** - Research resources and references for external scanner implementation
 - **[options-for-proceeding.md](options-for-proceeding.md)** - Analysis of approaches to resolve line block/pipe table conflicts
 
+## Academic Papers
+
+- **[papers/](papers/)** - Curated collection of academic papers on incremental parsing, GLR parsing, markdown specifications, and document parsing (5 key papers with citations)
+
 ## Quick Navigation
 
 ### New to the Project?
@@ -32,6 +36,9 @@ Read [architecture-rationale.md](architecture-rationale.md) to understand why th
 1. Start with [scanner-research.md](scanner-research.md) for patterns and best practices
 2. Review [external-scanner-plan.md](external-scanner-plan.md) for previous attempts
 3. Consult [external-scanner-resources.md](external-scanner-resources.md) for references
+
+### Academic Research
+Read [papers/](papers/) for foundational academic papers on incremental parsing, GLR parsing, and markdown specifications
 
 ## Related Files
 
