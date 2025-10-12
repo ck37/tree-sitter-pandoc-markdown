@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "pandoc_markdown_inline",
   "rules": {
     "inline": {
@@ -144,6 +145,48 @@
                   "type": "SYMBOL",
                   "name": "_inline_no_underscore"
                 }
+              },
+              {
+                "type": "STRING",
+                "value": "_"
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC",
+          "value": 1,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "*"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "strong_emphasis"
+              },
+              {
+                "type": "STRING",
+                "value": "*"
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC",
+          "value": 1,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "_"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "strong_emphasis"
               },
               {
                 "type": "STRING",
@@ -1010,5 +1053,6 @@
   "precedences": [],
   "externals": [],
   "inline": [],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

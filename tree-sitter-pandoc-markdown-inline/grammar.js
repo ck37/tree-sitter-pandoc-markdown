@@ -42,8 +42,12 @@ module.exports = grammar({
     ),
 
     emphasis: $ => choice(
+      // Standard single-delimiter emphasis
       prec.left(1, seq('*', repeat1($._inline_no_star), '*')),
-      prec.left(1, seq('_', repeat1($._inline_no_underscore), '_'))
+      prec.left(1, seq('_', repeat1($._inline_no_underscore), '_')),
+      // Triple-delimiter: emphasis wrapping strong_emphasis
+      prec(1, seq('*', $.strong_emphasis, '*')),
+      prec(1, seq('_', $.strong_emphasis, '_'))
     ),
 
     strong_emphasis: $ => choice(
