@@ -51,25 +51,7 @@ Term
 
 ## Grammar Bugs
 
-### 1. Fenced Divs - Content After Div Causes Errors
-**Status**: Active bug
-**Severity**: High - renders fenced divs unusable in real documents
-
-**Issue**: Fenced divs parse correctly in isolation but cause all subsequent content to be wrapped in ERROR nodes.
-
-**Example that fails**:
-```markdown
-:::{.callout-note}
-Important information here!
-:::
-
-### Next Section
-Text after the div.
-```
-
-**Workaround**: Show fenced div syntax in code blocks instead of using real divs.
-
-**Investigation needed**: Grammar rules for fenced_div may have incorrect precedence or block continuation logic.
+~~None currently known~~ (Fenced div bug fixed 2025-10-12)
 
 ## Edge Cases / Limitations
 
@@ -130,8 +112,8 @@ Some content...
 
 ## Test Coverage
 
-**Passing Tests**: 72/72 (100%)
-- Block grammar: 43/43 tests
+**Passing Tests**: 73/73 (100%)
+- Block grammar: 44/44 tests (added "Fenced div with content after")
 - Inline grammar: 29/29 tests
 
 **Example Files**:
