@@ -63,11 +63,11 @@ This repository ships **fully standalone grammars** that work independently with
 The following features require external scanner implementation and are planned for Phase 2:
 
 - **Definition lists** - Colon syntax conflicts with paragraphs
-- **Line blocks** - `|` marker conflicts with pipe tables (deferred after extensive research - see `OPTIONS_FOR_PROCEEDING.md` and `EXTERNAL_SCANNER_RESOURCES.md` for details)
+- **Line blocks** - `|` marker conflicts with pipe tables (deferred after extensive research - see `docs/OPTIONS_FOR_PROCEEDING.md` and `docs/EXTERNAL_SCANNER_RESOURCES.md` for details)
 - **Simple tables** - Dash patterns conflict with multiple constructs
 - **Grid tables** - Complex border syntax
 
-See `plan.md` for implementation roadmap, `EXTERNAL_SCANNER_PLAN.md` for the line block implementation attempt, and `OPTIONS_FOR_PROCEEDING.md` for analysis of approaches to resolve the line block/pipe table conflict.
+See `docs/plan.md` for implementation roadmap, `docs/EXTERNAL_SCANNER_PLAN.md` for the line block implementation attempt, and `docs/OPTIONS_FOR_PROCEEDING.md` for analysis of approaches to resolve the line block/pipe table conflict.
 
 ## Architecture
 
