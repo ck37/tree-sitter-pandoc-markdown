@@ -1,6 +1,5 @@
 {
   "output_format": "markdown",
   "disable_image_extraction": false,
-  "force_table": false,
   "disable_multiprocessing": true
 }

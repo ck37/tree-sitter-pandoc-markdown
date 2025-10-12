@@ -24,7 +24,7 @@ help:
 convert:
 	@echo "Converting PDFs to markdown..."
 	@echo "Note: This may take several minutes on first run while downloading models (~2GB)"
-	marker pdfs \
+	PYTHONWARNINGS=ignore marker pdfs \
 		--config_json marker-config.json
 	@echo "Conversion complete. Markdown files are in pdfs/"
 
@@ -36,7 +36,7 @@ convert-single:
 		exit 1; \
 	fi
 	@echo "Converting $(PDF) to markdown..."
-	marker pdfs/$(PDF) \
+	PYTHONWARNINGS=ignore marker pdfs/$(PDF) \
 		--config_json marker-config.json
 	@echo "Conversion complete. Markdown file is in pdfs/"
 
