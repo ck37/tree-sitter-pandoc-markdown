@@ -1,0 +1,8 @@
+# Ignore downloaded PDFs and converted markdown files
+# Users can download these using the links in readme.md
+pdfs/
+markdown/
+
+# Keep the readme with paper references
+!readme.md
+!.gitignore

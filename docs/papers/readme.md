@@ -348,5 +348,39 @@ All papers are cited in BibTeX format for easy integration into academic documen
 
 ---
 
+---
+
+## PDF Downloads
+
+All papers have been downloaded to `docs/papers/pdfs/`:
+
+- `wagner-parsing.pdf` - Efficient and Flexible Incremental Parsing (140KB)
+- `document-parsing-arxiv.pdf` - Document Parsing Unveiled (2.6MB)
+- `commonmark-spec.pdf` - CommonMark Specification v0.31.2 (9.2KB)
+- `pandoc-manual.pdf` - Pandoc User's Guide (515KB)
+- `pandoc-texnicians.pdf` - Pandoc for TeXnicians presentation (519KB)
+
+### Converting PDFs to Markdown
+
+To convert the PDFs to markdown, use the `marker-pdf` tool:
+
+```bash
+# Install marker-pdf (requires Python)
+pip3 install marker-pdf psutil --user
+
+# Convert all PDFs in the pdfs/ directory
+cd docs/papers
+marker pdfs --output_format markdown
+
+# Or convert a single PDF
+marker pdfs/wagner-parsing.pdf --output_format markdown
+```
+
+**Note:** Marker uses ML models for high-quality conversion and may take several minutes on first run while downloading models (~2GB). Subsequent conversions are faster.
+
+Markdown output will be placed in `pdfs/` directory alongside the original PDFs by default.
+
+---
+
 **Last Updated:** 2025-10-12
 **Maintained By:** tree-sitter-pandoc-markdown project contributors
