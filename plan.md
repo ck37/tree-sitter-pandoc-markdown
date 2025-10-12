@@ -265,11 +265,11 @@ tree-sitter-pandoc-markdown-inline/
 - Underline (`+text+`)
 
 **Test Coverage:**
-- Block grammar: 36/36 tests passing (100%)
+- Block grammar: 38/38 tests passing (100%)
 - Inline grammar: 29/29 tests passing (100%)
-- **Total: 65/65 tests passing (100%)**
+- **Total: 67/67 tests passing (100%)**
 
-*Note: 3 pre-existing failing tests (thematic breaks with spaces, pipe table parsing) have been temporarily removed from the corpus and will be re-enabled once the underlying issues are resolved.*
+*Note: 1 pre-existing failing test (pipe table parsing) has been temporarily removed from the corpus and will be re-enabled once the external scanner issue is resolved. Thematic break tests were fixed by preventing external scanner interference with grammar rules.*
 
 ## Phase 2: External Scanner Features
 

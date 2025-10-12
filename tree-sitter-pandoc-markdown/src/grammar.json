@@ -78,7 +78,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_pipe_construct"
+          "name": "pipe_table"
         },
         {
           "type": "SYMBOL",
@@ -111,15 +111,6 @@
         {
           "type": "SYMBOL",
           "name": "blank_line"
-        }
-      ]
-    },
-    "_pipe_construct": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "pipe_table"
         }
       ]
     },

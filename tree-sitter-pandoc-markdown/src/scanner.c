@@ -1457,6 +1457,14 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
         return false;
     }
 
+    // CRITICAL: This grammar only uses external scanner for pipe_table_start.
+    // All other constructs (headings, block quotes, lists, thematic breaks) are
+    // handled by pure grammar rules. Return false for everything except pipe tables
+    // to prevent interference with grammar rules.
+    if (!valid_symbols[PIPE_TABLE_START]) {
+        return false;
+    }
+
     if (!(s->state & STATE_MATCHING)) {
         // Parse any preceeding whitespace and remember its length. This makes a
         // lot of parsing quite a bit easier.

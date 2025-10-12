@@ -9,11 +9,11 @@ This repository ships **fully standalone grammars** that work independently with
 **Phase 1 Complete** - All grammar-only Pandoc Markdown features are implemented and tested.
 
 **Test Coverage:**
-- ✅ 36/36 block grammar tests passing (100%)
+- ✅ 38/38 block grammar tests passing (100%)
 - ✅ 29/29 inline grammar tests passing (100%)
-- **Total: 65/65 tests passing (100%)**
+- **Total: 67/67 tests passing (100%)**
 
-*Note: 3 pre-existing failing tests (thematic breaks with spaces, pipe table parsing) have been temporarily removed from the corpus and will be re-enabled once the underlying issues are resolved.*
+*Note: 1 pre-existing failing test (pipe table parsing) has been temporarily removed from the corpus and will be re-enabled once the external scanner issue is resolved.*
 
 ## Supported Features
 

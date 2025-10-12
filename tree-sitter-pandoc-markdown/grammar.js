@@ -38,7 +38,7 @@ module.exports = grammar({
       $.link_reference_definition,
       $.fenced_div,
       $.display_math,
-      $._pipe_construct,  // Groups line_block and pipe_table
+      $.pipe_table,  // NOTE: line_block deferred - see OPTIONS_FOR_PROCEEDING.md
       $.shortcode_block,
       $.raw_block,
       $.paragraph,
@@ -47,13 +47,6 @@ module.exports = grammar({
       $.list,
       $.thematic_break,
       $.blank_line
-    ),
-
-    // DEFERRED: Line blocks require grammar restructuring to prevent conflicts
-    // For now, only pipe_table is supported. Line blocks will be added in Phase 2.
-    _pipe_construct: $ => choice(
-      // $.line_block,  // DEFERRED - see OPTIONS_FOR_PROCEEDING.md
-      $.pipe_table
     ),
 
     // Headings
