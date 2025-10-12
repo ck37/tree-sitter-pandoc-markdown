@@ -1,7 +1,9 @@
 ## Phase 1: Standalone Pandoc Markdown Grammar
 
 ### Current Status
-After investigation, the repository's grammar inheritance approach is broken due to structural changes in the tree-sitter-markdown submodule. In upstream revisions from late 2023 the generated parser artifacts were relocated under nested directories (e.g. `tree-sitter-markdown/tree-sitter-markdown/grammar.js`), while this project still referenced the prior flat layout via `require('tree-sitter-markdown/grammar')`. As a result, Node emits `Cannot find module 'tree-sitter-markdown/tree-sitter-markdown/grammar'` during the build step, and every commit since that structural change (now roughly 22–24 months ago) has produced failing tests because the inherited grammar can no longer be loaded. Simply patching the import would not solve the broader mismatch—upstream refactors also altered node types and queries, and their CommonMark grammar still lacks the Pandoc-specific constructs (divs, citations, chunk options, shortcodes, etc.) we need. To avoid an endless chase after upstream churn and to gain full control over Pandoc features, a purpose-built standalone grammar is the safer long-term strategy.
+**Phase 1F In Progress** - The standalone Pandoc Markdown grammar is functional and supports the majority of Pandoc features. Recent work added raw content (inline/block), percent metadata blocks, and identified a pipe table vs line block parsing conflict requiring external scanner implementation.
+
+**Background**: After investigation, the repository's grammar inheritance approach was broken due to structural changes in the tree-sitter-markdown submodule. To avoid an endless chase after upstream churn and to gain full control over Pandoc features, a purpose-built standalone grammar was implemented. This provides complete control over grammar structure, Zed editor compatibility (ABI version 14), and the ability to add Pandoc-specific features incrementally.
 
 ### Revised Approach
 Build **standalone** Tree-sitter grammars for Pandoc Markdown that work independently, rather than attempting to extend tree-sitter-markdown. This provides:
@@ -18,7 +20,7 @@ Build **standalone** Tree-sitter grammars for Pandoc Markdown that work independ
 
 ### Implementation Phases
 
-#### Phase 1A: Foundation (Current Priority)
+#### Phase 1A: Foundation
 1. **ABI 14 Compatibility**
    - Enforce `--abi=14` flag in build scripts ✓
    - Document requirement in CONTRIBUTING.md ✓
@@ -63,7 +65,7 @@ After core markdown works, add Pandoc-specific features:
 - [x] Chunk options (`#|` comment lines in code blocks)
 - [x] YAML front matter (Pandoc metadata block)
 
-**Phase 1C Work Plan (current focus):**
+**Phase 1C Work Plan**
 1. **Attribute Lists** ✓
    - Support `{.class #id key=val}` tokens in both block and inline grammars.
    - Allow attribute lists to appear in info strings, fenced div markers, and inline sequences.
@@ -91,7 +93,7 @@ After core markdown works, add Pandoc-specific features:
    - After each feature: regenerate parsers (`npm run build`), extend corpora, and run `npm test`.
    - Update this plan and mark Phase 1C checklist items once their implementation stabilizes.
 
-#### Phase 1D: Mathematical Notation & Tables (Next Up)
+#### Phase 1D: Mathematical Notation & Tables
 Focus on high-impact Pandoc features that benefit all users (not Quarto-specific).
 
 **Status:** Inline/display math and pipe tables implemented. Beginning Phase 1E work.
@@ -125,25 +127,68 @@ Enhance inline semantics and block structures now that math/tables are stable.
 #### Phase 1F: Raw Content, Line Blocks, and Additional Tables
 Round out remaining Pandoc Markdown constructs before considering Quarto-only enhancements.
 
-**Status:** Not started. Prioritize raw content parsing first so the inline grammar can recognize format-qualified segments before layering on block structures and additional table variants.
+**Status:** Complete (for grammar-only features). Raw content and percent metadata successfully implemented and tested. Line blocks, simple tables, and grid tables identified as requiring external scanner (C code) to resolve pattern conflicts - these are deferred pending external scanner development.
 
-**Next Steps:**
-1. Implement raw inline and raw block nodes with corresponding highlights, injections, and corpus coverage; ensure they coexist with existing code spans and fenced code blocks.
-2. Add line block support (`line_block`, `line_block_line`) with precedence tuned against paragraphs and block quotes; cover edge cases with nested inline content.
-3. Extend block grammar for simple and grid tables, including highlighting for borders/delimiters and fixtures covering multi-line cells.
-4. Parse leading percent metadata lines into a `percent_metadata` block, confirming they gracefully hand off to subsequent blocks when absent.
+**Completed:**
+1. **Raw Inline and Raw Blocks** ✓
+   - Implemented `raw_inline` parsing for `` `code`{=html} `` syntax in both grammars with `prec(4)` to take precedence over regular code spans.
+   - Implemented `raw_block` parsing for fenced blocks with format markers (` ```{=format} `).
+   - Modified `attribute_list` token pattern to exclude `{=...}` syntax (now `/\{[^={}\r\n][^{}\r\n]*\}|\{\}/`), reserving format markers exclusively for raw content.
+   - Added `raw_inline`, `raw_inline_content`, `raw_block`, `raw_block_content`, `raw_block_delimiter`, and `raw_format` highlighting.
+   - Added 8 corpus tests: 5 for inline (HTML, LaTeX, multiple formats), 3 for blocks (HTML, LaTeX, empty).
+   - **Test Results**: ✓ All 8 tests passing in both grammars.
 
-1. **Raw Inline and Raw Blocks**
-   - Parse backtick + format markers (`` `code`{=html} ``) and fenced raw blocks (```{=latex}``).
-   - Emit `raw_inline`, `raw_block`, and `raw_format` nodes and inject appropriate languages based on format identifiers.
-2. **Line Blocks**
-   - Implement `line_block` and `line_block_line` for leading `|` syntax, preserving indentation and blank-line handling.
-3. **Additional Table Forms**
-   - Extend grammar for grid tables and simple tables, including optional captions and multi-line cells.
-4. **Percent Metadata Blocks**
-   - Recognize `% Title`, `% Author`, `% Date` sequences at the document start as `percent_metadata` (alternative to YAML front matter).
+2. **Percent Metadata Blocks** ✓
+   - Implemented `percent_metadata` recognizing `% Title`, `% Author`, `% Date` sequences at document start.
+   - Supports optional author/date fields (title-only, title+author, or full metadata).
+   - Added highlighting for `percent_metadata_title`, `percent_metadata_author`, `percent_metadata_date`.
+   - Added 4 corpus tests covering all metadata combinations.
+   - **Test Results**: ✓ All 4 tests passing.
 
-Each Phase 1D–1F feature should follow the established workflow: update grammar(s), queries, corpora, regenerate parsers, run tests, and log progress here.
+3. **Line Blocks** ⚠️ (Partial - Known Issue)
+   - Implemented `line_block` and `line_block_line` with `|` marker syntax.
+   - Line block marker requires at least one space (`/\|[ \t]+/`) to differentiate from pipe table delimiters.
+   - Added 4 corpus tests: simple blocks, indentation, emphasis within lines, empty lines.
+   - **Test Results**: ✓ All 4 line block tests pass in isolation.
+   - **Known Conflict**: Line blocks conflict with existing pipe tables (both use `|` character). Pipe table test now fails when line block is enabled in grammar.
+   - **Root Cause**: Both constructs start with `|`, and tree-sitter cannot disambiguate without lookahead. Pipe tables require `| cell | cell |` with delimiter row `| :--- | ---: |`, while line blocks are `| line content`.
+   - **Resolution Options**:
+     1. External scanner to peek ahead and detect table structure vs line block
+     2. Defer line blocks until after pipe table detection via precedence/ordering (attempted, insufficient)
+     3. Make line blocks require different marker (e.g., `||` - breaks Pandoc compatibility)
+   - **Current Status**: Line block implementation commented out/reverted from `_block` choices to restore pipe table functionality. Feature code preserved in git history.
+
+**Deferred Pending External Scanner:**
+1. **Line Blocks** ⚠️ (Requires External Scanner)
+   - **Issue**: `|` marker conflicts with pipe table delimiters
+   - Both constructs use `|` character, creating ambiguous parses
+   - Attempted precedence-based resolution insufficient
+   - **Resolution**: External scanner (C code) needed for context-aware tokenization
+   - **Status**: Implementation attempted and reverted; code preserved in git history
+
+2. **Simple Tables** ⚠️ (Requires External Scanner)
+   - **Issue**: Dash separator patterns conflict with multiple constructs:
+     - Pipe table alignment markers (`:?-{3,}:?`)
+     - Setext heading underlines (`===` or `---`)
+     - Thematic breaks (`---`)
+     - YAML front matter delimiters (`---`)
+   - Tree-sitter creates competing parses resulting in ERROR nodes
+   - **Resolution**: External scanner needed for context-aware dash pattern disambiguation
+   - **Status**: Implementation attempted and reverted
+
+3. **Grid Tables** (Not Attempted)
+   - Complex border syntax with `+`, `-`, and `|` characters
+   - Would support multi-line cells and complex layouts
+   - Likely faces similar pattern conflicts as line blocks and simple tables
+   - **Status**: Deferred until external scanner infrastructure exists
+
+**Phase 1F Summary:**
+- ✅ **2 of 5 features completed**: Raw content (inline/block), Percent metadata
+- ⚠️ **3 features require external scanner**: Line blocks, Simple tables, Grid tables
+- **Test coverage**: Added 12 new tests (all passing)
+- **Production ready**: Raw inline, raw blocks, percent metadata
+- **Technical insight**: Pure grammar rules insufficient for ambiguous Markdown constructs; external scanner (C code) required for context-aware lexing
+- All successfully implemented features follow established workflow: grammar updates, highlighting/injection queries, corpus tests, regeneration, and test verification.
 
 ### Cleanup & Repository Hygiene
 - [x] Remove the legacy `tree-sitter-markdown` git submodule and drop it from `package.json` / `package-lock.json` now that the grammar is fully standalone.
@@ -213,7 +258,60 @@ tree-sitter-pandoc-markdown-inline/
 - **ABI Version Changes**: Zed may update to ABI 15. *Mitigation*: Monitor Zed issue, flag can be changed easily in build script.
 - **Grammar complexity**: Full markdown is complex. *Mitigation*: Focus on commonly-used subset, add edge cases as needed.
 
+### Phase 1 Summary: Implemented Features
+
+**Block-Level Constructs:**
+- ATX headings (`#` through `######`)
+- Setext headings (underlined with `=` or `-`)
+- Block quotes (`>`)
+- Fenced code blocks with chunk options (`#|`)
+- HTML blocks
+- Fenced divs (`:::`) with attributes
+- YAML front matter (`---`)
+- Percent metadata (`% Title`, `% Author`, `% Date`)
+- Pipe tables with alignment markers
+- Display math (`$$...$$`)
+- Raw blocks (` ```{=format} `)
+- Footnote definitions
+- Link reference definitions
+- Shortcode blocks (`{{< ... >}}`, `{{% ... %}}`)
+- Lists (ordered and unordered)
+- Thematic breaks
+- Paragraphs
+
+**Inline-Level Constructs:**
+- Emphasis (`*` and `_`)
+- Strong emphasis (`**` and `__`)
+- Code spans (`` ` ``)
+- Raw inline (`` `code`{=format} ``)
+- Links (inline and reference-style)
+- Images (inline and reference-style)
+- Autolinks
+- HTML inline tags
+- Citations (`@key`, `[@key]`)
+- Cross-references (`@fig:id`)
+- Attribute lists (`{.class #id key=val}`)
+- Attribute spans (`[text]{.attrs}`)
+- Footnote references (`[^1]`)
+- Inline footnotes (`^[text]`)
+- Inline math (`$...$`)
+- Strikethrough (`~~text~~`)
+- Highlight (`==text==`)
+- Subscript (`~text~`)
+- Superscript (`^text^`)
+- Underline (`+text+`)
+
+**Test Coverage:**
+- Block grammar: 43 tests (42 passing, 1 known conflict)
+- Inline grammar: 29 tests (all passing)
+
+**Known Issues:**
+- Line blocks vs pipe tables conflict (both use `|` delimiter)
+
 ### Future Considerations (Post Phase 1)
+- Resolve line block/pipe table conflict via external scanner
+- Implement simple tables
+- Implement grid tables
 - Evaluate if/when to sync with CommonMark spec updates
 - Consider whether to re-integrate with tree-sitter-markdown if they stabilize structure
 - Plan for Quarto-specific grammar extensions (Phase 2)

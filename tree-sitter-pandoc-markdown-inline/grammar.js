@@ -19,6 +19,7 @@ module.exports = grammar({
     _inline_element: $ => choice(
       $.emphasis,
       $.strong_emphasis,
+      $.raw_inline,
       $.code_span,
       $.link,
       $.autolink,
@@ -52,6 +53,7 @@ module.exports = grammar({
 
     _inline_no_star: $ => choice(
       $.strong_emphasis,
+      $.raw_inline,
       $.code_span,
       $.link,
       $.autolink,
@@ -75,6 +77,7 @@ module.exports = grammar({
 
     _inline_no_underscore: $ => choice(
       $.strong_emphasis,
+      $.raw_inline,
       $.code_span,
       $.link,
       $.autolink,
@@ -102,6 +105,13 @@ module.exports = grammar({
       '`'
     )),
 
+    raw_inline: $ => prec(4, seq(
+      '`',
+      field('content', optional(alias(/[^`]+/, $.raw_inline_content))),
+      '`',
+      field('format', alias(token.immediate(/\{=[A-Za-z0-9_+-]+\}/), $.raw_format))
+    )),
+
     autolink: $ => token(choice(
       /<[^\s<>]+:[^\s<>]+>/,
       /<[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+>/
@@ -115,7 +125,7 @@ module.exports = grammar({
 
     citation: $ => token(/@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]/),
 
-    attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+    attribute_list: $ => token(/\{[^={}\r\n][^{}\r\n]*\}|\{\}/),
 
     strikethrough: $ => token(/~~[^~\r\n]+~~/),
 
@@ -191,6 +201,7 @@ module.exports = grammar({
     _link_text_element: $ => choice(
       $.emphasis,
       $.strong_emphasis,
+      $.raw_inline,
       $.code_span,
       $.strikethrough,
       $.highlight,

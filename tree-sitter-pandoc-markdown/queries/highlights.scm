@@ -95,3 +95,14 @@
 
 (attribute_list) @property
 (info_string_text) @string
+
+(raw_block) @text.literal
+(raw_block_delimiter) @punctuation.delimiter
+(raw_block_content) @text.literal
+(raw_inline) @text.literal
+(raw_inline_content) @text.literal
+(raw_format) @property
+
+(percent_metadata_title) @text.title
+(percent_metadata_author) @comment
+(percent_metadata_date) @comment

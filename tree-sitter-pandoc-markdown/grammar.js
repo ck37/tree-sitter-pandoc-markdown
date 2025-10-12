@@ -20,6 +20,7 @@ module.exports = grammar({
   rules: {
     document: $ => choice(
       seq($.yaml_front_matter, repeat($._block)),
+      seq($.percent_metadata, repeat($._block)),
       repeat($._block)
     ),
 
@@ -33,6 +34,7 @@ module.exports = grammar({
       $.display_math,
       $.pipe_table,
       $.shortcode_block,
+      $.raw_block,
       $.paragraph,
       $.html_block,
       $.fenced_code_block,
@@ -99,12 +101,26 @@ module.exports = grammar({
       /\r?\n/
     )),
 
+    percent_metadata: $ => prec(-1, seq(
+      field('title', alias(token(seq('%', /[ \t]*/, /[^\r\n]+/)), $.percent_metadata_title)),
+      /\r?\n/,
+      optional(seq(
+        field('author', alias(token(seq('%', /[ \t]*/, /[^\r\n]+/)), $.percent_metadata_author)),
+        /\r?\n/,
+        optional(seq(
+          field('date', alias(token(seq('%', /[ \t]*/, /[^\r\n]*/)), $.percent_metadata_date)),
+          /\r?\n/
+        ))
+      ))
+    )),
+
     // Inline content
     inline: $ => prec.right(repeat1($._inline_element)),
 
     _inline_element: $ => choice(
       $.emphasis,
       $.strong_emphasis,
+      $.raw_inline,
       $.code_span,
       $.link,
       $.autolink,
@@ -139,6 +155,7 @@ module.exports = grammar({
     _inline_no_star: $ => choice(
       $.strong_emphasis,
       $.code_span,
+      $.raw_inline,
       $.link,
       $.autolink,
       $.html_inline,
@@ -159,6 +176,7 @@ module.exports = grammar({
     _inline_no_underscore: $ => choice(
       $.strong_emphasis,
       $.code_span,
+      $.raw_inline,
       $.link,
       $.autolink,
       $.html_inline,
@@ -178,9 +196,16 @@ module.exports = grammar({
 
     code_span: $ => prec(3, seq(
       '`',
-      field('content', optional(alias(/[^`\r\n]+/, $.code_span_content))),
+      field('content', optional(alias(/[^`]+/, $.code_span_content))),
       '`'
     )),
+
+    raw_inline: $ => prec.dynamic(4, prec(4, seq(
+      '`',
+      field('content', optional(alias(/[^`]+/, $.raw_inline_content))),
+      '`',
+      field('format', alias(token.immediate(/\{=[A-Za-z0-9_+-]+\}/), $.raw_format))
+    ))),
 
     autolink: $ => token(choice(
       /<[^\s<>]+:[^\s<>]+>/,
@@ -195,7 +220,7 @@ module.exports = grammar({
 
     citation: $ => token(/@[A-Za-z0-9_.+-]*[A-Za-z0-9_+-]/),
 
-    attribute_list: $ => token(/\{[^{}\r\n]*\}/),
+    attribute_list: $ => token(/\{[^={}\r\n][^{}\r\n]*\}|\{\}/),
 
     strikethrough: $ => token(/~~[^~\r\n]+~~/),
 
@@ -372,6 +397,18 @@ module.exports = grammar({
       seq("'", /[^']*/, "'"),
       seq('(', /[^)]*/, ')')
     ),
+
+    // Raw blocks
+    raw_block: $ => prec(2, seq(
+      field('delimiter', alias(token(/```+/), $.raw_block_delimiter)),
+      field('format', alias(token(/\{=[A-Za-z0-9_+-]+\}/), $.raw_format)),
+      /\r?\n/,
+      optional(field('content', alias(repeat1(seq($.raw_block_line, /\r?\n/)), $.raw_block_content))),
+      field('delimiter', alias(token(/```+/), $.raw_block_delimiter)),
+      /\r?\n/
+    )),
+
+    raw_block_line: $ => token(/[^\r\n]*/),
 
     // Fenced code blocks
     fenced_code_block: $ => seq(

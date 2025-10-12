@@ -4,6 +4,10 @@
 (code_span) @text.literal
 (code_span_content) @text.literal
 
+(raw_inline) @text.literal
+(raw_inline_content) @text.literal
+(raw_format) @property
+
 (link
   (link_text) @text.reference
   (link_destination) @text.uri)

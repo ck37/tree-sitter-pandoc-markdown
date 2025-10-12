@@ -21,6 +21,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "raw_inline"
+        },
+        {
+          "type": "SYMBOL",
           "name": "code_span"
         },
         {
@@ -212,6 +216,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "raw_inline"
+        },
+        {
+          "type": "SYMBOL",
           "name": "code_span"
         },
         {
@@ -294,6 +302,10 @@
         {
           "type": "SYMBOL",
           "name": "strong_emphasis"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "raw_inline"
         },
         {
           "type": "SYMBOL",
@@ -411,6 +423,60 @@
         ]
       }
     },
+    "raw_inline": {
+      "type": "PREC",
+      "value": 4,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "`"
+          },
+          {
+            "type": "FIELD",
+            "name": "content",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[^`]+"
+                  },
+                  "named": true,
+                  "value": "raw_inline_content"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "`"
+          },
+          {
+            "type": "FIELD",
+            "name": "format",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "\\{=[A-Za-z0-9_+-]+\\}"
+                }
+              },
+              "named": true,
+              "value": "raw_format"
+            }
+          }
+        ]
+      }
+    },
     "autolink": {
       "type": "TOKEN",
       "content": {
@@ -459,7 +525,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\{[^{}\\r\\n]*\\}"
+        "value": "\\{[^={}\\r\\n][^{}\\r\\n]*\\}|\\{\\}"
       }
     },
     "strikethrough": {
@@ -858,6 +924,10 @@
         {
           "type": "SYMBOL",
           "name": "strong_emphasis"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "raw_inline"
         },
         {
           "type": "SYMBOL",

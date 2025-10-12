@@ -532,3 +532,166 @@ Shortcode block
 (document
   (shortcode_block
     (shortcode)))
+
+================================================================================
+Raw inline HTML
+================================================================================
+This is `<span class="test">HTML</span>`{=html} text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (raw_inline
+        (raw_inline_content)
+        (raw_format))
+      (text))))
+
+================================================================================
+Raw inline LaTeX
+================================================================================
+Use `\textbf{bold}`{=latex} for emphasis.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)
+      (raw_inline
+        (raw_inline_content)
+        (raw_format))
+      (text))))
+
+================================================================================
+Raw block LaTeX
+================================================================================
+```{=latex}
+\begin{center}
+Hello World
+\end{center}
+```
+
+--------------------------------------------------------------------------------
+
+(document
+  (raw_block
+    (raw_block_delimiter)
+    (raw_format)
+    (raw_block_content
+      (raw_block_line)
+      (raw_block_line)
+      (raw_block_line))
+    (raw_block_delimiter)))
+
+================================================================================
+Raw block HTML
+================================================================================
+```{=html}
+<div class="container">
+  <p>Content</p>
+</div>
+```
+
+--------------------------------------------------------------------------------
+
+(document
+  (raw_block
+    (raw_block_delimiter)
+    (raw_format)
+    (raw_block_content
+      (raw_block_line)
+      (raw_block_line)
+      (raw_block_line))
+    (raw_block_delimiter)))
+
+================================================================================
+Empty raw block
+================================================================================
+```{=html}
+```
+
+--------------------------------------------------------------------------------
+
+(document
+  (raw_block
+    (raw_block_delimiter)
+    (raw_format)
+    (raw_block_delimiter)))
+
+================================================================================
+Percent metadata full
+================================================================================
+% My Document Title
+% John Doe
+% January 2025
+
+Body text starts here.
+
+--------------------------------------------------------------------------------
+
+(document
+  (percent_metadata
+    (percent_metadata_title)
+    (percent_metadata_author)
+    (percent_metadata_date))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Percent metadata title only
+================================================================================
+% Just a Title
+
+Content follows.
+
+--------------------------------------------------------------------------------
+
+(document
+  (percent_metadata
+    (percent_metadata_title))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Percent metadata title and author
+================================================================================
+% Document Title
+% Jane Smith
+
+More content.
+
+--------------------------------------------------------------------------------
+
+(document
+  (percent_metadata
+    (percent_metadata_title)
+    (percent_metadata_author))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Percent metadata with empty date
+================================================================================
+% Title Here
+% Author Name
+%
+
+Paragraph text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (percent_metadata
+    (percent_metadata_title)
+    (percent_metadata_author)
+    (percent_metadata_date))
+  (paragraph
+    (inline
+      (text))))
+

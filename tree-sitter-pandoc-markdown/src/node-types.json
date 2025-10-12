@@ -117,6 +117,11 @@
     }
   },
   {
+    "type": "code_fence_line_text",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "code_span",
     "named": true,
     "fields": {
@@ -221,7 +226,15 @@
           "named": true
         },
         {
+          "type": "percent_metadata",
+          "named": true
+        },
+        {
           "type": "pipe_table",
+          "named": true
+        },
+        {
+          "type": "raw_block",
           "named": true
         },
         {
@@ -293,6 +306,10 @@
         },
         {
           "type": "link",
+          "named": true
+        },
+        {
+          "type": "raw_inline",
           "named": true
         },
         {
@@ -443,6 +460,10 @@
         },
         {
           "type": "pipe_table",
+          "named": true
+        },
+        {
+          "type": "raw_block",
           "named": true
         },
         {
@@ -647,6 +668,10 @@
         },
         {
           "type": "link",
+          "named": true
+        },
+        {
+          "type": "raw_inline",
           "named": true
         },
         {
@@ -958,6 +983,42 @@
     }
   },
   {
+    "type": "percent_metadata",
+    "named": true,
+    "fields": {
+      "author": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "percent_metadata_author",
+            "named": true
+          }
+        ]
+      },
+      "date": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "percent_metadata_date",
+            "named": true
+          }
+        ]
+      },
+      "title": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "percent_metadata_title",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "pipe_table",
     "named": true,
     "fields": {
@@ -1090,6 +1151,88 @@
     }
   },
   {
+    "type": "raw_block",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "raw_block_content",
+            "named": true
+          }
+        ]
+      },
+      "delimiter": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_block_delimiter",
+            "named": true
+          }
+        ]
+      },
+      "format": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_format",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "raw_block_content",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "raw_block_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "raw_block_line",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "raw_inline",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "raw_inline_content",
+            "named": true
+          }
+        ]
+      },
+      "format": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_format",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "setext_heading",
     "named": true,
     "fields": {
@@ -1197,6 +1340,10 @@
         },
         {
           "type": "link",
+          "named": true
+        },
+        {
+          "type": "raw_inline",
           "named": true
         },
         {
@@ -1357,10 +1504,6 @@
     "named": true
   },
   {
-    "type": "code_fence_line_text",
-    "named": true
-  },
-  {
     "type": "code_span_content",
     "named": true
   },
@@ -1429,11 +1572,35 @@
     "named": true
   },
   {
+    "type": "percent_metadata_author",
+    "named": true
+  },
+  {
+    "type": "percent_metadata_date",
+    "named": true
+  },
+  {
+    "type": "percent_metadata_title",
+    "named": true
+  },
+  {
     "type": "pipe_table_alignment_marker",
     "named": true
   },
   {
     "type": "pipe_table_cell_content",
+    "named": true
+  },
+  {
+    "type": "raw_block_delimiter",
+    "named": true
+  },
+  {
+    "type": "raw_format",
+    "named": true
+  },
+  {
+    "type": "raw_inline_content",
     "named": true
   },
   {

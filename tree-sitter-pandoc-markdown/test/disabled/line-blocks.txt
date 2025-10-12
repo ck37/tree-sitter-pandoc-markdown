@@ -1,0 +1,102 @@
+================================================================================
+Line block simple
+================================================================================
+| First line
+| Second line
+| Third line
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))
+
+================================================================================
+Line block with indentation
+================================================================================
+| The limerick packs laughs anatomical
+| In space that is quite economical.
+|    But the good ones I've seen
+|    So seldom are clean
+| And the clean ones so seldom are comical
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))
+
+================================================================================
+Line block with emphasis
+================================================================================
+| *Emphasis* in line blocks
+| **Strong** also works
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (emphasis
+          (text))
+        (text)))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (strong_emphasis
+          (text))
+        (text)))))
+
+================================================================================
+Empty line block line
+================================================================================
+| First line
+|
+| Third line
+
+--------------------------------------------------------------------------------
+
+(document
+  (line_block
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))
+    (line_block_line
+      (line_block_marker))
+    (line_block_line
+      (line_block_marker)
+      (inline
+        (text)))))
