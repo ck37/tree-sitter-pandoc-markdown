@@ -14,8 +14,9 @@ module.exports = grammar({
   extras: $ => [/\s/],
 
   externals: $ => [
-    // $.line_block_start,  // Disabled - causes parser interference
-    // $.pipe_table_start,  // Disabled - causes parser errors
+    // $.line_block_start,  // DEFERRED: Requires grammar restructuring to prevent conflicts with pipe_table
+    //                       // See OPTIONS_FOR_PROCEEDING.md and EXTERNAL_SCANNER_RESOURCES.md
+    $.pipe_table_start,
   ],
 
   conflicts: $ => [
@@ -37,8 +38,7 @@ module.exports = grammar({
       $.link_reference_definition,
       $.fenced_div,
       $.display_math,
-      // prec(2, $.line_block),  // Disabled - causes parser interference
-      prec(1, $.pipe_table),
+      $._pipe_construct,  // Groups line_block and pipe_table
       $.shortcode_block,
       $.raw_block,
       $.paragraph,
@@ -47,6 +47,13 @@ module.exports = grammar({
       $.list,
       $.thematic_break,
       $.blank_line
+    ),
+
+    // DEFERRED: Line blocks require grammar restructuring to prevent conflicts
+    // For now, only pipe_table is supported. Line blocks will be added in Phase 2.
+    _pipe_construct: $ => choice(
+      // $.line_block,  // DEFERRED - see OPTIONS_FOR_PROCEEDING.md
+      $.pipe_table
     ),
 
     // Headings
@@ -285,24 +292,32 @@ module.exports = grammar({
       token.immediate(/\r?\n/)
     ))),
 
-    // line_block: $ => prec.right(seq(
+    // DEFERRED: Line blocks require grammar restructuring to avoid conflicts with pipe tables
+    // The issue is that both LINE_BLOCK_START and PIPE_TABLE_START become valid simultaneously
+    // in the grammar, causing GLR parser conflicts. This requires either:
+    //   1. Deep grammar restructuring (context-specific block rules)
+    //   2. Alternative syntax (e.g., || instead of |)
+    //   3. Advanced scanner state management
+    // See OPTIONS_FOR_PROCEEDING.md and EXTERNAL_SCANNER_RESOURCES.md for details.
+    //
+    // line_block: $ => seq(
     //   $.line_block_start,
     //   $.line_block_line,
     //   repeat($.line_block_line)
-    // )),
-
+    // ),
+    //
     // line_block_line: $ => seq(
     //   field('marker', alias(token(prec(1, /\|[ \t]+/)), $.line_block_marker)),
     //   optional(field('content', $.inline)),
     //   /\r?\n/
     // ),
 
-    pipe_table: $ => prec.right(seq(
-      // $.pipe_table_start,  // Disabled external token - causes parser errors
+    pipe_table: $ => seq(
+      $.pipe_table_start,
       field('header', $.pipe_table_header),
       field('delimiter', $.pipe_table_delimiter),
       repeat1(field('row', $.pipe_table_row))
-    )),
+    ),
 
     pipe_table_header: $ => seq(
       '|',

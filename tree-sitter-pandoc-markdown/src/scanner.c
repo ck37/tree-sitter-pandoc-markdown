@@ -1174,8 +1174,10 @@ static bool parse_html_block(Scanner *s, TSLexer *lexer,
     return false;
 }
 
+// DEFERRED: Line blocks are commented out (see grammar.js and OPTIONS_FOR_PROCEEDING.md)
 // Quick check: does this look like a line block (without advancing lexer)?
 // Returns: 1 if line block, 0 if pipe table, -1 if neither
+/*
 static int is_line_block_quick_check(Scanner *s, TSLexer *lexer) {
     // This is a non-advancing check
     // We're already at '|', check what comes after without advancing
@@ -1184,11 +1186,14 @@ static int is_line_block_quick_check(Scanner *s, TSLexer *lexer) {
     // The full disambiguation happens in the parse functions
     return -1;
 }
+*/
 
+// DEFERRED: Line blocks are commented out (see grammar.js and OPTIONS_FOR_PROCEEDING.md)
 // Detect if the current line starting with | is a line block
 // Line blocks have pattern: | <space> <content>
 // and do NOT have a delimiter row following (which would indicate a pipe table)
 // IMPORTANT: This function must NOT advance lexer if returning false!
+/*
 static bool parse_line_block(Scanner *s, TSLexer *lexer,
                               const bool *valid_symbols) {
     (void)(valid_symbols);
@@ -1274,6 +1279,7 @@ static bool parse_line_block(Scanner *s, TSLexer *lexer,
     lexer->result_symbol = LINE_BLOCK_START;
     return true;
 }
+*/
 
 static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
                              const bool *valid_symbols) {
@@ -1283,6 +1289,12 @@ static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
 
     // PIPE_TABLE_START is zero width
     mark_end(s, lexer);
+
+    // CRITICAL FIX: Must start with | - return false immediately if not
+    if (lexer->lookahead != '|') {
+        return false;
+    }
+
     // count number of cells
     size_t cell_count = 0;
     // also remember if we see starting and ending pipes, as empty headers have
@@ -1412,6 +1424,9 @@ static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
 }
 
 static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
+    // NOTE: LINE_BLOCK_START is deferred (commented out in grammar.js)
+    // Only PIPE_TABLE_START is currently active as an external token
+
     // A normal tree-sitter rule decided that the current branch is invalid and
     // now "requests" an error to stop the branch
     if (valid_symbols[TRIGGER_ERROR]) {
@@ -1525,19 +1540,14 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
                 // A < could mark the beginning of a html block
                 return parse_html_block(s, lexer, valid_symbols);
             case '|':
-                // A '|' could mark either a line block or a pipe table
-                // NOTE: LINE_BLOCK_START temporarily disabled - causes interference
-                // with block quotes and other constructs. Need to debug simulate mode.
-                // Try pipe table if it's valid
+                // A '|' marks a pipe table (line blocks are deferred)
                 if (valid_symbols[PIPE_TABLE_START]) {
                     return parse_pipe_table(s, lexer, valid_symbols);
                 }
                 return false;
         }
-        if (lexer->lookahead != '\r' && lexer->lookahead != '\n' &&
-            valid_symbols[PIPE_TABLE_START]) {
-            return parse_pipe_table(s, lexer, valid_symbols);
-        }
+        // NOTE: Removed fallback pipe_table check here - it was calling parse_pipe_table
+        // even when lookahead != '|', causing tokens to be emitted inappropriately
     } else { // we are in the state of trying to match all currently open blocks
         bool partial_success = false;
         while (s->matched < (uint8_t)s->open_blocks.size) {

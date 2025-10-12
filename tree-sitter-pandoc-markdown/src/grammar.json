@@ -77,12 +77,8 @@
           "name": "display_math"
         },
         {
-          "type": "PREC",
-          "value": 1,
-          "content": {
-            "type": "SYMBOL",
-            "name": "pipe_table"
-          }
+          "type": "SYMBOL",
+          "name": "_pipe_construct"
         },
         {
           "type": "SYMBOL",
@@ -115,6 +111,15 @@
         {
           "type": "SYMBOL",
           "name": "blank_line"
+        }
+      ]
+    },
+    "_pipe_construct": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "pipe_table"
         }
       ]
     },
@@ -1603,40 +1608,40 @@
       }
     },
     "pipe_table": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "pipe_table_start"
+        },
+        {
+          "type": "FIELD",
+          "name": "header",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pipe_table_header"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "delimiter",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pipe_table_delimiter"
+          }
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
             "type": "FIELD",
-            "name": "header",
+            "name": "row",
             "content": {
               "type": "SYMBOL",
-              "name": "pipe_table_header"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "delimiter",
-            "content": {
-              "type": "SYMBOL",
-              "name": "pipe_table_delimiter"
-            }
-          },
-          {
-            "type": "REPEAT1",
-            "content": {
-              "type": "FIELD",
-              "name": "row",
-              "content": {
-                "type": "SYMBOL",
-                "name": "pipe_table_row"
-              }
+              "name": "pipe_table_row"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "pipe_table_header": {
       "type": "SEQ",
@@ -2774,7 +2779,12 @@
     ]
   ],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "pipe_table_start"
+    }
+  ],
   "inline": [],
   "supertypes": []
 }

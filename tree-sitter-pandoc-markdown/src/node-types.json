@@ -1052,6 +1052,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "pipe_table_start",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1589,6 +1599,10 @@
   },
   {
     "type": "pipe_table_cell_content",
+    "named": true
+  },
+  {
+    "type": "pipe_table_start",
     "named": true
   },
   {

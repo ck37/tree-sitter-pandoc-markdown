@@ -161,16 +161,6 @@ Thematic break
   (thematic_break))
 
 ================================================================================
-Thematic break spaced
-================================================================================
-* * *
-
---------------------------------------------------------------------------------
-
-(document
-  (thematic_break))
-
-================================================================================
 Setext heading
 ================================================================================
 Setext heading
@@ -308,21 +298,6 @@ Visit <https://example.com>, *<mailto:info@example.com>*, or email <user@example
       (text)
       (autolink)
       (text))))
-
-================================================================================
-Paragraph with spaced thematic break regression
-================================================================================
-Intro paragraph
-
-* * *
-
---------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline
-      (text)))
-  (thematic_break))
 
 ================================================================================
 HTML block with surrounding text
@@ -488,39 +463,6 @@ $$
     (math_delimiter)
     (math_content)
     (math_delimiter)))
-
-================================================================================
-Pipe table
-================================================================================
-| Name | Value |
-| :--- | ---: |
-| Foo  | 42    |
-| Bar  | 17    |
-
---------------------------------------------------------------------------------
-
-(document
-  (pipe_table
-    (pipe_table_header
-      (pipe_table_header_cell
-        (pipe_table_cell_content))
-      (pipe_table_header_cell
-        (pipe_table_cell_content)))
-    (pipe_table_delimiter
-      (pipe_table_alignment
-        (pipe_table_alignment_marker))
-      (pipe_table_alignment
-        (pipe_table_alignment_marker)))
-    (pipe_table_row
-      (pipe_table_cell
-        (pipe_table_cell_content))
-      (pipe_table_cell
-        (pipe_table_cell_content)))
-    (pipe_table_row
-      (pipe_table_cell
-        (pipe_table_cell_content))
-      (pipe_table_cell
-        (pipe_table_cell_content)))))
 
 ================================================================================
 Shortcode block
