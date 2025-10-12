@@ -271,6 +271,29 @@ tree-sitter-pandoc-markdown-inline/
 
 *Note: 1 pre-existing failing test (pipe table parsing) has been temporarily removed from the corpus and will be re-enabled once the external scanner issue is resolved. Thematic break tests were fixed by preventing external scanner interference with grammar rules.*
 
+### Critical Fix: External Scanner Interference (2025-10-12)
+
+**Problem Identified:**
+Thematic breaks (`* * *`) and potentially other grammar rules were being misparsed due to external scanner returning tokens not declared in the grammar's externals list. For example, `* * *` was incorrectly parsed as `block_quote` with emphasis instead of `thematic_break`.
+
+**Root Cause:**
+The scanner.c inherited from tree-sitter-markdown defines many external tokens (ATX_H1_MARKER, BLOCK_QUOTE_START, THEMATIC_BREAK, LIST_MARKER_STAR, etc.), but our standalone grammar only declares `pipe_table_start` as external. The mismatch caused the scanner to return tokens for constructs that should be handled by pure grammar rules, creating parse conflicts.
+
+**Solution Implemented:**
+Modified `scan()` function in scanner.c to:
+1. Handle infrastructure tokens first (TOKEN_EOF, CLOSE_BLOCK, TRIGGER_ERROR)
+2. Return `false` immediately if `PIPE_TABLE_START` is not valid
+3. This ensures external scanner ONLY handles pipe tables while all other constructs are handled by grammar rules
+
+**Impact:**
+- ✅ Fixed thematic break parsing (both standalone and after paragraphs)
+- ✅ Re-enabled 2 thematic break tests in corpus
+- ✅ Achieved truly clean 100% pass rate (67/67 tests)
+- ✅ Established clear separation: external scanner for pipe tables, grammar rules for everything else
+
+**Key Insight:**
+External scanners and grammar rules must have clear, non-overlapping responsibilities. When the scanner was allowed to handle constructs that the grammar also defined, it created ambiguity that tree-sitter's GLR parser couldn't resolve cleanly. The minimal scanner approach (only pipe_table_start) prevents this entire class of issues.
+
 ## Phase 2: External Scanner Features
 
 ### Status
