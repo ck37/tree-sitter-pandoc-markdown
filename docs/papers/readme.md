@@ -2,6 +2,10 @@
 
 This directory contains references to academic papers and technical documents relevant to the development of tree-sitter-pandoc-markdown. Papers cover topics including incremental parsing, GLR parsing algorithms, markdown specifications, and document parsing.
 
+## 📖 Quick Start
+
+**[Read key-insights.md](key-insights.md)** for a comprehensive summary of the most relevant insights from all papers, organized by topic and application to this project.
+
 ---
 
 ## 1. Efficient and Flexible Incremental Parsing (1997)
