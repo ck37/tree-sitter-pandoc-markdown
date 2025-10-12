@@ -371,10 +371,33 @@ The external token `pipe_table_start` is meant to validate AFTER consuming '|', 
 
 **Status:** Pipe tables require deeper tree-sitter expertise and potentially fundamental grammar restructuring. Feature deferred for Phase 2 focused external scanner work.
 
+**Scanner Research Completed (2025-10-12 PM):**
+Comprehensive analysis of external scanner patterns across 6 grammars documented in SCANNER_RESEARCH.md:
+- **tree-sitter-markdown**: 40+ external tokens, scanner classifies ALL blocks
+- **Python**: State management (INDENT/DEDENT tracking)
+- **TypeScript**: Extensive conflicts array (30+ declarations)
+- **Ruby**: Heavy precedence (50+ levels)
+- **Bash**: Combined state + conflicts approach
+- **Org-mode**: Priority through choice ordering
+
+**Experiment 1: Conflicts Array** - Implemented recommended approach from research:
+- Added `[$.pipe_table, $.paragraph]` and `[$.pipe_table_header, $.inline]` to conflicts array
+- Tree-sitter reported "unnecessary conflicts" - revealing issue isn't GLR ambiguity
+- Scanner works correctly (verified with debug output - called multiple times, returns true)
+- Parser attempts pipe_table path (scanner receives PIPE_TABLE_START in valid_symbols)
+- But grammar rules fail to match table structure - produces ERROR nodes with inline content
+
+**Conclusion from Research:**
+Scanner architecture is sound. The issue is grammar rule structure for cells/rows. Current simplified `token(/[^\r\n|]+/)` approach is insufficient. Tree-sitter-markdown uses complex cell patterns with:
+- Optional leading whitespace and pipe handling
+- Complex choice structures for cell content
+- Explicit whitespace management
+- Multiple cell format patterns
+
 **Next Steps:**
-- Research how other tree-sitter grammars handle similar ambiguous constructs
-- Consult tree-sitter documentation on conflict resolution and dynamic precedence
-- Consider consulting tree-sitter community or examining similar grammar implementations
+- Consider adopting tree-sitter-markdown's complex cell/row patterns
+- Or expand external scanner to handle full table structure (not just start token)
+- See SCANNER_RESEARCH.md for detailed analysis and recommendations
 - For now, focus on other features that are working (67/67 tests passing without pipe tables)
 
 ## Phase 2: External Scanner Features
