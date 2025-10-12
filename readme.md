@@ -4,14 +4,6 @@ Tree-sitter parser for Pandoc-flavored Markdown, including support for Quarto an
 
 **Fully standalone grammars** that work independently without extending tree-sitter-markdown. Compatible with Zed editor (ABI version 14).
 
-## Status
-
-✅ **Phase 1 Complete** - All grammar-only Pandoc Markdown features implemented and tested.
-
-**Test Coverage:** 67/67 tests passing (100%)
-- 38/38 block grammar tests
-- 29/29 inline grammar tests
-
 ## Features
 
 Supports **42+ Pandoc Markdown constructs** including:
