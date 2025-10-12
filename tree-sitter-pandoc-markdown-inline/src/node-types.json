@@ -26,6 +26,11 @@
     }
   },
   {
+    "type": "autolink",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "code_span",
     "named": true,
     "fields": {
@@ -75,6 +80,10 @@
         },
         {
           "type": "cross_reference",
+          "named": true
+        },
+        {
+          "type": "emphasis_delimiter",
           "named": true
         },
         {
@@ -525,6 +534,10 @@
           "named": true
         },
         {
+          "type": "emphasis_delimiter",
+          "named": true
+        },
+        {
           "type": "footnote_reference",
           "named": true
         },
@@ -558,10 +571,6 @@
         },
         {
           "type": "strikethrough",
-          "named": true
-        },
-        {
-          "type": "strong_emphasis",
           "named": true
         },
         {
@@ -601,14 +610,6 @@
     "named": false
   },
   {
-    "type": "*",
-    "named": false
-  },
-  {
-    "type": "**",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
@@ -621,23 +622,11 @@
     "named": false
   },
   {
-    "type": "_",
-    "named": false
-  },
-  {
-    "type": "__",
-    "named": false
-  },
-  {
     "type": "`",
     "named": false
   },
   {
     "type": "attribute_list",
-    "named": true
-  },
-  {
-    "type": "autolink",
     "named": true
   },
   {
@@ -654,6 +643,10 @@
   },
   {
     "type": "cross_reference",
+    "named": true
+  },
+  {
+    "type": "emphasis_delimiter",
     "named": true
   },
   {

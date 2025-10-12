@@ -9,8 +9,26 @@ module.exports = grammar({
 
   extras: $ => [/\s/],
 
+  externals: $ => [
+    $._emphasis_open_star,
+    $._emphasis_close_star,
+    $._emphasis_open_underscore,
+    $._emphasis_close_underscore,
+    $._last_token_whitespace,
+    $._last_token_punctuation,
+    $._code_span_start,
+    $._code_span_close,
+    $._latex_span_start,
+    $._latex_span_close,
+    $._strikethrough_open,
+    $._strikethrough_close,
+    $._unclosed_span,
+    $._trigger_error
+  ],
+
   conflicts: $ => [
-    [$._inline_element, $._link_text_element]
+    [$._inline_element, $._link_text_element],
+    [$.emphasis, $.strong_emphasis]
   ],
 
   rules: {
@@ -42,17 +60,56 @@ module.exports = grammar({
     ),
 
     emphasis: $ => choice(
-      prec.left(1, seq('*', repeat1($._inline_no_star), '*')),
-      prec.left(1, seq('_', repeat1($._inline_no_underscore), '_'))
+      prec.dynamic(1, seq(
+        alias($._emphasis_open_star, $.emphasis_delimiter),
+        optional($._last_token_punctuation),
+        optional($._last_token_whitespace),
+        repeat1(choice(
+          $.strong_emphasis,
+          $._inline_no_star
+        )),
+        alias($._emphasis_close_star, $.emphasis_delimiter)
+      )),
+      prec.dynamic(1, seq(
+        alias($._emphasis_open_underscore, $.emphasis_delimiter),
+        optional($._last_token_punctuation),
+        optional($._last_token_whitespace),
+        repeat1(choice(
+          $.strong_emphasis,
+          $._inline_no_underscore
+        )),
+        alias($._emphasis_close_underscore, $.emphasis_delimiter)
+      ))
     ),
 
     strong_emphasis: $ => choice(
-      prec.left(2, seq('**', repeat1($._inline_element), '**')),
-      prec.left(2, seq('__', repeat1($._inline_element), '__'))
+      prec.dynamic(2, seq(
+        alias($._emphasis_open_star, $.emphasis_delimiter),
+        alias($._emphasis_open_star, $.emphasis_delimiter),
+        optional($._last_token_punctuation),
+        optional($._last_token_whitespace),
+        repeat1(choice(
+          $.emphasis,
+          $._inline_no_star
+        )),
+        alias($._emphasis_close_star, $.emphasis_delimiter),
+        alias($._emphasis_close_star, $.emphasis_delimiter)
+      )),
+      prec.dynamic(2, seq(
+        alias($._emphasis_open_underscore, $.emphasis_delimiter),
+        alias($._emphasis_open_underscore, $.emphasis_delimiter),
+        optional($._last_token_punctuation),
+        optional($._last_token_whitespace),
+        repeat1(choice(
+          $.emphasis,
+          $._inline_no_underscore
+        )),
+        alias($._emphasis_close_underscore, $.emphasis_delimiter),
+        alias($._emphasis_close_underscore, $.emphasis_delimiter)
+      ))
     ),
 
     _inline_no_star: $ => choice(
-      $.strong_emphasis,
       $.raw_inline,
       $.code_span,
       $.link,
@@ -76,7 +133,6 @@ module.exports = grammar({
     ),
 
     _inline_no_underscore: $ => choice(
-      $.strong_emphasis,
       $.raw_inline,
       $.code_span,
       $.link,
@@ -112,10 +168,10 @@ module.exports = grammar({
       field('format', alias(token.immediate(/\{=[A-Za-z0-9_+-]+\}/), $.raw_format))
     )),
 
-    autolink: $ => token(choice(
+    autolink: $ => choice(
       /<[^\s<>]+:[^\s<>]+>/,
       /<[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+>/
-    )),
+    ),
 
     html_inline: $ => token(/<\/?[A-Za-z][^>\r\n]*>/),
 
@@ -217,7 +273,7 @@ module.exports = grammar({
     link_label: $ => repeat1($._link_text_element),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`<>\[\]{}@\^$|~+=]+/, 
+      /[^\n\r*_`<>\[\]{}@\^$|~+=]+/,
       /[*_`]/
     )))
   }

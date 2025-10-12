@@ -7,22 +7,23 @@
 #endif
 
 // For explanation of the tokens see grammar.js
+// Order must match externals array in grammar.js
 typedef enum {
-    ERROR,
-    TRIGGER_ERROR,
-    CODE_SPAN_START,
-    CODE_SPAN_CLOSE,
     EMPHASIS_OPEN_STAR,
-    EMPHASIS_OPEN_UNDERSCORE,
     EMPHASIS_CLOSE_STAR,
+    EMPHASIS_OPEN_UNDERSCORE,
     EMPHASIS_CLOSE_UNDERSCORE,
     LAST_TOKEN_WHITESPACE,
     LAST_TOKEN_PUNCTUATION,
-    STRIKETHROUGH_OPEN,
-    STRIKETHROUGH_CLOSE,
+    CODE_SPAN_START,
+    CODE_SPAN_CLOSE,
     LATEX_SPAN_START,
     LATEX_SPAN_CLOSE,
-    UNCLOSED_SPAN
+    STRIKETHROUGH_OPEN,
+    STRIKETHROUGH_CLOSE,
+    UNCLOSED_SPAN,
+    TRIGGER_ERROR,
+    ERROR
 } TokenType;
 
 // Determines if a character is punctuation as defined by the markdown spec.

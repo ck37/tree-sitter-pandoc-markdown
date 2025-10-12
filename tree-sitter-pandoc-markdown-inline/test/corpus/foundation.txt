@@ -17,7 +17,9 @@ Emphasis
 
 (inline
   (emphasis
-    (text)))
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter)))
 
 ================================================================================
 Strong emphasis
@@ -28,7 +30,29 @@ Strong emphasis
 
 (inline
   (strong_emphasis
-    (text)))
+    (emphasis_delimiter)
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter)
+    (emphasis_delimiter)))
+
+================================================================================
+Nested emphasis with triple asterisks
+================================================================================
+***bold and italic***
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (strong_emphasis
+      (emphasis_delimiter)
+      (emphasis_delimiter)
+      (text)
+      (emphasis_delimiter)
+      (emphasis_delimiter))
+    (emphasis_delimiter)))
 
 ================================================================================
 Strikethrough
@@ -187,8 +211,9 @@ Autolink inside emphasis
 --------------------------------------------------------------------------------
 
 (inline
-  (emphasis
-    (autolink)))
+  (text)
+  (autolink)
+  (text))
 
 ================================================================================
 HTML inline tags
