@@ -55,6 +55,129 @@ Nested emphasis with triple asterisks
     (emphasis_delimiter)))
 
 ================================================================================
+Nested emphasis with triple underscores
+================================================================================
+___bold and italic___
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (strong_emphasis
+      (emphasis_delimiter)
+      (emphasis_delimiter)
+      (text)
+      (emphasis_delimiter)
+      (emphasis_delimiter))
+    (emphasis_delimiter)))
+
+================================================================================
+Nested emphasis with quadruple asterisks
+================================================================================
+****deeply nested****
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (strong_emphasis
+      (emphasis_delimiter)
+      (emphasis_delimiter)
+      (emphasis
+        (emphasis_delimiter)
+        (text)
+        (emphasis_delimiter))
+      (emphasis_delimiter)
+      (emphasis_delimiter))
+    (emphasis_delimiter)))
+
+================================================================================
+Mixed emphasis delimiters
+================================================================================
+**_combined_**
+
+--------------------------------------------------------------------------------
+
+(inline
+  (text)
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter))
+  (text))
+
+================================================================================
+Adjacent emphasis
+================================================================================
+*first* *second*
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter))
+  (text)
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter)))
+
+================================================================================
+Emphasis with punctuation
+================================================================================
+*word*, *word.*
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter))
+  (text)
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter)))
+
+================================================================================
+Emphasis at word boundaries
+================================================================================
+word*italic*word
+
+--------------------------------------------------------------------------------
+
+(inline
+  (text)
+  (emphasis
+    (emphasis_delimiter)
+    (text)
+    (emphasis_delimiter))
+  (text))
+
+================================================================================
+Nested emphasis with longer content
+================================================================================
+***multiple words with spaces***
+
+--------------------------------------------------------------------------------
+
+(inline
+  (emphasis
+    (emphasis_delimiter)
+    (strong_emphasis
+      (emphasis_delimiter)
+      (emphasis_delimiter)
+      (text)
+      (emphasis_delimiter)
+      (emphasis_delimiter))
+    (emphasis_delimiter)))
+
+================================================================================
 Strikethrough
 ================================================================================
 ~~gone~~
