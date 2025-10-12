@@ -305,24 +305,19 @@ module.exports = grammar({
     //   /\r?\n/
     // ),
 
-    pipe_table: $ => prec.right(seq(
+    pipe_table: $ => prec(1, seq(
       field('header', $.pipe_table_header),
       field('delimiter', $.pipe_table_delimiter),
       repeat1(field('row', $.pipe_table_row))
     )),
 
-    pipe_table_header: $ => seq(
+    pipe_table_header: $ => prec.right(seq(
       '|',
-      $.pipe_table_start,  // Zero-width token to validate this is a pipe table
-      field('cell', $.pipe_table_header_cell),
-      repeat1(seq('|', field('cell', $.pipe_table_header_cell))),
-      optional('|'),
+      $.pipe_table_start,  // Zero-width token AFTER '|' to validate this is a pipe table
+      optional(alias(token(/[^\r\n|]+/), $.pipe_table_header_cell)),
+      repeat1(seq('|', optional(alias(token(/[^\r\n|]+/), $.pipe_table_header_cell)))),
       /\r?\n/
-    ),
-
-    pipe_table_header_cell: $ => seq(
-      field('content', alias(token(/[^\r\n|]+/), $.pipe_table_cell_content))
-    ),
+    )),
 
     pipe_table_delimiter: $ => seq(
       '|',
@@ -336,17 +331,12 @@ module.exports = grammar({
       field('marker', alias(token(prec(2, /:?-{3,}:?/)), $.pipe_table_alignment_marker))
     ),
 
-    pipe_table_row: $ => seq(
+    pipe_table_row: $ => prec.right(seq(
       '|',
-      field('cell', $.pipe_table_cell),
-      repeat1(seq('|', field('cell', $.pipe_table_cell))),
-      optional('|'),
+      optional(alias(token(/[^\r\n|]+/), $.pipe_table_cell)),
+      repeat1(seq('|', optional(alias(token(/[^\r\n|]+/), $.pipe_table_cell)))),
       /\r?\n/
-    ),
-
-    pipe_table_cell: $ => seq(
-      field('content', alias(token(/[^\r\n|]+/), $.pipe_table_cell_content))
-    ),
+    )),
 
     text: $ => prec.right(repeat1(choice(
       /[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/, 

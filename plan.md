@@ -333,11 +333,49 @@ Multiple issues with grammar structure and scanner logic:
 **Key Insight - Zero-Width Tokens and Lexer Position:**
 The `advance()` function always calls `lexer->advance()` regardless of simulate mode. For zero-width tokens with multi-line lookahead, the lexer gets positioned beyond where grammar expects. The original scanner was designed to consume entire tables, but our grammar wants to parse rows itself. Solution: Simplified scanner to minimal validation without advancing, letting grammar handle full parsing.
 
+**Investigation Continued (2025-10-12 PM):**
+
+After simplifying scanner approach and refining grammar rules, discovered fundamental parser recognition issue:
+
+**Grammar Structure Attempts:**
+1. Made cell content optional to allow empty cells (tree-sitter rejected - can't match empty string)
+2. Restructured to: `'|' + optional_cell + repeat1('|' + optional_cell) + newline`
+3. Added `prec(1)` to pipe_table to prioritize over paragraph (prec -2)
+
+**Scanner Behavior:**
+- Scanner is called correctly and returns true for `PIPE_TABLE_START`
+- Called many times per parse (GLR exploring paths)
+- But parser NEVER enters pipe_table rules - treats input as paragraph/inline content
+
+**Parse Tree Analysis:**
+For input "|A|B|", parser generates:
+- `(text [0,1]-[0,4])` - " A |" (but text excludes '|'!)
+- `(strikethrough [0,4]-[0,4])` - empty nodes
+- `(list_marker)` - recognizes " - " from delimiter row
+- Everything wrapped in ERROR node
+
+**Root Cause - Token Look-ahead Issue:**
+Tree-sitter's LR parser needs distinctive tokens to decide which rule to try. The '|' character at line start doesn't uniquely indicate pipe_table because:
+- It's inside pipe_table_header (nested), not at pipe_table level
+- Parser must speculatively try pipe_table → pipe_table_header → '|' to discover this
+- By that point, paragraph rule may have already claimed the '|' as inline content
+
+**Fundamental Challenge:**
+The external token `pipe_table_start` is meant to validate AFTER consuming '|', but the parser needs to know to TRY pipe_table BEFORE consuming '|'. This is a chicken-and-egg problem in tree-sitter's LR parsing approach.
+
+**Potential Solutions for Future Work:**
+1. **Restructure grammar** to make pipe_table start with a more distinctive pattern that parser can recognize before committing to paragraph
+2. **Use conflicts array** to explicitly tell tree-sitter about pipe_table vs paragraph ambiguity
+3. **Research tree-sitter LR parsing mechanics** for how other grammars handle similar ambiguous starting tokens
+4. **Consider alternative approaches** like making first '|' part of block-level lexical scan
+
+**Status:** Pipe tables require deeper tree-sitter expertise and potentially fundamental grammar restructuring. Feature deferred for Phase 2 focused external scanner work.
+
 **Next Steps:**
-- Refine grammar rules for pipe_table_header_cell parsing
-- Fix delimiter and row parsing in grammar
-- Test with various table formats
-- Re-enable pipe table test once fully working
+- Research how other tree-sitter grammars handle similar ambiguous constructs
+- Consult tree-sitter documentation on conflict resolution and dynamic precedence
+- Consider consulting tree-sitter community or examining similar grammar implementations
+- For now, focus on other features that are working (67/67 tests passing without pipe tables)
 
 ## Phase 2: External Scanner Features
 

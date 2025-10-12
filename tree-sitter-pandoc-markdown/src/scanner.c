@@ -1287,15 +1287,11 @@ static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
     // unused
     (void)(valid_symbols);
 
-    // PIPE_TABLE_START is zero width - just validate we have | characters on this line
+    // PIPE_TABLE_START is a zero-width validation token.
+    // Grammar has already consumed the leading '|', so we just emit the token.
+    // The grammar will handle full table structure validation.
     mark_end(s, lexer);
 
-    // NOTE: Grammar has already consumed the leading '|', so we're now positioned
-    // after it. We do MINIMAL validation: just check we have at least one more | on this line.
-    // The grammar will handle full table parsing.
-
-    // Don't advance! Just check if there's another | somewhere ahead (quick validation)
-    // For now, just return true if we got here - the grammar consumed a |, so assume it's a table
     lexer->result_symbol = PIPE_TABLE_START;
     return true;
 }
@@ -1346,6 +1342,16 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
         return false;
     }
 
+    // If we get here, PIPE_TABLE_START is valid. The grammar has already consumed
+    // the leading '|', so validate and emit the token.
+    return parse_pipe_table(s, lexer, valid_symbols);
+
+    // NOTE: All the code below (whitespace parsing, switch statement for different
+    // characters) was designed for the original approach where the scanner handles
+    // ALL token types. Since we now only handle pipe_table_start, and the grammar
+    // consumes the '|' before calling the scanner, we can skip all that logic.
+
+    /*
     if (!(s->state & STATE_MATCHING)) {
         // Parse any preceeding whitespace and remember its length. This makes a
         // lot of parsing quite a bit easier.
@@ -1568,6 +1574,10 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
         }
     }
     return false;
+    */
+
+    // Dead code above is commented out - it handles tokens that are not in the
+    // externals list in grammar.js, so they will never be requested.
 }
 
 void *tree_sitter_pandoc_markdown_external_scanner_create(void) {

@@ -77,9 +77,19 @@ The project ships two separate but related grammars:
 
 **Key technical details:**
 - ABI version 14 for Zed editor compatibility
-- External scanner (C code) for list markers, HTML blocks, and pipe tables
-- Grammar-only implementation (no external scanner) for most features
+- **Minimal external scanner** - Only handles `pipe_table_start` token
+- **Grammar-first approach** - All other constructs (headings, block quotes, lists, thematic breaks) handled by pure grammar rules
 - Shared common code in `common/` directory
+
+### External Scanner Design
+
+The external scanner in `scanner.c` is intentionally minimal:
+- **Only emits**: `pipe_table_start` (for detecting pipe table structures)
+- **Grammar handles**: All other block and inline constructs through regular expression matching and precedence rules
+
+This design prevents scanner interference with grammar rules. The scanner returns `false` for all cases except when `pipe_table_start` is valid, ensuring clean separation between scanner-based and grammar-based parsing.
+
+**Historical note**: The scanner.c originated from tree-sitter-markdown (which uses external scanner extensively). We modified it to only handle pipe tables, allowing our standalone grammar to control all other syntax.
 
 ## Setup
 

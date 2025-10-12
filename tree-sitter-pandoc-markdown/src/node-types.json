@@ -176,6 +176,7 @@
   {
     "type": "document",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -1071,22 +1072,6 @@
     }
   },
   {
-    "type": "pipe_table_cell",
-    "named": true,
-    "fields": {
-      "content": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "pipe_table_cell_content",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "pipe_table_delimiter",
     "named": true,
     "fields": {
@@ -1105,22 +1090,15 @@
   {
     "type": "pipe_table_header",
     "named": true,
-    "fields": {
-      "cell": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "pipe_table_header_cell",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "pipe_table_header_cell",
+          "named": true
+        },
         {
           "type": "pipe_table_start",
           "named": true
@@ -1129,35 +1107,18 @@
     }
   },
   {
-    "type": "pipe_table_header_cell",
-    "named": true,
-    "fields": {
-      "content": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "pipe_table_cell_content",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "pipe_table_row",
     "named": true,
-    "fields": {
-      "cell": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "pipe_table_cell",
-            "named": true
-          }
-        ]
-      }
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "pipe_table_cell",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1598,7 +1559,11 @@
     "named": true
   },
   {
-    "type": "pipe_table_cell_content",
+    "type": "pipe_table_cell",
+    "named": true
+  },
+  {
+    "type": "pipe_table_header_cell",
     "named": true
   },
   {

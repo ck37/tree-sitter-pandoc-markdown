@@ -32,11 +32,9 @@
 
 ; (line_block_marker) @punctuation.special  ; Disabled - line blocks not implemented
 
-(pipe_table_header_cell
-  (pipe_table_cell_content)? @text.title)
+(pipe_table_header_cell) @text.title
 
-(pipe_table_cell
-  (pipe_table_cell_content)? @string)
+(pipe_table_cell) @string
 
 (pipe_table_alignment_marker) @punctuation.special
 
