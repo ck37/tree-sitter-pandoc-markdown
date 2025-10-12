@@ -794,3 +794,80 @@ The research reveals that our approach is **unusual but not wrong**:
 **Most promising path:** Combine conflicts array + choice reordering + dynamic precedence.
 
 **Nuclear option:** Expand external scanner to handle all block starts (like Markdown), but this violates our minimal scanner principle.
+
+---
+
+## Experiment Results (2025-10-12 PM)
+
+### Experiment 1: Add Conflicts Array
+
+**What we did:**
+```javascript
+conflicts: $ => [
+  [$._inline_element, $._link_text_element],
+  [$.pipe_table, $.paragraph],              // Added
+  [$.pipe_table_header, $.inline],          // Added
+],
+```
+
+**Result:** Tree-sitter reported "unnecessary conflicts" - parser doesn't see these as ambiguous in generated grammar. This revealed the issue isn't GLR ambiguity but rather parser not entering pipe_table path at all.
+
+### Additional Changes Made
+
+1. **Fixed cell definitions:** Changed from `alias(token(...))` to separate rules
+   ```javascript
+   pipe_table_header_cell: $ => token(/[^\r\n|]+/),
+   pipe_table_cell: $ => token(/[^\r\n|]+/),
+   ```
+
+2. **Removed trailing pipe handling:** The `repeat1(seq('|', optional(cell)))` already consumes trailing pipes as empty cells
+
+3. **Added debug output:** Confirmed scanner IS being called and returning true
+
+### Key Findings
+
+1. **Scanner works correctly:** `PIPE_TABLE_START` is in valid_symbols, scanner returns true
+2. **Parser tries pipe_table:** Debug shows scanner called multiple times with different lookaheads
+3. **Grammar rules fail:** Despite scanner success, parse produces ERROR nodes with inline content
+4. **Some recognition occurs:** `pipe_table_alignment_marker` from delimiter row IS recognized, showing partial success
+
+### Root Cause (Updated Hypothesis)
+
+The scanner works, but the **grammar rule structure** fails to match:
+
+1. Parser enters pipe_table → pipe_table_header
+2. Consumes '|'
+3. Scanner returns PIPE_TABLE_START = true ✅
+4. Tries to match header cells
+5. **Something fails here** - grammar rules don't successfully parse the cell/row structure
+6. Parser backtracks and wraps in ERROR
+
+**The issue isn't scanner-parser communication** - that works. The issue is **grammar rule correctness** for the table structure itself.
+
+### Comparison with tree-sitter-markdown
+
+Their pipe_table_row is dramatically more complex:
+- Optional leading whitespace and pipe
+- Complex choice structures for cells
+- Explicit whitespace handling
+- Multiple cell format patterns
+
+Our simplified approach may be too minimal for tree-sitter's LR parsing to handle correctly.
+
+### Conclusion
+
+After comprehensive research and experimentation:
+
+1. ✅ **Scanner architecture is sound:** Minimal external scanner works as designed
+2. ✅ **Conflicts array unnecessary:** Not a GLR ambiguity issue
+3. ✅ **Research insights valuable:** Understanding of scanner patterns across grammars
+4. ❌ **Grammar rules need redesign:** The table structure parsing itself fails
+
+**Recommendation:** Pipe tables require either:
+- Adopting tree-sitter-markdown's complex cell/row structure
+- OR different grammar architecture entirely
+- OR expanding external scanner to handle full table structure
+
+This is a Phase 2 task requiring dedicated focus on table grammar design, not just scanner integration.
+
+**Status:** Feature deferred. All research and experiments documented for future implementation.

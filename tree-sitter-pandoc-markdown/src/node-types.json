@@ -1072,6 +1072,11 @@
     }
   },
   {
+    "type": "pipe_table_cell",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "pipe_table_delimiter",
     "named": true,
     "fields": {
@@ -1105,6 +1110,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "pipe_table_header_cell",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "pipe_table_row",
@@ -1556,14 +1566,6 @@
   },
   {
     "type": "pipe_table_alignment_marker",
-    "named": true
-  },
-  {
-    "type": "pipe_table_cell",
-    "named": true
-  },
-  {
-    "type": "pipe_table_header_cell",
     "named": true
   },
   {

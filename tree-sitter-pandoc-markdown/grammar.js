@@ -21,6 +21,8 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$._inline_element, $._link_text_element],
+    [$.pipe_table, $.paragraph],              // '|' can start either pipe table or inline content
+    [$.pipe_table_header, $.inline],          // Header row vs inline parsing
   ],
 
   rules: {
@@ -314,10 +316,12 @@ module.exports = grammar({
     pipe_table_header: $ => prec.right(seq(
       '|',
       $.pipe_table_start,  // Zero-width token AFTER '|' to validate this is a pipe table
-      optional(alias(token(/[^\r\n|]+/), $.pipe_table_header_cell)),
-      repeat1(seq('|', optional(alias(token(/[^\r\n|]+/), $.pipe_table_header_cell)))),
+      optional($.pipe_table_header_cell),
+      repeat1(seq('|', optional($.pipe_table_header_cell))),
       /\r?\n/
     )),
+
+    pipe_table_header_cell: $ => token(/[^\r\n|]+/),
 
     pipe_table_delimiter: $ => seq(
       '|',
@@ -333,10 +337,12 @@ module.exports = grammar({
 
     pipe_table_row: $ => prec.right(seq(
       '|',
-      optional(alias(token(/[^\r\n|]+/), $.pipe_table_cell)),
-      repeat1(seq('|', optional(alias(token(/[^\r\n|]+/), $.pipe_table_cell)))),
+      optional($.pipe_table_cell),
+      repeat1(seq('|', optional($.pipe_table_cell))),
       /\r?\n/
     )),
+
+    pipe_table_cell: $ => token(/[^\r\n|]+/),
 
     text: $ => prec.right(repeat1(choice(
       /[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/, 

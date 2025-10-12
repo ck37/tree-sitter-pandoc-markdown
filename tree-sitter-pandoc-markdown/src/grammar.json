@@ -1653,16 +1653,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "TOKEN",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^\\r\\n|]+"
-                  }
-                },
-                "named": true,
-                "value": "pipe_table_header_cell"
+                "type": "SYMBOL",
+                "name": "pipe_table_header_cell"
               },
               {
                 "type": "BLANK"
@@ -1682,16 +1674,8 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "ALIAS",
-                      "content": {
-                        "type": "TOKEN",
-                        "content": {
-                          "type": "PATTERN",
-                          "value": "[^\\r\\n|]+"
-                        }
-                      },
-                      "named": true,
-                      "value": "pipe_table_header_cell"
+                      "type": "SYMBOL",
+                      "name": "pipe_table_header_cell"
                     },
                     {
                       "type": "BLANK"
@@ -1706,6 +1690,13 @@
             "value": "\\r?\\n"
           }
         ]
+      }
+    },
+    "pipe_table_header_cell": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\r\\n|]+"
       }
     },
     "pipe_table_delimiter": {
@@ -1800,16 +1791,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "TOKEN",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^\\r\\n|]+"
-                  }
-                },
-                "named": true,
-                "value": "pipe_table_cell"
+                "type": "SYMBOL",
+                "name": "pipe_table_cell"
               },
               {
                 "type": "BLANK"
@@ -1829,16 +1812,8 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "ALIAS",
-                      "content": {
-                        "type": "TOKEN",
-                        "content": {
-                          "type": "PATTERN",
-                          "value": "[^\\r\\n|]+"
-                        }
-                      },
-                      "named": true,
-                      "value": "pipe_table_cell"
+                      "type": "SYMBOL",
+                      "name": "pipe_table_cell"
                     },
                     {
                       "type": "BLANK"
@@ -1853,6 +1828,13 @@
             "value": "\\r?\\n"
           }
         ]
+      }
+    },
+    "pipe_table_cell": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\r\\n|]+"
       }
     },
     "text": {
@@ -2762,6 +2744,14 @@
     [
       "_inline_element",
       "_link_text_element"
+    ],
+    [
+      "pipe_table",
+      "paragraph"
+    ],
+    [
+      "pipe_table_header",
+      "inline"
     ]
   ],
   "precedences": [],
