@@ -153,6 +153,87 @@ Round out remaining grammar-only Pandoc Markdown constructs.
 - **Production ready**: Raw inline, raw blocks, percent metadata
 - All successfully implemented features follow established workflow: grammar updates, highlighting/injection queries, corpus tests, regeneration, and test verification.
 
+#### Phase 1G: Query File Enhancements
+Improve editor integration with comprehensive query files for syntax highlighting, code navigation, folding, and text objects.
+
+**Status:** In Progress (2025-10-12)
+
+**Objectives:**
+1. **Modernize highlights.scm** - Update to modern semantic scopes, add missing captures
+2. **Create folds.scm** - Enable code folding for better document navigation
+3. **Create tags.scm** - Support symbol navigation and document outline
+4. **Create locals.scm** - Enable go-to-definition for references
+5. **Create textobjects.scm** - Support nvim-treesitter text object selection
+6. **Enhance injections.scm** - Add more language injections for code blocks
+
+**Work Plan:**
+
+1. **highlights.scm Modernization** ⏳
+   - Replace deprecated scopes (`@text.*` → `@markup.*`)
+   - Add emphasis delimiter highlighting (`emphasis_delimiter`)
+   - Add heading level distinction (h1-h6)
+   - Improve Pandoc-specific scopes (citations, cross-refs, shortcodes)
+   - Use modern semantic naming conventions
+
+2. **folds.scm Creation** 📝
+   - Fold headings with content
+   - Fold block structures (code blocks, divs, quotes, lists)
+   - Fold YAML frontmatter
+   - Fold footnote definitions
+   - Fold tables
+
+3. **tags.scm Creation** 📝
+   - Extract headings as navigable tags
+   - Extract link reference definitions
+   - Extract footnote definitions
+   - Extract fenced divs with IDs
+   - Support document outline generation
+
+4. **locals.scm Creation** 📝
+   - Define link reference scopes
+   - Define footnote scopes
+   - Enable go-to-definition for references
+   - Support LSP semantic tokens
+
+5. **textobjects.scm Creation** 📝
+   - Code blocks as text objects
+   - Links as text objects
+   - Emphasis/strong as text objects
+   - Headings as text objects
+   - Lists as text objects
+   - Fenced divs as text objects
+
+6. **injections.scm Enhancement** 📝
+   - Add HTML detection in raw blocks
+   - Add common language injections (bash, python, r, javascript)
+   - Improve LaTeX injection patterns
+   - Add language-specific code fence handling
+
+**Testing Strategy:**
+- Create `test/queries/` directory with sample markdown files
+- Test each query file with `tree-sitter query` command
+- Validate in Neovim with nvim-treesitter
+- Test in Zed editor for highlighting
+- Document query patterns for maintainability
+
+**Benefits:**
+- **Better syntax highlighting** - Modern semantic scopes, more accurate
+- **Code folding** - Hide sections, focus on relevant content
+- **Document navigation** - Jump to headings, outline view
+- **Text object selection** - Faster editing with vim motions
+- **Go-to-definition** - Navigate link/footnote references
+- **Multi-editor support** - Works across Neovim, VSCode, Zed
+
+**Phase 1G Deliverables:**
+- [ ] Modernized `highlights.scm` with semantic scopes
+- [ ] New `folds.scm` for code folding
+- [ ] New `tags.scm` for code navigation
+- [ ] New `locals.scm` for reference scoping
+- [ ] New `textobjects.scm` for text object selection
+- [ ] Enhanced `injections.scm` with additional languages
+- [ ] Test directory with validation files
+- [ ] Documentation of query patterns
+
 ### Cleanup & Repository Hygiene
 - [x] Remove the legacy `tree-sitter-markdown` git submodule and drop it from `package.json` / `package-lock.json` now that the grammar is fully standalone.
 - [x] Update documentation (README, CONTRIBUTING, plan notes) to eliminate references to extending upstream grammars and clarify the standalone architecture.

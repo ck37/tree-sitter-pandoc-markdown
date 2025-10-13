@@ -1,53 +1,95 @@
-(emphasis) @text.emphasis
-(strong_emphasis) @text.strong
+; Pandoc Markdown Inline Highlighting Queries
+; Modern semantic scopes following nvim-treesitter conventions
 
-(code_span) @text.literal
-(code_span_content) @text.literal
+; ============================================================================
+; Emphasis & Strong
+; ============================================================================
 
-(raw_inline) @text.literal
-(raw_inline_content) @text.literal
-(raw_format) @property
+(emphasis) @markup.italic
+(strong_emphasis) @markup.bold
+
+; Emphasis delimiters (asterisks, underscores)
+(emphasis_delimiter) @punctuation.delimiter.emphasis
+
+; ============================================================================
+; Code
+; ============================================================================
+
+(code_span) @markup.raw.inline
+(code_span_content) @markup.raw.inline
+
+; Raw inline with format markers
+(raw_inline) @markup.raw.inline
+(raw_inline_content) @markup.raw.inline
+(raw_format) @attribute
+
+; ============================================================================
+; Links & Images
+; ============================================================================
 
 (link
-  (link_text) @text.reference
-  (link_destination) @text.uri)
+  (link_text) @markup.link.label
+  (link_destination) @markup.link.url)
 
 (link
-  (link_label) @text.reference)
+  (link_label) @markup.link.label)
 
 (image
-  (link_text) @text.reference
-  (link_destination)? @text.uri)
+  (link_text) @markup.link.label
+  (link_destination)? @markup.link.url)
 
 (image
-  (link_label) @text.reference)
+  (link_label) @markup.link.label)
 
-(autolink) @text.uri
+(autolink) @markup.link.url
 
-(citation_group) @text.reference
-(citation) @text.reference
-(cross_reference) @text.reference
+; ============================================================================
+; Pandoc Extensions
+; ============================================================================
 
-(footnote_reference) @text.reference
-(inline_footnote) @comment
+; Citations
+(citation_group) @markup.reference.citation
+(citation) @markup.reference.citation
 
-(strikethrough) @text.strike
-(highlight) @text.highlight
-(subscript) @text.subscript
-(superscript) @text.super
-(underline) @text.underline
+; Cross-references
+(cross_reference) @markup.reference.cross_ref
+
+; Footnotes
+(footnote_reference) @markup.reference.footnote
+(inline_footnote) @markup.reference.footnote
+
+; ============================================================================
+; Special Formatting
+; ============================================================================
+
+(strikethrough) @markup.strikethrough
+(highlight) @markup.highlight
+(subscript) @markup.subscript
+(superscript) @markup.superscript
+(underline) @markup.underline
+
+; ============================================================================
+; Attributes
+; ============================================================================
 
 (attribute_span
-  (inline)? @text)
+  (inline)? @markup.raw)
 (attribute_span
-  (attribute_list) @property)
+  (attribute_list) @attribute)
+
+(attribute_list) @attribute
+
+; ============================================================================
+; Math
+; ============================================================================
 
 (inline_math
-  (math_content)? @string)
+  (math_content)? @markup.math.inline)
 
-(math_delimiter) @punctuation.special
+(math_delimiter) @punctuation.delimiter.math
+
+; ============================================================================
+; HTML
+; ============================================================================
 
 (html_inline) @tag
-
-(attribute_list) @property
-
