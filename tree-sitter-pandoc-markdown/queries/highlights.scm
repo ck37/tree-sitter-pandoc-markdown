@@ -112,8 +112,9 @@
 ; Inline Formatting
 ; ============================================================================
 
-(emphasis) @markup.italic
-(strong_emphasis) @markup.bold
+; Note: emphasis and strong_emphasis are parsed by the inline grammar
+; and will be highlighted via grammar injection
+
 (strikethrough) @markup.strikethrough
 (highlight) @markup.highlight
 (subscript) @markup.subscript

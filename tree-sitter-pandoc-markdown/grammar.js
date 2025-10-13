@@ -5,7 +5,7 @@
 // Phase 1A: Minimal working grammar foundation
 
 function thematicLine(char) {
-  return token(new RegExp(`${char}(?:[ \t]*${char}){2,}[ \t]*`));
+  return token(new RegExp(`${char}(?:[ \t]*${char}){2,}[ \t]*\\r?\\n`));
 }
 
 module.exports = grammar({
@@ -43,11 +43,11 @@ module.exports = grammar({
       $.pipe_table,  // NOTE: line_block deferred - see OPTIONS_FOR_PROCEEDING.md
       $.shortcode_block,
       $.raw_block,
-      $.paragraph,
       $.html_block,
       $.fenced_code_block,
       $.list,
       $.thematic_break,
+      $.paragraph,
       $.blank_line
     ),
 
@@ -291,7 +291,7 @@ module.exports = grammar({
     pipe_table_cell: $ => token(/[^\r\n|]+/),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r`#<>\-\[\]{}@\^$|~=+]+/,
+      /[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/,
       /[>*_`]/
     ))),
 
@@ -426,14 +426,11 @@ module.exports = grammar({
     ),
 
     // Thematic break
-    thematic_break: $ => seq(
-      choice(
-        thematicLine('\\*'),
-        thematicLine('\-'),
-        thematicLine('_')
-      ),
-      /\r?\n/
-    ),
+    thematic_break: $ => prec(1, choice(
+      thematicLine('\\*'),
+      thematicLine('\-'),
+      thematicLine('_')
+    )),
 
     // Blank line
     blank_line: $ => /\r?\n/

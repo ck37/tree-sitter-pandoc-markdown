@@ -90,10 +90,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "paragraph"
-        },
-        {
-          "type": "SYMBOL",
           "name": "html_block"
         },
         {
@@ -107,6 +103,10 @@
         {
           "type": "SYMBOL",
           "name": "thematic_break"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "paragraph"
         },
         {
           "type": "SYMBOL",
@@ -1578,7 +1578,7 @@
           "members": [
             {
               "type": "PATTERN",
-              "value": "[^\\n\\r`#<>\\-\\[\\]{}@\\^$|~=+]+"
+              "value": "[^\\n\\r*_`#<>\\-\\[\\]{}@\\^$|~=+]+"
             },
             {
               "type": "PATTERN",
@@ -2418,39 +2418,34 @@
       ]
     },
     "thematic_break": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "PATTERN",
-                "value": "\\*(?:[ \t]*\\*){2,}[ \t]*"
-              }
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "PATTERN",
-                "value": "-(?:[ \t]*-){2,}[ \t]*"
-              }
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "PATTERN",
-                "value": "_(?:[ \t]*_){2,}[ \t]*"
-              }
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\\*(?:[ \t]*\\*){2,}[ \t]*\\r?\\n"
             }
-          ]
-        },
-        {
-          "type": "PATTERN",
-          "value": "\\r?\\n"
-        }
-      ]
+          },
+          {
+            "type": "TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "-(?:[ \t]*-){2,}[ \t]*\\r?\\n"
+            }
+          },
+          {
+            "type": "TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "_(?:[ \t]*_){2,}[ \t]*\\r?\\n"
+            }
+          }
+        ]
+      }
     },
     "blank_line": {
       "type": "PATTERN",

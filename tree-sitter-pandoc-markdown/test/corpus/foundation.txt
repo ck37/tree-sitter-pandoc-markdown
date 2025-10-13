@@ -298,6 +298,8 @@ Visit <https://example.com>, *<mailto:info@example.com>*, or email <user@example
       (autolink)
       (text)
       (autolink)
+      (text)
+      (autolink)
       (text))))
 
 ================================================================================
