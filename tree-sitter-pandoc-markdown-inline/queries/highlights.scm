@@ -8,24 +8,24 @@
 ; Emphasis & Strong
 ; ============================================================================
 
-; Triple asterisks create nested emphasis+strong_emphasis
-; Apply scopes to text nodes directly to avoid overlapping ranges
-; For nested case (triple asterisks), only apply strong scope
+; IMPORTANT: Only capture text nodes, never container nodes
+; Container node captures create overlapping ranges that cause themes to fail
+; For triple asterisks (***text***), the structure is:
+;   (emphasis (strong_emphasis (text)))
+; We only apply @emphasis.strong to the text to avoid overlaps
+
+; Triple asterisks: capture text inside nested emphasis>strong_emphasis
 (emphasis
   (strong_emphasis
     (text) @emphasis.strong))
 
-; For regular emphasis (not containing strong), apply emphasis scope
+; Regular emphasis: capture text directly inside emphasis
 (emphasis
   (text) @text.emphasis)
 
-; For strong emphasis (not inside emphasis), apply strong scope
+; Regular strong: capture text directly inside strong_emphasis
 (strong_emphasis
   (text) @emphasis.strong)
-
-; Also handle the container nodes for cases without text children
-(emphasis) @text.emphasis
-(strong_emphasis) @emphasis.strong
 
 ; Emphasis delimiters (asterisks, underscores)
 (emphasis_delimiter) @punctuation.delimiter.emphasis
