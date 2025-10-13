@@ -695,3 +695,39 @@ Triple asterisks (block grammar delegates to inline grammar via injection)
   (paragraph
     (inline
       (text))))
+
+================================================================================
+Mixed emphasis patterns (block grammar delegates to inline grammar)
+================================================================================
+Mixed *single* and **double** and ***triple*** text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Underscore emphasis patterns (block grammar delegates to inline grammar)
+================================================================================
+Underscore _single_ and __double__ and ___triple___ text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Quadruple asterisks (block grammar delegates to inline grammar)
+================================================================================
+****deeply nested****
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
