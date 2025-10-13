@@ -9,12 +9,21 @@
 ; ============================================================================
 
 ; Triple asterisks create nested emphasis+strong_emphasis
-; We need special handling to avoid conflicting overlapping scopes
-; For nested case, only apply strong scope to avoid theme conflicts
+; Apply scopes to text nodes directly to avoid overlapping ranges
+; For nested case (triple asterisks), only apply strong scope
 (emphasis
-  (strong_emphasis) @emphasis.strong)
+  (strong_emphasis
+    (text) @emphasis.strong))
 
-; Regular non-nested emphasis and strong
+; For regular emphasis (not containing strong), apply emphasis scope
+(emphasis
+  (text) @text.emphasis)
+
+; For strong emphasis (not inside emphasis), apply strong scope
+(strong_emphasis
+  (text) @emphasis.strong)
+
+; Also handle the container nodes for cases without text children
 (emphasis) @text.emphasis
 (strong_emphasis) @emphasis.strong
 
