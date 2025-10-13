@@ -156,7 +156,7 @@ Round out remaining grammar-only Pandoc Markdown constructs.
 #### Phase 1G: Query File Enhancements
 Improve editor integration with comprehensive query files for syntax highlighting, code navigation, folding, and text objects.
 
-**Status:** In Progress (2025-10-12)
+**Status:** Complete (2025-10-12)
 
 **Objectives:**
 1. **Modernize highlights.scm** - Update to modern semantic scopes, add missing captures
@@ -225,14 +225,22 @@ Improve editor integration with comprehensive query files for syntax highlightin
 - **Multi-editor support** - Works across Neovim, VSCode, Zed
 
 **Phase 1G Deliverables:**
-- [ ] Modernized `highlights.scm` with semantic scopes
-- [ ] New `folds.scm` for code folding
-- [ ] New `tags.scm` for code navigation
-- [ ] New `locals.scm` for reference scoping
-- [ ] New `textobjects.scm` for text object selection
-- [ ] Enhanced `injections.scm` with additional languages
-- [ ] Test directory with validation files
-- [ ] Documentation of query patterns
+- [x] Modernized `highlights.scm` with semantic scopes
+- [x] New `folds.scm` for code folding
+- [x] New `tags.scm` for code navigation
+- [x] New `locals.scm` for reference scoping
+- [x] New `textobjects.scm` for text object selection
+- [x] Enhanced `injections.scm` with additional languages
+- [x] Test directory with validation files
+- [x] Documentation of query patterns
+
+**Phase 1G Summary:**
+- ✅ **All 6 query files completed**: highlights, folds, tags, locals, textobjects, injections
+- ✅ **7 test files created**: Comprehensive validation suite in `test/queries/`
+- ✅ **Modern semantic scopes**: Aligned with nvim-treesitter conventions
+- ✅ **25+ language injections**: Python, R, JavaScript, TypeScript, and more
+- ✅ **Multi-editor support**: Works with Neovim, VSCode, Zed
+- All query files tested and validated with tree-sitter query command
 
 ### Cleanup & Repository Hygiene
 - [x] Remove the legacy `tree-sitter-markdown` git submodule and drop it from `package.json` / `package-lock.json` now that the grammar is fully standalone.
