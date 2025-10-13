@@ -8,6 +8,13 @@
 ; Emphasis & Strong
 ; ============================================================================
 
+; Triple asterisks create nested emphasis+strong_emphasis
+; We need special handling to avoid conflicting overlapping scopes
+; For nested case, only apply strong scope to avoid theme conflicts
+(emphasis
+  (strong_emphasis) @emphasis.strong)
+
+; Regular non-nested emphasis and strong
 (emphasis) @text.emphasis
 (strong_emphasis) @emphasis.strong
 
