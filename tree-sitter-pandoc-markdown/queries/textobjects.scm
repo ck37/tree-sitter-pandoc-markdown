@@ -40,9 +40,9 @@
 ; Emphasis (@emphasis)
 ; ============================================================================
 
-; Both emphasis and strong emphasis as emphasis objects
-(emphasis) @emphasis.outer
-(strong_emphasis) @emphasis.outer
+; Note: emphasis and strong_emphasis are parsed by the inline grammar
+; Text object queries for emphasis should be defined in the inline grammar's
+; textobjects.scm file instead
 
 ; ============================================================================
 ; Headings (@heading)

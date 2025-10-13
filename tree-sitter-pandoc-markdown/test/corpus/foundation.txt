@@ -63,12 +63,6 @@ This is *em* and **strong** text.
 (document
   (paragraph
     (inline
-      (text)
-      (emphasis
-        (text))
-      (text)
-      (strong_emphasis
-        (text))
       (text))))
 
 ================================================================================
@@ -303,8 +297,7 @@ Visit <https://example.com>, *<mailto:info@example.com>*, or email <user@example
       (text)
       (autolink)
       (text)
-      (emphasis
-        (autolink))
+      (autolink)
       (text)
       (autolink)
       (text))))
@@ -687,6 +680,54 @@ Paragraph text.
     (percent_metadata_title)
     (percent_metadata_author)
     (percent_metadata_date))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Triple asterisks (block grammar delegates to inline grammar via injection)
+================================================================================
+***triple***
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Mixed emphasis patterns (block grammar delegates to inline grammar)
+================================================================================
+Mixed *single* and **double** and ***triple*** text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Underscore emphasis patterns (block grammar delegates to inline grammar)
+================================================================================
+Underscore _single_ and __double__ and ___triple___ text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Quadruple asterisks (block grammar delegates to inline grammar)
+================================================================================
+****deeply nested****
+
+--------------------------------------------------------------------------------
+
+(document
   (paragraph
     (inline
       (text))))

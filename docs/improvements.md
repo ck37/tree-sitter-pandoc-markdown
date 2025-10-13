@@ -580,7 +580,59 @@ Total: 67/67 tests passing (100%)
 - Tests validate both asterisk and underscore variants work identically
 - Edge cases with punctuation and whitespace properly handled
 
-### 6. Test Suite Restoration
+### 6. Block Grammar Emphasis Delegation (Architecture Fix - 2025-10-13)
+
+**Problem:** Block grammar failed to parse triple asterisks (`***text***`), producing ERROR nodes that broke grammar injection in editors like Zed. Reported in GitHub issue #2.
+
+**Root cause:**
+- Block grammar attempted to parse emphasis with simple string literals (`*`, `**`)
+- This violated the two-phase parsing strategy from CommonMark specification
+- Triple asterisks created ambiguity that couldn't be resolved without external scanner tokens
+- Grammar injection in editors (Zed) requires valid `(inline)` nodes to trigger
+
+**Solution:**
+- **Removed emphasis/strong_emphasis parsing from block grammar entirely**
+- Block grammar now creates `(paragraph (inline (text)))` for all emphasis patterns
+- Follows CommonMark two-phase parsing strategy:
+  - **Phase 1 (Block Grammar)**: Document structure, creates `(inline)` nodes
+  - **Phase 2 (Inline Grammar)**: Formatting within blocks via grammar injection
+- Updated test expectations to reflect delegation architecture
+- Removed emphasis references from block grammar query files (highlights.scm, textobjects.scm)
+
+**Impact:**
+- ✅ Triple asterisks now parse correctly (no ERROR nodes)
+- ✅ Grammar injection works properly for *single*, **double**, ***triple*** asterisks
+- ✅ Architecture aligns with CommonMark specification and research (docs/papers/key-insights.md)
+- ✅ All 80 tests passing (43 block + 37 inline)
+- ✅ Block grammar focuses on structure, inline grammar handles formatting
+- ✅ Closed GitHub issue #2
+
+**Commits:** 9c0acf2 (main fix), 1d123bd (test fixes), 3079b67 (additional tests)
+
+**Additional Test Coverage:**
+Added 3 block grammar tests documenting emphasis delegation:
+1. **Triple asterisks** (`***triple***`) - validates delegation for triple patterns
+2. **Mixed emphasis patterns** (`*single* and **double** and ***triple***`) - validates multiple patterns
+3. **Underscore patterns** (`_single_ and __double__ and ___triple___`) - validates underscore variant
+4. **Quadruple asterisks** (`****deeply nested****`) - validates deep nesting delegation
+
+**Technical Details:**
+- Block grammar `text` pattern: `/[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/` excludes `*` and `_` from runs
+- Second pattern `/[>*_`]/` allows individual special characters
+- This enables thematic breaks (`***`, `* * *`) to be recognized at block level
+- Inline content passes through as text, parsed by inline grammar via injection
+- Query files updated to note emphasis handled by inline grammar
+
+**Side Effect Fixes:**
+- Fixed thematic break parsing (included newline in token regex)
+- Fixed autolinks test expectation (now recognizes all 3 autolinks)
+- Resolved "Paragraph with spaced thematic break regression" test
+
+**Architectural Validation:**
+This change implements the research-backed two-phase parsing strategy documented in docs/papers/key-insights.md, which states:
+> "Two-Phase Parsing is Correct - CommonMark specification explicitly recommends it. Block structure must precede inline parsing. Proven approach, should not be unified."
+
+### 7. Test Suite Restoration
 
 **Problem:** 12+ tests were failing with ERROR nodes in parse trees
 
@@ -598,7 +650,7 @@ Total: 67/67 tests passing (100%)
 
 **Commits:** 955fe54, 5e2213e
 
-### 7. Pipe Table Debugging
+### 8. Pipe Table Debugging
 
 **Problem:** Pipe tables produced ERROR nodes despite scanner being called
 
@@ -777,12 +829,15 @@ Total: 67/67 tests passing (100%)
 - 5aefcda: Highlight and underline
 - 05aaaab: Raw content and percent metadata
 
-### Bug Fixes (5 commits)
+### Bug Fixes (8 commits)
 - 52c6abe: External scanner interference fix
 - 955fe54: Disable external scanner
 - 5e2213e: Defer line blocks
 - d2e2081: Pipe table debugging
 - 884fcc7: Conflicts array experiment
+- 9c0acf2: Block grammar emphasis delegation (issue #2)
+- 1d123bd: Fix pre-existing test failures
+- 3079b67: Add comprehensive emphasis delegation tests
 
 ### Documentation (8 commits)
 - 7c6e11e, 5d0df70: Plan updates
@@ -820,10 +875,10 @@ Total: 67/67 tests passing (100%)
 - **Total:** 42 fully implemented and tested features
 
 ### Commits
-- **Total:** 46 commits
+- **Total:** 49 commits
 - **Architecture:** 8 commits
 - **Features:** 23 commits
-- **Bug fixes:** 8 commits (includes emphasis fix, YAML highlighting, comprehensive tests)
+- **Bug fixes:** 11 commits (includes emphasis parsing, YAML highlighting, emphasis delegation, test fixes)
 - **Documentation:** 8 commits
 - **Testing:** 4 commits
 
@@ -882,15 +937,16 @@ The following features are documented and planned but require external scanner i
 
 This branch represents a complete reimagining and reimplementation of the tree-sitter-pandoc-markdown parser, with:
 
-- **46 commits** of focused development
+- **49 commits** of focused development
 - **3,100+ lines** of technical documentation
 - **100% test pass rate** (80/80 tests)
 - **42 Pandoc features** fully implemented
 - **39-41% parser size reduction**
 - **Comprehensive research** across 6 tree-sitter grammars
-- **Clear architecture** with documented rationale
-- **Critical bug fixes** for production readiness (emphasis parsing, YAML highlighting, fenced divs)
+- **Clear architecture** with documented rationale following CommonMark specification
+- **Critical bug fixes** for production readiness (emphasis parsing, YAML highlighting, fenced divs, emphasis delegation)
 - **Enhanced test coverage** with comprehensive emphasis edge case testing
+- **Grammar injection support** for editors like Zed (issue #2 fixed)
 
 The work demonstrates deep understanding of tree-sitter parsing mechanics, Pandoc Markdown syntax, and software architecture principles.
 
