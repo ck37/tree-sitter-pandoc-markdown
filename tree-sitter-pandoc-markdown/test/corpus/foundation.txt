@@ -63,12 +63,6 @@ This is *em* and **strong** text.
 (document
   (paragraph
     (inline
-      (text)
-      (emphasis
-        (text))
-      (text)
-      (strong_emphasis
-        (text))
       (text))))
 
 ================================================================================
@@ -302,9 +296,6 @@ Visit <https://example.com>, *<mailto:info@example.com>*, or email <user@example
     (inline
       (text)
       (autolink)
-      (text)
-      (emphasis
-        (autolink))
       (text)
       (autolink)
       (text))))
@@ -687,6 +678,18 @@ Paragraph text.
     (percent_metadata_title)
     (percent_metadata_author)
     (percent_metadata_date))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+Triple asterisks (block grammar delegates to inline grammar via injection)
+================================================================================
+***triple***
+
+--------------------------------------------------------------------------------
+
+(document
   (paragraph
     (inline
       (text))))

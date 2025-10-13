@@ -126,8 +126,6 @@ module.exports = grammar({
     inline: $ => prec.right(repeat1($._inline_element)),
 
     _inline_element: $ => choice(
-      $.emphasis,
-      $.strong_emphasis,
       $.raw_inline,
       $.code_span,
       $.link,
@@ -147,58 +145,6 @@ module.exports = grammar({
       $.footnote_reference,
       $.inline_footnote,
       $.inline_math,
-      $.text
-    ),
-
-    emphasis: $ => choice(
-      prec.left(1, seq('*', repeat1($._inline_no_star), '*')),
-      prec.left(1, seq('_', repeat1($._inline_no_underscore), '_'))
-    ),
-
-    strong_emphasis: $ => choice(
-      prec.left(2, seq('**', repeat1($._inline_element), '**')),
-      prec.left(2, seq('__', repeat1($._inline_element), '__'))
-    ),
-
-    _inline_no_star: $ => choice(
-      $.strong_emphasis,
-      $.code_span,
-      $.raw_inline,
-      $.link,
-      $.autolink,
-      $.html_inline,
-      $.citation_group,
-      $.cross_reference,
-      $.citation,
-      $.attribute_list,
-      $.image,
-      $.strikethrough,
-      $.highlight,
-      $.subscript,
-      $.superscript,
-      $.underline,
-      $.attribute_span,
-      $.text
-    ),
-
-    _inline_no_underscore: $ => choice(
-      $.strong_emphasis,
-      $.code_span,
-      $.raw_inline,
-      $.link,
-      $.autolink,
-      $.html_inline,
-      $.citation_group,
-      $.cross_reference,
-      $.citation,
-      $.attribute_list,
-      $.image,
-      $.strikethrough,
-      $.highlight,
-      $.subscript,
-      $.superscript,
-      $.underline,
-      $.attribute_span,
       $.text
     ),
 
@@ -345,7 +291,7 @@ module.exports = grammar({
     pipe_table_cell: $ => token(/[^\r\n|]+/),
 
     text: $ => prec.right(repeat1(choice(
-      /[^\n\r*_`#<>\-\[\]{}@\^$|~=+]+/, 
+      /[^\n\r`#<>\-\[\]{}@\^$|~=+]+/,
       /[>*_`]/
     ))),
 
@@ -389,8 +335,6 @@ module.exports = grammar({
     link_text: $ => repeat1($._link_text_element),
 
     _link_text_element: $ => choice(
-      $.emphasis,
-      $.strong_emphasis,
       $.code_span,
       $.strikethrough,
       $.highlight,
