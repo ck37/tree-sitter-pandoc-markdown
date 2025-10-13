@@ -1,12 +1,15 @@
 ; Pandoc Markdown Inline Highlighting Queries
-; Modern semantic scopes following nvim-treesitter conventions
+;
+; NOTE: This file overrides the upstream grammar's highlights.scm to use Zed-compatible
+; scope names (@text.*, @emphasis.strong) instead of nvim-treesitter conventions (@markup.*).
+; See docs/scope-naming-decision.md for rationale and migration path.
 
 ; ============================================================================
 ; Emphasis & Strong
 ; ============================================================================
 
-(emphasis) @markup.italic
-(strong_emphasis) @markup.bold
+(emphasis) @text.emphasis
+(strong_emphasis) @emphasis.strong
 
 ; Emphasis delimiters (asterisks, underscores)
 (emphasis_delimiter) @punctuation.delimiter.emphasis
@@ -15,76 +18,76 @@
 ; Code
 ; ============================================================================
 
-(code_span) @markup.raw.inline
-(code_span_content) @markup.raw.inline
+(code_span) @text.literal
+(code_span_content) @text.literal
 
 ; Raw inline with format markers
-(raw_inline) @markup.raw.inline
-(raw_inline_content) @markup.raw.inline
-(raw_format) @attribute
+(raw_inline) @text.literal
+(raw_inline_content) @text.literal
+(raw_format) @property
 
 ; ============================================================================
 ; Links & Images
 ; ============================================================================
 
 (link
-  (link_text) @markup.link.label
-  (link_destination) @markup.link.url)
+  (link_text) @text.reference
+  (link_destination) @text.uri)
 
 (link
-  (link_label) @markup.link.label)
+  (link_label) @text.reference)
 
 (image
-  (link_text) @markup.link.label
-  (link_destination)? @markup.link.url)
+  (link_text) @text.reference
+  (link_destination)? @text.uri)
 
 (image
-  (link_label) @markup.link.label)
+  (link_label) @text.reference)
 
-(autolink) @markup.link.url
+(autolink) @text.uri
 
 ; ============================================================================
 ; Pandoc Extensions
 ; ============================================================================
 
 ; Citations
-(citation_group) @markup.reference.citation
-(citation) @markup.reference.citation
+(citation_group) @text.reference
+(citation) @text.reference
 
 ; Cross-references
-(cross_reference) @markup.reference.cross_ref
+(cross_reference) @text.reference
 
 ; Footnotes
-(footnote_reference) @markup.reference.footnote
-(inline_footnote) @markup.reference.footnote
+(footnote_reference) @text.reference
+(inline_footnote) @text.reference
 
 ; ============================================================================
 ; Special Formatting
 ; ============================================================================
 
-(strikethrough) @markup.strikethrough
-(highlight) @markup.highlight
-(subscript) @markup.subscript
-(superscript) @markup.superscript
-(underline) @markup.underline
+(strikethrough) @text.strike
+(highlight) @text.highlight
+(subscript) @text.subscript
+(superscript) @text.super
+(underline) @text.underline
 
 ; ============================================================================
 ; Attributes
 ; ============================================================================
 
 (attribute_span
-  (inline)? @markup.raw)
+  (inline)? @text)
 (attribute_span
-  (attribute_list) @attribute)
+  (attribute_list) @property)
 
-(attribute_list) @attribute
+(attribute_list) @property
 
 ; ============================================================================
 ; Math
 ; ============================================================================
 
 (inline_math
-  (math_content)? @markup.math.inline)
+  (math_content)? @string)
 
 (math_delimiter) @punctuation.delimiter.math
 
