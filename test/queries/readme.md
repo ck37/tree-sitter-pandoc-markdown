@@ -114,10 +114,23 @@ Each test file is designed to exercise specific query patterns:
 ## Expected Behavior
 
 ### Highlights
-- Headings should use `@markup.heading` scopes
-- Links should use `@markup.link.url` and `@markup.link.label`
-- Code should use `@markup.raw` scopes
-- Pandoc extensions should use semantic scopes
+
+This parser uses **modern nvim-treesitter scope conventions** (`@markup.*`) introduced in nvim-treesitter PR #3449 (August 2023).
+
+**Scope conventions:**
+- Headings use `@markup.heading` (with `.1` through `.6` level variants)
+- Links use `@markup.link.url` and `@markup.link.label`
+- Code uses `@markup.raw.inline` and `@markup.raw.block`
+- Emphasis uses `@markup.italic` and `@markup.strong`
+- Lists use `@markup.list` (with `.checked` / `.unchecked` for tasks)
+- Pandoc citations use `@markup.reference.citation`
+- Shortcodes use `@keyword.directive`
+
+**Why modern scopes?**
+- Better semantic meaning than deprecated `@text.*` scopes
+- Cross-editor compatibility (Neovim, Helix, Zed, Emacs)
+- Forward-compatible with tree-sitter ecosystem
+- Aligns with CommonMark terminology
 
 ### Folds
 - Folding headings should hide their content

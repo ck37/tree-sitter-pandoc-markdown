@@ -30,6 +30,17 @@ found in the `tree-sitter-pandoc-markdown` folder, and one for inline structure,
 can be found in the `tree-sitter-pandoc-markdown-inline` folder. Components that are
 parts of either grammar can be found in the `common` folder.
 
+### Query Files and Syntax Highlighting
+
+This project uses **modern nvim-treesitter scope conventions** (`@markup.*`) introduced in nvim-treesitter PR #3449 (August 2023). When contributing to query files:
+
+- **Use modern scopes:** `@markup.heading`, `@markup.strong`, `@markup.link.url`
+- **Avoid deprecated scopes:** `@text.title`, `@text.strong`, `@text.uri`
+- **Follow semantic conventions:** Use scopes that reflect meaning, not appearance
+- **Test across editors:** Verify highlighting in Neovim, Helix, and Zed
+
+See existing `queries/highlights.scm` files for examples of proper scope usage.
+
 For either of the grammar the most important files are the `grammar.js` which
 defines most nodes and the `src/scanner.c` which defines nodes that cannot
 be parsed with normal tree-sitter rules. All other files in the `src` subfolder

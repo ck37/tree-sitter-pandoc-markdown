@@ -49,6 +49,20 @@ vim.treesitter.language.add('pandoc_markdown_inline', {
 vim.treesitter.language.register('pandoc_markdown', { 'quarto', 'rmarkdown' })
 ```
 
+## Syntax Highlighting
+
+This parser uses **modern nvim-treesitter scope conventions** (`@markup.*`) introduced in nvim-treesitter PR #3449 (August 2023). These replace deprecated `@text.*` scopes and provide better semantic highlighting across all tree-sitter-compatible editors.
+
+**Modern scopes used:**
+- `@markup.heading` - Headings with level variants (`.1` through `.6`)
+- `@markup.strong` / `@markup.italic` - Emphasis
+- `@markup.link.url` / `@markup.link.label` - Links
+- `@markup.raw.block` - Code blocks and raw content
+- `@markup.list` - List markers
+- `@markup.quote` - Block quotes
+
+See [queries/highlights.scm](tree-sitter-pandoc-markdown/queries/highlights.scm) for complete scope mappings.
+
 ## Architecture
 
 Two-grammar architecture following CommonMark's two-phase parsing strategy:

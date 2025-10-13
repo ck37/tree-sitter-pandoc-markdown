@@ -27,6 +27,27 @@ The project ships two separate but related grammars:
 - **Minimal external scanner** - Only handles `pipe_table_start` token
 - **Grammar-first approach** - All other constructs handled by pure grammar rules
 - **Shared common code** in `common/` directory
+- **Modern semantic scopes** - Uses nvim-treesitter `@markup.*` conventions (not deprecated `@text.*`)
+
+### Syntax Highlighting Conventions
+
+This parser uses **modern nvim-treesitter scope conventions** introduced in nvim-treesitter PR #3449 (August 2023). These semantic scopes provide consistent highlighting across all tree-sitter-compatible editors (Neovim, Helix, Zed, Emacs).
+
+**Why modern scopes?**
+- Better semantic meaning (`@markup.heading` vs generic `@text.title`)
+- Cross-editor compatibility
+- Forward-compatible with tree-sitter ecosystem
+- Aligns with CommonMark and Markdown spec terminology
+
+**Scope mapping:**
+- Headings: `@markup.heading` with level variants (`.1` through `.6`)
+- Emphasis: `@markup.italic` and `@markup.strong`
+- Links: `@markup.link.url` and `@markup.link.label`
+- Code: `@markup.raw.inline` and `@markup.raw.block`
+- Lists: `@markup.list.checked` / `.unchecked` for task lists
+- Pandoc extensions: `@markup.reference.citation`, `@keyword.directive` (shortcodes)
+
+See [queries/highlights.scm](../tree-sitter-pandoc-markdown/queries/highlights.scm) for complete mappings.
 
 ### Why Separate Grammars?
 
