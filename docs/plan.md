@@ -2,18 +2,7 @@
 
 ## Current Status
 
-**Phase 1: Complete ✅** (2025-10-12)
-- 80/80 tests passing (100%)
-- 43 block-level features implemented
-- 37 inline-level features implemented
-- Comprehensive query files for editor integration
-- Full documentation suite
-
 See [improvements.md](./improvements.md) for detailed Phase 1 achievements.
-
-**Phase 2: In Planning** - External scanner features requiring disambiguation
-
----
 
 ## Pending Work
 
@@ -171,8 +160,6 @@ Another term
 
 **Reference:** See `scanner-research.md` for detailed analysis
 
----
-
 ### Phase 2 Implementation Strategy
 
 **Recommended Order:**
@@ -201,8 +188,6 @@ Another term
 - Add test cases with explanatory comments
 - Update `readme.md` with feature status
 - Note any known limitations or edge cases
-
----
 
 ## Phase 3: Future Enhancements
 
@@ -240,42 +225,6 @@ Another term
 - **CommonMark conformance** - Test against spec
 - **Pandoc conformance** - Test against Pandoc output
 - **Performance regression tests** - Catch slowdowns
-
----
-
-## Phase 1 Summary (Completed)
-
-**For full details, see [improvements.md](./improvements.md)**
-
-### Implementation Phases Completed
-
-- **Phase 1A:** Foundation (ABI 14, standalone grammars, test infrastructure)
-- **Phase 1B:** Core Markdown features (headings, quotes, lists, code, links, images)
-- **Phase 1C:** Pandoc extensions (divs, attributes, citations, shortcodes, YAML, chunk options)
-- **Phase 1D:** Math & tables (inline/display math, pipe tables)
-- **Phase 1E:** Document semantics (footnotes, strikethrough, subscript, superscript, attribute spans, highlight, underline)
-- **Phase 1F:** Raw content (raw inline, raw blocks, percent metadata)
-- **Phase 1G:** Query files (highlights, folds, tags, locals, textobjects, injections)
-
-### Key Achievements
-
-- **Architecture:** Fully standalone grammar, no git submodules
-- **Features:** 42 Pandoc features fully implemented
-- **Testing:** 80/80 tests passing (100% pass rate)
-- **Documentation:** 3,100+ lines of technical documentation
-- **Parser Size:** 39-41% reduction from upstream
-- **ABI:** Version 14 enforced for Zed compatibility
-- **Queries:** Comprehensive editor integration files
-
-### Critical Bug Fixes
-
-1. **External scanner interference** - Reduced scanner to single token
-2. **YAML frontmatter highlighting** - Added injection queries
-3. **Triple asterisk emphasis** - Fixed delimiter run algorithm
-4. **Fenced div parsing** - Fixed closing delimiter precedence
-5. **Comprehensive emphasis tests** - Added 7 edge case tests
-
----
 
 ## References
 
