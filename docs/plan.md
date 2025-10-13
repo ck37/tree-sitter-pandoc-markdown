@@ -1,4 +1,4 @@
-# Tree-sitter-pandoc-markdown: Implementation Plan
+# Improvement planning
 
 ## Current Status
 
