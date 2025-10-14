@@ -5,6 +5,12 @@ fn main() {
     let mut c_config = cc::Build::new();
     c_config.std("c11").include(&block_dir);
 
+    // Suppress false-positive unused warnings from scanner.c
+    // These functions/variables are actually used at runtime but the compiler's
+    // static analysis doesn't trace through the full call graph
+    c_config.flag_if_supported("-Wno-unused-function");
+    c_config.flag_if_supported("-Wno-unused-const-variable");
+
     #[cfg(target_env = "msvc")]
     c_config.flag("-utf-8");
 
