@@ -1,5 +1,5 @@
 use tree_sitter::{InputEdit, Point};
-use tree_sitter_pandoc_md::{MarkdownParser, MarkdownTree};
+use tree_sitter_pandoc_markdown::{MarkdownParser, MarkdownTree};
 
 fn main() {
     let mut parser = MarkdownParser::default();
