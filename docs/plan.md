@@ -11,7 +11,7 @@ See [improvements.md](./improvements.md) for detailed Phase 1 achievements.
 These features require external scanner implementation for disambiguation. They were deferred from Phase 1 due to pattern ambiguities that cannot be resolved with pure grammar rules.
 
 #### 2.1 Definition Lists
-**Status:** Not started (moved from Phase 1E)
+**Status:** Cannot be implemented (attempted 2025-10-13, blocked by tree-sitter LR(1) limitations)
 
 **Syntax:**
 ```markdown
@@ -22,20 +22,38 @@ Another term
 :   Another description
 ```
 
-**Challenge:** Colon-led description marker (`: `) is indistinguishable from inline colons in normal paragraphs without lookahead.
+**Challenge:** Requires lookahead that is fundamentally incompatible with LR(1) parsing.
 
-**Requirements:**
-- External scanner to detect `: ` at line start following a term
-- Distinguish from inline colons in normal paragraphs
-- Handle multi-paragraph descriptions with proper indentation
-- Handle multiple terms with single description
-- Handle lazy continuation lines
+**Root Cause Analysis:**
+- Definition terms are structurally identical to paragraphs until the next line is examined
+- Tree-sitter's LR(1) parser commits to `paragraph` rule before checking if next line has definition marker
+- External scanner is only called AFTER grammar rule selection, not before
+- GLR conflicts only help when both paths are viable at the same parse state - they don't help with rule selection
+- Three different implementation approaches attempted, all failed due to same fundamental limitation
 
-**Implementation Approach:**
-1. Add `DEFINITION_LIST_MARKER` external token
-2. Scanner checks for `: ` at line start after non-blank line
-3. Grammar rule for `definition_list` with terms and descriptions
-4. Test corpus with various edge cases
+**Attempted Approaches (2025-10-13):**
+1. **GLR with dynamic precedence**: Parser commits to paragraph before GLR exploration begins
+2. **Setext heading pattern**: Same issue - paragraph matches before definition_list_item is tried
+3. **Scanner-driven lookahead with DEFINITION_TERM_START**: Scanner never called because parser doesn't try definition_list path
+
+**Why This Is Impossible in Tree-sitter:**
+- Tree-sitter uses LR(1) parsing with single token lookahead
+- LR parsers must decide which grammar rule to try BEFORE calling external scanner
+- External scanner cannot influence grammar rule selection - only provide tokens for already-selected rules
+- Definition lists need to examine line N+1 to decide how to parse line N (multi-token lookahead)
+- No backtracking after a rule succeeds (paragraph matches "Term\n" perfectly)
+
+**Evidence This Is a Known Limitation:**
+- Tree-sitter documentation confirms: "only one token of look-ahead is available"
+- Community discussions (#1005, #1252) document this limitation
+- Stack Overflow: "if the scanner C code identifies a token and returns it, TS will not backtrack"
+
+**Alternatives:**
+1. **Post-processing**: Parse as paragraphs, then identify definition list patterns in post-processing
+2. **Different parser**: Use a parser generator that supports arbitrary lookahead
+3. **Accept limitation**: Document that definition lists are not supported in tree-sitter-pandoc-markdown
+
+**Recommendation:** Accept limitation and document. This is not a bug or implementation flaw - it's an architectural constraint of LR(1) parsing that cannot be worked around.
 
 #### 2.2 Line Blocks
 **Status:** Deferred (attempted 2025-10-11, requires grammar restructuring)

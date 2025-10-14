@@ -16,8 +16,8 @@ Emphasis, strong, links, images, citations, cross-references, inline math, strik
 
 **📚 [Complete feature list →](docs/improvements.md#feature-completeness)**
 
-### Coming in Phase 2
-Definition lists, line blocks, simple tables, grid tables (require external scanner).
+### Not Yet Implemented
+Simple tables and grid tables (require external scanner). Definition lists and line blocks cannot be implemented due to tree-sitter LR(1) parsing limitations (see [plan.md](docs/plan.md) for details).
 
 **📖 [Full documentation →](docs/readme.md)**
 
