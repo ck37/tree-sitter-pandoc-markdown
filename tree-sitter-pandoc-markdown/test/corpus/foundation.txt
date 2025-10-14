@@ -16,6 +16,7 @@ Paragraph after front matter.
     (yaml_front_matter_start)
     (yaml_front_matter_content)
     (yaml_front_matter_content)
+    (yaml_front_matter_content)
     (yaml_front_matter_delimiter))
   (paragraph
     (inline
@@ -35,6 +36,99 @@ Body text.
 (document
   (yaml_front_matter
     (yaml_front_matter_start)
+    (yaml_front_matter_content)
+    (yaml_front_matter_delimiter))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+YAML front matter - single line
+================================================================================
+---
+title: "Test"
+---
+
+Content here.
+
+--------------------------------------------------------------------------------
+
+(document
+  (yaml_front_matter
+    (yaml_front_matter_start)
+    (yaml_front_matter_content)
+    (yaml_front_matter_delimiter))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+YAML front matter - empty
+================================================================================
+---
+---
+
+Content here.
+
+--------------------------------------------------------------------------------
+
+(document
+  (yaml_front_matter
+    (yaml_front_matter_start)
+    (yaml_front_matter_delimiter))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+YAML front matter - nested structure
+================================================================================
+---
+title: "Document"
+author:
+  name: "Jane Doe"
+  email: "jane@example.com"
+execute:
+  echo: false
+  warning: true
+---
+
+Content here.
+
+--------------------------------------------------------------------------------
+
+(document
+  (yaml_front_matter
+    (yaml_front_matter_start)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
+    (yaml_front_matter_delimiter))
+  (paragraph
+    (inline
+      (text))))
+
+================================================================================
+YAML front matter - special characters in first line
+================================================================================
+---
+title: "Test: A Study of \"Quotes\" & Symbols"
+author: "Jane"
+---
+
+Content here.
+
+--------------------------------------------------------------------------------
+
+(document
+  (yaml_front_matter
+    (yaml_front_matter_start)
+    (yaml_front_matter_content)
+    (yaml_front_matter_content)
     (yaml_front_matter_delimiter))
   (paragraph
     (inline
@@ -147,7 +241,7 @@ print("hi")
 ================================================================================
 Thematic break
 ================================================================================
----
+___
 
 --------------------------------------------------------------------------------
 

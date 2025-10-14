@@ -472,10 +472,6 @@
                     {
                       "type": "PATTERN",
                       "value": "\\r?\\n"
-                    },
-                    {
-                      "type": "PATTERN",
-                      "value": "[^\\r\\n]+"
                     }
                   ]
                 }
@@ -485,38 +481,25 @@
             }
           },
           {
-            "type": "PATTERN",
-            "value": "\\r?\\n"
-          },
-          {
             "type": "REPEAT",
             "content": {
-              "type": "CHOICE",
+              "type": "SEQ",
               "members": [
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "ALIAS",
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "TOKEN",
+                    "content": {
+                      "type": "PREC",
+                      "value": -1,
                       "content": {
-                        "type": "TOKEN",
-                        "content": {
-                          "type": "PREC",
-                          "value": -1,
-                          "content": {
-                            "type": "PATTERN",
-                            "value": "[^\\r\\n]+"
-                          }
-                        }
-                      },
-                      "named": true,
-                      "value": "yaml_front_matter_content"
-                    },
-                    {
-                      "type": "PATTERN",
-                      "value": "\\r?\\n"
+                        "type": "PATTERN",
+                        "value": "[^\\r\\n]+"
+                      }
                     }
-                  ]
+                  },
+                  "named": true,
+                  "value": "yaml_front_matter_content"
                 },
                 {
                   "type": "PATTERN",

@@ -98,13 +98,12 @@ module.exports = grammar({
       /\r?\n/
     ),
 
+    // NOTE: Standalone `---` at document start is ambiguous with thematic break.
+    // This grammar treats it as (invalid) YAML front matter. To use a thematic
+    // break at document start, add content before it or use a different pattern (* * *).
     yaml_front_matter: $ => prec(-1, seq(
-      field('start', alias(token(seq('---', /\r?\n/, /[^\r\n]+/)), $.yaml_front_matter_start)),
-      /\r?\n/,
-      repeat(choice(
-        seq(alias(token(prec(-1, /[^\r\n]+/)), $.yaml_front_matter_content), /\r?\n/),
-        /\r?\n/
-      )),
+      field('start', alias(token(seq('---', /\r?\n/)), $.yaml_front_matter_start)),
+      repeat(seq(alias(token(prec(-1, /[^\r\n]+/)), $.yaml_front_matter_content), /\r?\n/)),
       field('close', alias(token(prec(1, choice('---', '...'))), $.yaml_front_matter_delimiter)),
       /\r?\n/
     )),
