@@ -56,6 +56,7 @@ typedef enum {
     PIPE_TABLE_LINE_ENDING,
     LINE_BLOCK_START,
     LINE_BLOCK_LINE_ENDING,
+    SIMPLE_TABLE_START,
 } TokenType;
 
 // Description of a block on the block stack.
@@ -173,6 +174,7 @@ static const bool paragraph_interrupt_symbols[] = {
     false, // PIPE_TABLE_LINE_ENDING,
     true,  // LINE_BLOCK_START,
     false, // LINE_BLOCK_LINE_ENDING,
+    true,  // SIMPLE_TABLE_START,
 };
 
 // State bitflags used with `Scanner.state`
@@ -1300,6 +1302,92 @@ static bool parse_pipe_table(Scanner *s, TSLexer *lexer,
 // The simplified version above just returns true when called after grammar consumes '|'
 // Full table validation is handled by grammar rules, not the external scanner
 
+// Parse simple table - whitespace-aligned tables with dash separators
+// Inspired by tree-sitter-markdown's parse_pipe_table implementation
+//
+// Simple table format:
+//   Right     Left     Center     Default
+// -------     ------ ----------   -------
+//      12     12        12            12
+//
+// Key challenge: Distinguish from setext headings and thematic breaks
+// - Setext: single continuous dash line (no whitespace gaps)
+// - Thematic break: single dash line (no preceding text)
+// - Simple table: multiple dash groups separated by whitespace (2+ spaces)
+static bool parse_simple_table(Scanner *s, TSLexer *lexer,
+                               const bool *valid_symbols) {
+    // unused
+    (void)(valid_symbols);
+
+    // SIMPLE_TABLE_START is zero-width - mark position before analyzing
+    mark_end(s, lexer);
+
+    // Simple table requires dash groups separated by whitespace
+    // Count number of dash groups (columns)
+    size_t column_count = 0;
+    bool in_dashes = false;
+    size_t dash_count = 0;
+    bool has_whitespace_gap = false;
+    size_t whitespace_count = 0;
+
+    // Scan the separator line to validate pattern
+    while (lexer->lookahead != '\r' && lexer->lookahead != '\n' &&
+           !lexer->eof(lexer)) {
+        if (lexer->lookahead == '-') {
+            if (!in_dashes) {
+                // Starting a new dash group
+                if (column_count > 0 && whitespace_count < 2) {
+                    // Not enough whitespace between columns
+                    return false;
+                }
+                in_dashes = true;
+                dash_count = 0;
+            }
+            dash_count++;
+            whitespace_count = 0;
+            advance(s, lexer);
+        } else if (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
+            if (in_dashes) {
+                // End of dash group - must have at least 3 dashes
+                if (dash_count < 3) {
+                    return false;
+                }
+                column_count++;
+                in_dashes = false;
+                has_whitespace_gap = true;
+            }
+            whitespace_count++;
+            advance(s, lexer);
+        } else {
+            // Invalid character for simple table separator
+            return false;
+        }
+    }
+
+    // Handle last dash group if line ended while in dashes
+    if (in_dashes) {
+        if (dash_count < 3) {
+            return false;
+        }
+        column_count++;
+    }
+
+    // Simple table requires at least 2 columns to distinguish from setext/thematic break
+    // (Single column with dashes would be ambiguous with setext heading underline)
+    if (column_count < 2) {
+        return false;
+    }
+
+    // Must have whitespace gaps between columns (not continuous dashes)
+    if (!has_whitespace_gap) {
+        return false;
+    }
+
+    // Valid simple table pattern detected
+    lexer->result_symbol = SIMPLE_TABLE_START;
+    return true;
+}
+
 static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
     // NOTE: LINE_BLOCK_START is deferred (commented out in grammar.js)
     // Only PIPE_TABLE_START is currently active as an external token
@@ -1334,17 +1422,22 @@ static bool scan(Scanner *s, TSLexer *lexer, const bool *valid_symbols) {
         return false;
     }
 
-    // CRITICAL: This grammar only uses external scanner for pipe_table_start.
+    // CRITICAL: This grammar only uses external scanner for pipe_table_start and simple_table_start.
     // All other constructs (headings, block quotes, lists, thematic breaks) are
-    // handled by pure grammar rules. Return false for everything except pipe tables
+    // handled by pure grammar rules. Return false for everything except tables
     // to prevent interference with grammar rules.
-    if (!valid_symbols[PIPE_TABLE_START]) {
-        return false;
+
+    // Check for pipe table (grammar has already consumed '|')
+    if (valid_symbols[PIPE_TABLE_START]) {
+        return parse_pipe_table(s, lexer, valid_symbols);
     }
 
-    // If we get here, PIPE_TABLE_START is valid. The grammar has already consumed
-    // the leading '|', so validate and emit the token.
-    return parse_pipe_table(s, lexer, valid_symbols);
+    // Check for simple table (separator line with dash groups)
+    if (valid_symbols[SIMPLE_TABLE_START]) {
+        return parse_simple_table(s, lexer, valid_symbols);
+    }
+
+    return false;
 
     // NOTE: All the code below (whitespace parsing, switch statement for different
     // characters) was designed for the original approach where the scanner handles

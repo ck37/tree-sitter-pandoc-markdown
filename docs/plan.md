@@ -45,7 +45,7 @@ Another term
 
 **Evidence This Is a Known Limitation:**
 - Tree-sitter documentation confirms: "only one token of look-ahead is available"
-- Community discussions (#1005, #1252) document this limitation
+- Community discussions ([tree-sitter#1005](https://github.com/tree-sitter/tree-sitter/issues/1005), [tree-sitter#1252](https://github.com/tree-sitter/tree-sitter/issues/1252)) document this limitation
 - Stack Overflow: "if the scanner C code identifies a token and returns it, TS will not backtrack"
 
 **Alternatives:**
@@ -54,6 +54,8 @@ Another term
 3. **Accept limitation**: Document that definition lists are not supported in tree-sitter-pandoc-markdown
 
 **Recommendation:** Accept limitation and document. This is not a bug or implementation flaw - it's an architectural constraint of LR(1) parsing that cannot be worked around.
+
+**External Validation:** The [Quarto Markdown Parser](https://github.com/quarto-dev/quarto-markdown) project independently reached identical conclusions: "Definition lists offer the same problem. There's no way to know that the following construct isn't a paragraph followed by something else without parsing the entire paragraph first. We will also not support definition lists directly." See [quarto-parser-comparison.md](./quarto-parser-comparison.md) for detailed architectural comparison.
 
 #### 2.2 Line Blocks
 **Status:** Deferred (attempted 2025-10-11, requires grammar restructuring)
@@ -90,7 +92,7 @@ Another term
 - `options-for-proceeding.md` - Analysis of 7 possible approaches
 
 #### 2.3 Simple Tables
-**Status:** Not started (moved from Phase 1F)
+**Status:** Cannot be implemented (attempted 2025-10-13, blocked by tree-sitter LR(1) limitations)
 
 **Syntax:**
 ```markdown
@@ -101,24 +103,81 @@ Another term
       1     1          1             1
 ```
 
-**Challenge:** Dash separator patterns conflict with multiple constructs:
-- Setext heading underlines (`===` or `---`)
-- Thematic breaks (`---`)
-- YAML front matter delimiters (`---`)
-- Pipe table alignment markers (`:?-{3,}:?`)
+**Challenge:** Requires lookahead that is fundamentally incompatible with LR(1) parsing.
 
-**Requirements:**
-- External scanner to detect table structure via column alignment
-- Context-aware dash pattern disambiguation
-- Detect header row followed by separator row with matching column positions
-- Handle column alignment indicators (left, right, center, default)
-- Support for multi-line cells and optional caption
+**Root Cause Analysis:**
+- Header rows are structurally identical to paragraphs until the separator row is examined
+- Separator rows look like setext heading underlines (`---`) until multiple dash groups with whitespace gaps are detected
+- Tree-sitter's LR(1) parser commits to `paragraph` or `setext_heading` rules before detecting simple table pattern
+- External scanner is only called AFTER grammar rule selection, not before
+- Simple tables need to examine line N+1 to decide how to parse line N (multi-line lookahead)
+- No backtracking after a rule succeeds (paragraph matches "Header\n" perfectly)
 
-**Implementation Approach:**
-1. Add `SIMPLE_TABLE_START` external token
-2. Scanner validates table structure (header + separator with aligned columns)
-3. Grammar rules for rows, cells, alignment
-4. Test corpus with various alignment and content patterns
+**Attempted Approaches (2025-10-13):**
+1. **Scanner validation of separator row**: Implemented parse_simple_table() that detects multiple dash groups with whitespace gaps (scanner.c:1317-1389)
+2. **Grammar rules with external token**: Added SIMPLE_TABLE_START external token and grammar rules (grammar.js:295-367)
+3. **Test corpus**: Created 14 comprehensive test cases (test/corpus/simple-tables.txt)
+
+**Why This Failed:**
+- Parser sees header text and commits to `paragraph` rule
+- Parser sees separator row (`-------  -----`) and commits to `setext_heading` rule (paragraph + dash underline)
+- Grammar never tries `simple_table` rule, so scanner is never called for SIMPLE_TABLE_START
+- Even if scanner were called, parser cannot backtrack after committing to paragraph
+
+**Dash Pattern Conflicts:**
+- Setext heading underlines: `===` or `---` (continuous dashes)
+- Thematic breaks: `---` (continuous dashes, no preceding text)
+- YAML front matter delimiters: `---`
+- Pipe table alignment markers: `:?-{3,}:?`
+- Simple table separators: `-------  -----` (multiple dash groups with 2+ spaces)
+
+The separator row pattern IS distinctive (multiple dash groups vs continuous), but this doesn't help because:
+1. By the time parser sees separator row, it already committed to paragraph for header
+2. Setext heading rule matches (paragraph + dash line = heading)
+3. Parser never explores simple_table path
+
+**Why This Is Impossible in Tree-sitter:**
+- Tree-sitter uses LR(1) parsing with single token lookahead
+- LR parsers must decide which grammar rule to try BEFORE calling external scanner
+- External scanner cannot influence grammar rule selection - only provide tokens for already-selected rules
+- Simple tables need multi-token lookahead (examine entire next line to determine current line's type)
+- No backtracking after a rule succeeds
+
+**Evidence This Is a Known Limitation:**
+- Same root cause as definition lists (plan.md:14-56)
+- Tree-sitter documentation confirms: "only one token of look-ahead is available"
+- Community discussions ([tree-sitter#1005](https://github.com/tree-sitter/tree-sitter/issues/1005), [tree-sitter#1252](https://github.com/tree-sitter/tree-sitter/issues/1252)) document this limitation
+- Stack Overflow: "if the scanner C code identifies a token and returns it, TS will not backtrack"
+
+**Potential Workarounds (all have significant drawbacks):**
+1. **Headerless tables only**: Start detection at separator row, treat header as separate paragraph
+   - Breaks semantic relationship between header and table
+   - Requires post-processing to associate header with table
+   - Still ambiguous with thematic breaks
+2. **Require distinctive marker**: Use different syntax like `Table:` caption before table
+   - Breaks Pandoc compatibility
+   - Defeats purpose of Pandoc markdown support
+3. **Full block-level scanner**: Adopt tree-sitter-markdown's approach with massive scanner
+   - Contradicts minimal scanner philosophy
+   - Requires moving all block parsing to scanner
+   - Maintenance burden and complexity increase
+
+**Alternatives:**
+1. **Post-processing**: Parse as paragraphs/headings, then identify simple table patterns in post-processing
+2. **Different parser**: Use a parser generator that supports arbitrary lookahead (GLR, PEG)
+3. **Accept limitation**: Document that simple tables are not supported in tree-sitter-pandoc-markdown
+4. **Use pipe tables instead**: Pipe tables work correctly and are more common in practice
+
+**Recommendation:** Accept limitation and document. Simple tables are relatively rare (pipe tables are more common), and this is not a bug or implementation flaw - it's an architectural constraint of LR(1) parsing that cannot be worked around without compromising the grammar's design principles.
+
+**Implementation Evidence:**
+- Scanner logic: scanner.c:1317-1389 (parse_simple_table function)
+- Grammar rules: grammar.js:295-367 (simple_table and related rules)
+- Test corpus: test/corpus/simple-tables.txt (14 test cases, all fail due to LR(1) constraints)
+- External token: SIMPLE_TABLE_START defined in scanner.c:59, 177
+- Detailed analysis: docs/simple-tables-impossibility.md
+
+**External Validation:** The [Quarto Markdown Parser](https://github.com/quarto-dev/quarto-markdown) project independently reached identical conclusions about line blocks (same problem as simple tables) and definition lists. They explicitly document that these features "interact very badly with pipe tables under any fixed lookahead parsing strategy" and that "tree-sitter is (mostly) a LALR(1) parser, which means it needs to decide rules based on 1-token lookahead." Their solution: provide escape hatch syntax (`{<pandoc}`) to fall back to Pandoc's parser for unsupported features. See [quarto-parser-comparison.md](./quarto-parser-comparison.md) for detailed architectural comparison and explanation of why their design differs from ours.
 
 #### 2.4 Grid Tables
 **Status:** Not started (moved from Phase 1F)
@@ -253,6 +312,9 @@ Another term
 - **[options-for-proceeding.md](./options-for-proceeding.md)** - Decision analysis for line blocks
 - **[external-scanner-plan.md](./external-scanner-plan.md)** - Line block implementation attempt
 - **[external-scanner-resources.md](./external-scanner-resources.md)** - Research resources
+- **[simple-tables-impossibility.md](./simple-tables-impossibility.md)** - Proof of simple tables impossibility
+- **[quarto-validation.md](./quarto-validation.md)** - External validation summary
+- **[quarto-parser-comparison.md](./quarto-parser-comparison.md)** - Architecture comparison: rendering vs editor focus
 - **[readme.md](./readme.md)** - Documentation index
 
 ### External Resources
@@ -260,11 +322,12 @@ Another term
 - [CommonMark Spec](https://spec.commonmark.org/) - Base Markdown specification
 - [Tree-sitter Documentation](https://tree-sitter.github.io/tree-sitter/) - Parser generator docs
 - [tree-sitter-markdown](https://github.com/tree-sitter-grammars/tree-sitter-markdown) - Reference implementation
+- [Quarto Markdown Parser](https://github.com/quarto-dev/quarto-markdown) - Rendering-focused parser (external validation)
 - [Zed Editor Issue #24632](https://github.com/zed-industries/zed/issues/24632) - ABI version compatibility
 
 ---
 
-**Document Version:** 2.0
+**Document Version:** 2.1
 **Last Updated:** 2025-10-13
-**Branch:** feat/phase-1-pandoc-grammar
-**Status:** Phase 1 Complete ✅ | Phase 2 In Planning
+**Branch:** zed-compatible-scopes
+**Status:** Phase 1 Complete ✅ | Phase 2: Definition Lists & Simple Tables Determined Impossible Due to LR(1) Constraints

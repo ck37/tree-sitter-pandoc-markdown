@@ -16,6 +16,12 @@ This directory contains comprehensive documentation for the tree-sitter-pandoc-m
 - **[external-scanner-resources.md](external-scanner-resources.md)** - Research resources and references for external scanner implementation
 - **[options-for-proceeding.md](options-for-proceeding.md)** - Analysis of approaches to resolve line block/pipe table conflicts
 
+## LR(1) Limitations & External Validation
+
+- **[simple-tables-impossibility.md](simple-tables-impossibility.md)** - Detailed proof of why simple tables cannot be implemented with LR(1) parsing
+- **[quarto-validation.md](quarto-validation.md)** - External validation summary: Quarto Markdown Parser reached identical conclusions
+- **[quarto-parser-comparison.md](quarto-parser-comparison.md)** - Architecture comparison: rendering-focused vs editor-focused parser design
+
 ## Academic Papers
 
 - **[papers/](papers/)** - Curated collection of academic papers on incremental parsing, GLR parsing, markdown specifications, and document parsing (5 key papers with citations)
@@ -38,6 +44,11 @@ Start with [improvements.md](improvements.md) to see what's been accomplished in
 1. Start with [scanner-research.md](scanner-research.md) for patterns and best practices
 2. Review [external-scanner-plan.md](external-scanner-plan.md) for previous attempts
 3. Consult [external-scanner-resources.md](external-scanner-resources.md) for references
+
+### Understanding LR(1) Limitations
+1. Read [simple-tables-impossibility.md](simple-tables-impossibility.md) for detailed analysis of what cannot be implemented
+2. Review [quarto-validation.md](quarto-validation.md) for external validation of our findings
+3. Check [quarto-parser-comparison.md](quarto-parser-comparison.md) to understand different architectural approaches
 
 ### Academic Research
 Read [papers/](papers/) for foundational academic papers on incremental parsing, GLR parsing, and markdown specifications

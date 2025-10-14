@@ -1,0 +1,311 @@
+================================================================================
+Simple table - basic with alignment
+================================================================================
+  Right     Left     Center     Default
+-------     ------ ----------   -------
+     12     12        12            12
+    123     123       123          123
+      1     1          1             1
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start))
+    (simple_table_row)
+    (simple_table_row)
+    (simple_table_row)
+    (blank_line)))
+
+================================================================================
+Simple table - with caption below
+================================================================================
+  Right     Left
+-------     ------
+     12     12
+    123     123
+
+Table: Demonstration of simple table syntax.
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row)
+    (simple_table_caption))
+  (blank_line))
+
+================================================================================
+Simple table - headerless (body rows only)
+================================================================================
+-------     ------
+     12     12
+    123     123
+      1     1
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - two columns minimal
+================================================================================
+ One   Two
+----- -----
+ 1     2
+ 3     4
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - single column
+================================================================================
+Heading
+-------
+Row 1
+Row 2
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - with empty cells
+================================================================================
+  Col1     Col2
+-------  -------
+   42
+          42
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - all alignments right
+================================================================================
+  Col1     Col2     Col3
+------   ------   ------
+    42       12       99
+   100      200      300
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - all alignments left
+================================================================================
+Col1     Col2     Col3
+------   ------   ------
+42       12       99
+100      200      300
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+Simple table - all alignments centered
+================================================================================
+  Col1      Col2      Col3
+--------  --------  --------
+   42        12        99
+  100       200       300
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
+
+================================================================================
+NOT a simple table - single dash line (thematic break)
+================================================================================
+Some text
+
+---
+
+More text
+
+--------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline
+      (text)))
+  (blank_line)
+  (thematic_break)
+  (blank_line)
+  (paragraph
+    (inline
+      (text)))
+  (blank_line))
+
+================================================================================
+NOT a simple table - setext heading
+================================================================================
+Heading Text
+------------
+
+Body text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (setext_heading
+    (setext_heading_content
+      (inline
+        (text)))
+    (setext_heading_underline))
+  (blank_line)
+  (paragraph
+    (inline
+      (text)))
+  (blank_line))
+
+================================================================================
+NOT a simple table - insufficient separator row spacing
+================================================================================
+One Two Three
+-------------
+
+Body text.
+
+--------------------------------------------------------------------------------
+
+(document
+  (setext_heading
+    (setext_heading_content
+      (inline
+        (text)))
+    (setext_heading_underline))
+  (blank_line)
+  (paragraph
+    (inline
+      (text)))
+  (blank_line))
+
+================================================================================
+Simple table - followed by paragraph
+================================================================================
+ Col1   Col2
+-----  -----
+  1      2
+  3      4
+
+This is a paragraph after the table.
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line)
+  (paragraph
+    (inline
+      (text)))
+  (blank_line))
+
+================================================================================
+Simple table - with caption above (alternate syntax)
+================================================================================
+Table: Demonstration table
+
+  Right     Left
+-------     ------
+     12     12
+    123     123
+
+--------------------------------------------------------------------------------
+
+(document
+  (simple_table
+    (simple_table_caption)
+    (simple_table_header)
+    (simple_table_separator
+      (simple_table_start)
+      (simple_table_alignment_marker)
+      (simple_table_alignment_marker))
+    (simple_table_row)
+    (simple_table_row))
+  (blank_line))
