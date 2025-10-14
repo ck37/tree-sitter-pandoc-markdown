@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main", "feat/phase-1-pandoc-grammar"]
+    branches: ["main", "feat/phase-1-pandoc-grammar", "zed-compatible-scopes"]
   pull_request:
 
 jobs:
